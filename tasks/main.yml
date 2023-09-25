@@ -1,0 +1,33 @@
+---
+- name: 'Deploy services'
+  ansible.builtin.include_tasks: "services/{{ container }}.yml"
+  loop: "{{ podman_services }}"
+  loop_control:
+    loop_var: 'container'
+
+- name: 'Generate systemd services'
+  ansible.builtin.include_tasks: 'service_systemd.yml'
+  loop: "{{ podman_services }}"
+  loop_control:
+    loop_var: 'container'
+
+- name: 'Gathering services'
+  ansible.builtin.service_facts:
+
+- name: 'Make list of podman services'
+  ansible.builtin.set_fact:
+    podman_services_detected: "{{ podman_services_detected + [item['key'].split('.')[0].split('_')[2:] | join('_')] }}"
+  loop: "{{ ansible_facts['services'] | dict2items | selectattr('key', 'contains', 'podman_service_') }}"
+
+- name: 'Stop unknown Podman services'
+  ansible.builtin.service:
+    name: "podman_service_{{ item }}"
+    state: 'stopped'
+    enabled: false
+  loop: "{{ podman_services_detected | difference(podman_services) }}"
+
+- name: 'Remove unknown Podman services'
+  ansible.builtin.file:
+    path: "/etc/systemd/system/podman_service_{{ item }}.service"
+    state: 'absent'
+  loop: "{{ podman_services_detected | difference(podman_services) }}"

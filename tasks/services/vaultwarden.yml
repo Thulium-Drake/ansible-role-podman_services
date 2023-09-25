@@ -1,0 +1,25 @@
+---
+- name: 'Ensure Vaultwarden storage directories'
+  ansible.builtin.file:
+    path: "{{ vaultwarden_data_dir }}"
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0700'
+
+- name: 'Ensure Vaultwarden container'
+  containers.podman.podman_container:
+    name: 'vaultwarden'
+    image: "vaultwarden/server:{{ vaultwarden_version }}"
+    state: 'present'
+    auto_remove: true
+    env:
+      ROCKET_PORT: 3000
+      DOMAIN: "https://{{ vaultwarden_domain }}"
+      SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
+      INVITATIONS_ALLOWED: "{{ vaultwarden_invitations_allowed }}"
+      ADMIN_TOKEN: "{{ vaultwarden_admin_token | default(omit) }}"
+    ports:
+      - "{{ vaultwarden_listen_address }}:3000:3000"
+    volume:
+      - "{{ vaultwarden_data_dir }}:/data:z"

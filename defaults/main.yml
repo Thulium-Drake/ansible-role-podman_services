@@ -1,0 +1,17 @@
+---
+podman_services: []
+
+podman_data_dir: '/opt'
+
+# Vaultwarden
+vaultwarden_version: 'alpine'
+vaultwarden_data_dir: "{{ podman_data_dir }}/vaultwarden"
+# Set this token to enable the admin portal
+vaultwarden_admin_token: ''
+vaultwarden_domain: 'vault.example.nl'
+vaultwarden_signups_allowed: false
+vaultwarden_invitations_allowed: false
+
+# By default, this service is only available on localhost, either change this
+# or put a reverse proxy in front of it
+vaultwarden_listen_address: '127.0.0.1'

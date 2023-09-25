@@ -1,0 +1,22 @@
+---
+- name: 'Generate systemd service'
+  ansible.builtin.command: podman generate systemd --no-header --new -n {{ container }}
+  register: 'podman_service'
+  changed_when: false  # This task only generates input for the task below
+
+- name: 'Copy service file into place'
+  ansible.builtin.copy:
+    content: "{{ podman_service['stdout'] }}"
+    dest: "/etc/systemd/system/podman_service_{{ container }}.service"
+    remote_src: true
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: 'service_file'
+
+- name: 'Ensure service'
+  ansible.builtin.systemd:
+    name: "podman_service_{{ container }}.service"
+    state: "{{ (service_file['changed']) | ternary('restarted', 'started') }}"
+    enabled: true
+    daemon_reload: true
