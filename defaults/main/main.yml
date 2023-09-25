@@ -1,0 +1,4 @@
+---
+podman_services: []
+
+podman_data_dir: '/opt'

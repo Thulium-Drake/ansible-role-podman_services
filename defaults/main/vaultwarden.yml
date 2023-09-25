@@ -1,0 +1,23 @@
+---
+vaultwarden_version: 'alpine'
+vaultwarden_data_dir: "{{ podman_data_dir }}/vaultwarden"
+# Set this token to enable the admin portal
+vaultwarden_admin_token: ''
+vaultwarden_domain: 'vault.example.nl'
+vaultwarden_invitations_allowed: false
+
+vaultwarden_signups_verify: false
+vaultwarden_signups_allowed: false
+# When set, vaultwarden_signups_allowed is ignored
+vaultwarden_signup_whitelist: []
+
+# By default, this service is only available on localhost, either change this
+# or put a reverse proxy in front of it
+vaultwarden_listen_address: '127.0.0.1'
+
+vaultwarden_smtp_server: 'mail.example.nl'
+vaultwarden_smtp_port: 25
+vaultwarden_smtp_from: "vault-noreply@example.nl"
+vaultwarden_smtp_ssl: false
+vaultwarden_smtp_user: ''
+vaultwarden_smtp_password: ''
