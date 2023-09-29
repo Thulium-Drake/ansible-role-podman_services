@@ -12,6 +12,7 @@ vaultwarden_signup_whitelist: []
 
 # The listening URI for vaultwarden
 # Either specify an IP address:port (e.g. 127.0.0.1:3000) or a port for listening on all interfaces
+# NOTE: Vaultwarden is not encrypted by default!
 vaultwarden_listen_uri: '3000'
 
 vaultwarden_smtp_server: 'mail.example.nl'

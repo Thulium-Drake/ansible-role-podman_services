@@ -5,6 +5,12 @@
   loop_control:
     loop_var: 'container'
 
+- name: 'Deploy custom services'
+  ansible.builtin.include_tasks: "{{ podman_custom_services_path }}/{{ container }}.yml"
+  loop: "{{ podman_custom_services }}"
+  loop_control:
+    loop_var: 'container'
+
 - name: 'Gathering services'
   ansible.builtin.service_facts:
 
@@ -18,20 +24,24 @@
     name: "podman_service_{{ item }}"
     state: 'stopped'
     enabled: false
-  loop: "{{ podman_services_detected | difference(podman_services) }}"
+  failed_when: false
+  loop: "{{ podman_services_detected | difference(podman_services + podman_custom_services) }}"
 
 - name: 'Remove unknown Podman services'
   ansible.builtin.file:
     path: "/etc/systemd/system/podman_service_{{ item }}.service"
     state: 'absent'
-  loop: "{{ podman_services_detected | difference(podman_services) }}"
+  loop: "{{ podman_services_detected | difference(podman_services + podman_custom_services) }}"
+
+- name: 'Reload systemd to process changed units'
+  ansible.builtin.systemd:
+    daemon_reload: true
 
 - name: 'Restart changed services'  # noqa no-handler
   ansible.builtin.service:
     name: "podman_service_{{ service }}"
     state: 'restarted'
     enabled: true
-    daemon_reload: true
   loop: "{{ podman_services_changed }}"
   loop_control:
     loop_var: 'service'

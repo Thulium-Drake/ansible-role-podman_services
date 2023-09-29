@@ -2,6 +2,7 @@
 podman_services: []
 
 podman_data_dir: '/opt'
+podman_custom_services_path: 'files/podman_services'
 
 podman_services_systemd_config:
   path: '/etc/systemd/system'
