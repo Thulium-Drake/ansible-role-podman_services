@@ -5,12 +5,6 @@
   loop_control:
     loop_var: 'container'
 
-- name: 'Generate systemd services'
-  ansible.builtin.include_tasks: 'service_systemd.yml'
-  loop: "{{ podman_services }}"
-  loop_control:
-    loop_var: 'container'
-
 - name: 'Gathering services'
   ansible.builtin.service_facts:
 
@@ -31,3 +25,13 @@
     path: "/etc/systemd/system/podman_service_{{ item }}.service"
     state: 'absent'
   loop: "{{ podman_services_detected | difference(podman_services) }}"
+
+- name: 'Restart changed services'  # noqa no-handler
+  ansible.builtin.service:
+    name: "podman_service-{{ service }}"
+    state: 'restarted'
+    enabled: true
+    daemon_reload: true
+  loop: "{{ podman_services_changed }}"
+  loop_control:
+    loop_var: 'service'

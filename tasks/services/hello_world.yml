@@ -1,5 +1,5 @@
 ---
-- name: 'Ensure container'
+- name: 'Ensure hello-world container'
   containers.podman.podman_container:
     name: 'hello_world'
     image: 'thomaspoignant/hello-world-rest-json'
@@ -7,3 +7,10 @@
     auto_remove: true
     ports:
       - '8080:8080'
+    generate_systemd: "{{ podman_services_systemd_config }}"
+  register: 'service_config'
+
+- name: 'Add service to changelist'  # noqa no-handler
+  ansible.builtin.set_fact:
+    podman_services_changed: "{{ podman_services_changed + ['hello_world'] }}"
+  when: service_config['changed']

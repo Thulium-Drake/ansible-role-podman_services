@@ -1,7 +1,7 @@
 ---
 - name: 'Ensure Vaultwarden storage directories'
   ansible.builtin.file:
-    path: "{{ vaultwarden_data_dir }}"
+    path: "{{ podman_data_dir }}/vaultwarden"
     state: 'directory'
     owner: 'root'
     group: 'root'
@@ -28,6 +28,13 @@
       SMTP_USERNAME: "{{ vaultwarden_smtp_user | default(omit, true) }}"
       SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
     ports:
-      - "{{ vaultwarden_listen_address }}:3000:3000"
+      - "{{ vaultwarden_listen_uri }}:3000"
     volume:
-      - "{{ vaultwarden_data_dir }}:/data:z"
+      - "{{ podman_data_dir }}/vaultwarden:/data:z"
+    generate_systemd: "{{ podman_services_systemd_config }}"
+  register: 'service_config'
+
+- name: 'Add service to changelist'  # noqa no-handler
+  ansible.builtin.set_fact:
+    podman_services_changed: "{{ podman_services_changed + ['vaultwarden'] }}"
+  when: service_config['changed']

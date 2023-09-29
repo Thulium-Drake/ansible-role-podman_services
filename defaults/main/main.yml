@@ -2,3 +2,11 @@
 podman_services: []
 
 podman_data_dir: '/opt'
+
+podman_services_systemd_config:
+  path: '/etc/systemd/system'
+  restart_policy: 'always'
+  time: 120
+  names: true
+  new: true
+  container_prefix: 'podman_service'

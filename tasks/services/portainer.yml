@@ -1,0 +1,27 @@
+---
+- name: 'Ensure Portainer data directory'
+  ansible.builtin.file:
+    path: "{{ podman_data_dir }}/portainer_data"
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0700'
+
+- name: 'Ensure Portainer container'
+  containers.podman.podman_container:
+    name: 'portainer'
+    image: "portainer/portainer-ce:{{ portainer_version }}"
+    state: 'started'
+    privileged: true
+    ports:
+      - '{{ portainer_listen_uri }}:9443'
+    volumes:
+      - '/run/podman/podman.sock:/var/run/docker.sock:Z'
+      - "{{ podman_data_dir }}/portainer_data:/data:Z"
+    generate_systemd: "{{ podman_services_systemd_config }}"
+  register: 'service_config'
+
+- name: 'Add service to changelist'  # noqa no-handler
+  ansible.builtin.set_fact:
+    podman_services_changed: "{{ podman_services_changed + ['portainer'] }}"
+  when: service_config['changed']
