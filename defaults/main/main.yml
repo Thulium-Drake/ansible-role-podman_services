@@ -10,3 +10,4 @@ podman_services_systemd_config:
   names: true
   new: true
   container_prefix: 'podman_service'
+  separator: '_'

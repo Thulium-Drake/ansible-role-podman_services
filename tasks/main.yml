@@ -28,7 +28,7 @@
 
 - name: 'Restart changed services'  # noqa no-handler
   ansible.builtin.service:
-    name: "podman_service-{{ service }}"
+    name: "podman_service_{{ service }}"
     state: 'restarted'
     enabled: true
     daemon_reload: true
