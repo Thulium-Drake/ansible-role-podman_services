@@ -8,6 +8,8 @@
     ports:
       - '8080:8080'
     generate_systemd: "{{ podman_services_systemd_config }}"
+    labels:
+      io.containers.autoupdate: 'registry'
   register: 'service_config'
 
 - name: 'Add service to changelist'  # noqa no-handler

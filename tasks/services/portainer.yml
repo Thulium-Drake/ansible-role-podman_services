@@ -19,6 +19,8 @@
       - '/run/podman/podman.sock:/var/run/docker.sock:Z'
       - "{{ podman_data_dir }}/portainer_data:/data:Z"
     generate_systemd: "{{ podman_services_systemd_config }}"
+    labels:
+      io.containers.autoupdate: 'registry'
   register: 'service_config'
 
 - name: 'Add service to changelist'  # noqa no-handler
