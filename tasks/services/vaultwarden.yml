@@ -10,7 +10,7 @@
 - name: 'Ensure Vaultwarden container'
   containers.podman.podman_container:
     name: 'vaultwarden'
-    image: "vaultwarden/server:{{ vaultwarden_version }}"
+    image: "{{ podman_default_registry }}/vaultwarden/server:{{ vaultwarden_version }}"
     state: 'present'
     auto_remove: true
     env:

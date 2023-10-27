@@ -1,6 +1,8 @@
 ---
 podman_services: []
 
+podman_default_registry: 'docker.io'
+
 podman_data_dir: '/opt'
 podman_custom_services_path: 'files/podman_services'
 

@@ -10,7 +10,7 @@
 - name: 'Ensure Portainer container'
   containers.podman.podman_container:
     name: 'portainer'
-    image: "portainer/portainer-ce:{{ portainer_version }}"
+    image: "{{ podman_default_registry }}/portainer/portainer-ce:{{ portainer_version }}"
     state: 'started'
     privileged: true
     ports:

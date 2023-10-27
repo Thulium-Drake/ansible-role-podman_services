@@ -2,7 +2,7 @@
 - name: 'Ensure hello-world container'
   containers.podman.podman_container:
     name: 'hello_world'
-    image: 'thomaspoignant/hello-world-rest-json'
+    image: "{{ podman_default_registry }}/thomaspoignant/hello-world-rest-json"
     state: 'started'
     auto_remove: true
     ports:
