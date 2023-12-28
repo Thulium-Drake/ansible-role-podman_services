@@ -1,11 +1,19 @@
 ---
+# Services to deploy contained in this role
 podman_services: []
 
-podman_default_registry: 'docker.io'
-
-podman_data_dir: '/opt'
+# Services to deploy from the custom_services_path
+podman_custom_services: []
 podman_custom_services_path: 'files/podman_services'
 
+# Default container registry to use when no fully qualified image name is provided
+# NOTE: This role does not configure registries.
+podman_default_registry: 'docker.io'
+
+# Directory to store all container data
+podman_data_dir: '/opt'
+
+# Systemd config for all podman services
 podman_services_systemd_config:
   path: '/etc/systemd/system'
   restart_policy: 'always'
