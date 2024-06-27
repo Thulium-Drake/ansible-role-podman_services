@@ -14,7 +14,7 @@
     state: 'present'
     auto_remove: true
     ports:
-      - "{{ factorio_listen_port }}:34197"
+      - "{{ factorio_listen_port }}:34197/udp"
     volume:
       - "{{ podman_data_dir }}/factorio:/data:Z"
     generate_systemd: "{{ podman_services_systemd_config }}"
