@@ -1,0 +1,28 @@
+---
+- name: 'Ensure storage directories'
+  ansible.builtin.file:
+    path: "{{ podman_data_dir }}/factorio"
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0700'
+
+- name: 'Ensure container'
+  containers.podman.podman_container:
+    name: 'factorio'
+    image: "{{ factorio_image_uri }}:{{ factorio_version }}"
+    state: 'present'
+    auto_remove: true
+    ports:
+      - "{{ factorio_listen_port }}:34197"
+    volume:
+      - "{{ podman_data_dir }}/factorio:/data:Z"
+    generate_systemd: "{{ podman_services_systemd_config }}"
+    labels:
+      io.containers.autoupdate: 'registry'
+  register: 'service_config'
+
+- name: 'Add service to changelist'  # noqa no-handler
+  ansible.builtin.set_fact:
+    podman_services_changed: "{{ podman_services_changed + ['factorio'] }}"
+  when: service_config['changed']
