@@ -1,0 +1,32 @@
+---
+- name: 'Ensure storage directories'
+  ansible.builtin.file:
+    path: "{{ podman_data_dir }}/minecraft"
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0700'
+
+- name: 'Ensure container'
+  containers.podman.podman_container:
+    name: 'minecraft'
+    image: "{{ minecraft_image_uri }}:{{ minecraft_version }}"
+    state: 'present'
+    auto_remove: true
+    ports:
+      - "{{ minecraft_listen_port }}:25565/tcp"
+    volume:
+      - "{{ podman_data_dir }}/minecraft:/data:Z"
+    generate_systemd: "{{ podman_services_systemd_config }}"
+    env:
+      EULA: "TRUE"
+      MODS_FILE: '/data/mods_list.txt'
+      TYPE: "{{ minecraft_mod_platform }}"
+    labels:
+      io.containers.autoupdate: 'registry'
+  register: 'service_config'
+
+- name: 'Add service to changelist'  # noqa no-handler
+  ansible.builtin.set_fact:
+    podman_services_changed: "{{ podman_services_changed + ['minecraft'] }}"
+  when: service_config['changed']
