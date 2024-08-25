@@ -15,6 +15,7 @@
     auto_remove: true
     ports:
       - "{{ minecraft_listen_port }}:25565/tcp"
+      - "{{ minecraft_rcon_port }}:25575/tcp"
     volume:
       - "{{ podman_data_dir }}/minecraft:/data:Z"
     generate_systemd: "{{ podman_services_systemd_config }}"

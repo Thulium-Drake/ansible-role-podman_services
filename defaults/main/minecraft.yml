@@ -3,3 +3,4 @@ minecraft_version: 'latest'
 minecraft_mod_platform: 'FORGE'
 
 minecraft_listen_port: 25565
+minecraft_rcon_port: 25575
