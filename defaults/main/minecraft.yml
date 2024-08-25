@@ -1,6 +1,18 @@
+---
+# Images etc.
 minecraft_image_uri: 'docker.io/itzg/minecraft-server'
 minecraft_version: 'latest'
+minecraft_rcon_image_uri: 'docker.io/itzg/rcon'
+minecraft_rcon_version: 'latest'
+
+# Minecraft server settings
+minecraft_listen_port: 25565
 minecraft_mod_platform: 'FORGE'
 
-minecraft_listen_port: 25565
-minecraft_rcon_port: 25575
+# RCON server settings
+minecraft_rcon_listen_port: 4326
+minecraft_rcon_websocket_port: 4327
+
+# Credentials
+minecraft_rcon_webui_user: 'gameop'
+minecraft_rcon_webui_password: 'gameop'
