@@ -8,6 +8,8 @@ minecraft_rcon_version: 'latest'
 # Minecraft server settings
 minecraft_listen_port: 25565
 minecraft_mod_platform: 'FORGE'
+minecraft_initial_memory: '1G'
+minecraft_max_memory: '1G'
 
 # RCON server settings
 minecraft_rcon_listen_port: 4326

@@ -38,6 +38,8 @@
       MODS_FILE: '/data/mods_list.txt'
       TYPE: "{{ minecraft_mod_platform }}"
       RCON_PASSWORD: 'nobody_really_cares_its_isolated_anyway'
+      INIT_MEMORY: "{{ minecraft_initial_memory }}"
+      MAX_MEMORY: "{{ minecraft_max_memory }}"
     labels:
       io.containers.autoupdate: 'registry'
   register: 'service_config'
