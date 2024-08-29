@@ -31,9 +31,9 @@
     env:
       EULA: "TRUE"
       VERSION: "{{ minecraft_game_version }}"
-      MODS_FILE: "{{ (minecraft_mods_list_enabled) | ternary('/data/mods_list.txt', '') }}"
-      TYPE: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_mod_platform, '') }}"
-      MODPACK: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_modpack_url, '') }}"
+      MODS_FILE: "{{ (minecraft_mods_list_enabled) | ternary('/data/mods_list.txt', omit) }}"
+      TYPE: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_mod_platform, omit) }}"
+      MODPACK: "{{ (minecraft_mods_list_enabled) | ternary(omit, minecraft_modpack_url) }}"
       INIT_MEMORY: "{{ minecraft_initial_memory }}"
       MAX_MEMORY: "{{ minecraft_max_memory }}"
     labels:
