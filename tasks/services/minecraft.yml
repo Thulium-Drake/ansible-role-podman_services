@@ -1,8 +1,4 @@
 ---
-- name: 'Add minecraft_rcon to services list'
-  ansible.builtin.set_fact:
-    podman_services: "{{ podman_services + ['minecraft_rcon'] }}"
-
 - name: 'Ensure storage directories'
   ansible.builtin.file:
     path: "{{ podman_data_dir }}/{{ dir }}"
@@ -12,7 +8,6 @@
     mode: '0700'
   loop:
     - 'minecraft'
-    - 'minecraft_rcon'
   loop_control:
     loop_var: 'dir'
 
@@ -24,7 +19,7 @@
 - name: 'Ensure container'
   containers.podman.podman_container:
     name: 'minecraft'
-    image: "{{ minecraft_image_uri }}:{{ minecraft_version }}"
+    image: "{{ minecraft_image_uri }}:{{ minecraft_image_version }}"
     state: 'present'
     auto_remove: true
     ports:
@@ -35,9 +30,10 @@
     network: 'minecraft'
     env:
       EULA: "TRUE"
-      MODS_FILE: '/data/mods_list.txt'
-      TYPE: "{{ minecraft_mod_platform }}"
-      RCON_PASSWORD: 'nobody_really_cares_its_isolated_anyway'
+      VERSION: "{{ minecraft_game_version }}"
+      MODS_FILE: "{{ (minecraft_mods_list_enabled) | ternary('/data/mods_list.txt', '') }}"
+      TYPE: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_mod_platform, '') }}"
+      MODPACK: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_modpack_url, '') }}"
       INIT_MEMORY: "{{ minecraft_initial_memory }}"
       MAX_MEMORY: "{{ minecraft_max_memory }}"
     labels:
@@ -47,32 +43,4 @@
 - name: 'Add service to changelist'  # noqa no-handler
   ansible.builtin.set_fact:
     podman_services_changed: "{{ podman_services_changed + ['minecraft'] }}"
-  when: service_config['changed']
-
-- name: 'Ensure container'
-  containers.podman.podman_container:
-    name: 'minecraft_rcon'
-    image: "{{ minecraft_rcon_image_uri }}:{{ minecraft_rcon_version }}"
-    state: 'present'
-    auto_remove: true
-    ports:
-      - "{{ minecraft_rcon_listen_port }}:4326/tcp"
-      - "{{ minecraft_rcon_websocket_port }}:4327/tcp"
-    volume:
-      - "{{ podman_data_dir }}/minecraft_rcon:/data:Z"
-    generate_systemd: "{{ podman_services_systemd_config }}"
-    network: 'minecraft'
-    env:
-      RWA_USERNAME: "{{ minecraft_rcon_webui_user }}"
-      RWA_PASSWORD: "{{ minecraft_rcon_webui_password }}"
-      RWA_ADMIN: "TRUE"
-      RWA_RCON_HOST: 'minecraft'
-      RWA_RCON_PASSWORD: 'nobody_really_cares_its_isolated_anyway'
-    labels:
-      io.containers.autoupdate: 'registry'
-  register: 'service_config'
-
-- name: 'Add service to changelist'  # noqa no-handler
-  ansible.builtin.set_fact:
-    podman_services_changed: "{{ podman_services_changed + ['minecraft_rcon'] }}"
   when: service_config['changed']
