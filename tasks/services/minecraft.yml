@@ -31,9 +31,10 @@
     env:
       EULA: "TRUE"
       VERSION: "{{ minecraft_game_version }}"
-      MODS_FILE: "{{ (minecraft_mods_list_enabled) | ternary('/data/mods_list.txt', omit) }}"
-      TYPE: "{{ (minecraft_mods_list_enabled) | ternary(minecraft_mod_platform, omit) }}"
-      MODPACK: "{{ (minecraft_mods_list_enabled) | ternary(omit, minecraft_modpack_url) }}"
+      TYPE: 'AUTO_CURSEFORGE'
+      CF_API_KEY: "{{ minecraft_curseforge_api_key | quote }}"
+      CF_SLUG: "{{ minecraft_curseforge_modpack_slug }}"
+      CF_EXCLUDE_MODS: "{{ minecraft_curseforge_modpack_exclude_slugs }}"
       INIT_MEMORY: "{{ minecraft_initial_memory }}"
       MAX_MEMORY: "{{ minecraft_max_memory }}"
     labels:
