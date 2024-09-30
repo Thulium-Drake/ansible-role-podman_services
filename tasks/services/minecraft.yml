@@ -27,7 +27,6 @@
     volume:
       - "{{ podman_data_dir }}/minecraft:/data:Z"
     generate_systemd: "{{ podman_services_systemd_config }}"
-    network: 'minecraft'
     env:
       EULA: "TRUE"
       VERSION: "{{ minecraft_game_version }}"
