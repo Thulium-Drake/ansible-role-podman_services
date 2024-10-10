@@ -11,11 +11,6 @@
   loop_control:
     loop_var: 'dir'
 
-- name: 'Ensure network'
-  containers.podman.podman_network:
-    name: 'minecraft'
-    state: 'present'
-
 - name: 'Ensure container'
   containers.podman.podman_container:
     name: 'minecraft'
