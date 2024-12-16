@@ -126,7 +126,7 @@
     pull: 'newer'
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
-      - "{{ service['name'] }}-tranmission_config:/config:Z"
+      - "{{ service['name'] }}-transmission_config:/config:Z"
       - "{{ arr_data_folder }}:/data:z"
   register: 'service_config'
   notify: 'Restart changed services'

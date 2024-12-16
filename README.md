@@ -3,7 +3,7 @@ This role contains a collection of services that run on a Podman node. All persi
 
 The catalogus currently contains:
 
-* arr: A full arr stack with tranmission
+* arr: A full arr stack with transmission
 * hello_world: a simple container that will return 'hello world' via a REST API
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
 * factorio: The Factorio server
