@@ -1,0 +1,15 @@
+---
+# Set this to the folder that _contains_ your downloads/movies/tv etc.
+arr_data_folder: '/media'
+
+arr_data_container_uid: '0'
+arr_data_container_gid: '0'
+
+bazarr_port: 6767
+prowlarr_port: 9696
+radarr_port: 7878
+readarr_port: 8787
+sonarr_port: 8989
+transmission_port: 9091
+
+arr_timezone: 'Etc/UTC'

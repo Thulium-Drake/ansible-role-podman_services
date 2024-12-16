@@ -1,4 +1,39 @@
 ---
-podman_services_detected: []
-
 podman_services_changed: []
+
+# List of volumes to create for each service
+podman_volumes:
+  arr:
+    - 'arr-bazarr_config'
+    - 'arr-prowlarr_config'
+    - 'arr-radarr_config'
+    - 'arr-readarr_config'
+    - 'arr-sonarr_config'
+    - 'arr-transmission_config'
+  factorio:
+    - 'factorio'
+  minecraft:
+    - 'minecraft'
+  vaultwarden:
+    - 'vaultwarden'
+
+# List of networks to create for each service
+podman_networks:
+  arr:
+    - 'arr-backend'
+
+# List of containers to create for each service
+podman_containers:
+  arr:
+    - 'arr-bazarr'
+    - 'arr-prowlarr'
+    - 'arr-radarr'
+    - 'arr-readarr'
+    - 'arr-sonarr'
+    - 'arr-transmission'
+  factorio:
+    - 'factorio'
+  minecraft:
+    - 'minecraft'
+  vaultwarden:
+    - 'vaultwarden'

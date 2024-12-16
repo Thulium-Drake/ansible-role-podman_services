@@ -1,24 +1,18 @@
 ---
-# Services to deploy contained in this role
+# Services to deploy contained in this role, for service configuration, please see the appropriate file
+# in the defaults
+# NOTE: When disabling services, DATA VOLUMES WILL BE REMOVED!
 podman_services: []
+# - name: 'hello_world'
+#   state: 'present'
 
-# Services to deploy from the custom_services_path
-podman_custom_services: []
-podman_custom_services_path: 'files/podman_services'
+# Which driver to use for volume storage, this role does not set up the driver!
+podman_volume_driver: 'local'
 
-# Default container registry to use when no fully qualified image name is provided
-# NOTE: This role does not configure registries.
-podman_default_registry: 'docker.io'
-
-# Directory to store all container data
-podman_data_dir: '/opt'
-
-# Systemd config for all podman services
-podman_services_systemd_config:
-  path: '/etc/systemd/system'
-  restart_policy: 'always'
-  time: 120
-  names: true
-  new: true
-  container_prefix: 'podman_service'
-  separator: '_'
+# Default options for all generated container quadlets
+# Enable automatic updates and ensure that it is started by default
+podman_quadlet_options:
+  - 'AutoUpdate=registry'
+  - |
+    [Install]
+    WantedBy=default.target

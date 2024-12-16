@@ -1,0 +1,9 @@
+---
+- name: 'Restart changed containers'
+  ansible.builtin.systemd:
+    name: "{{ container }}"
+    state: 'restarted'
+    scope: "{{ (ansible_facts['effective_user_id'] > 0) | ternary('user', 'system', 'system') }}"
+  loop: "{{ podman_containers[service] }}"
+  loop_control:
+    loop_var: 'container'

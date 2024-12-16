@@ -1,5 +1,7 @@
 ---
 vaultwarden_version: 'alpine'
+vaultwarden_image_uri: 'docker.io/vaultwarden/server'
+
 # Set this token to enable the admin portal
 vaultwarden_admin_token: ''
 vaultwarden_domain: 'vault.example.nl'

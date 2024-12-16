@@ -1,18 +1,16 @@
 ---
-- name: 'Ensure hello-world container'
+- name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
-    name: 'hello_world'
-    image: "{{ podman_default_registry }}/thomaspoignant/hello-world-rest-json"
-    state: 'started'
+    name: "{{ service['name'] }}"
+    image: 'docker.io/thomaspoignant/hello-world-rest-json'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
     ports:
       - '8080:8080'
-    generate_systemd: "{{ podman_services_systemd_config }}"
-    labels:
-      io.containers.autoupdate: 'registry'
-  register: 'service_config'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+  register: service_config
+  notify: 'Restart changed services'
 
-- name: 'Add service to changelist'  # noqa no-handler
-  ansible.builtin.set_fact:
-    podman_services_changed: "{{ podman_services_changed + ['hello_world'] }}"
-  when: service_config['changed']
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

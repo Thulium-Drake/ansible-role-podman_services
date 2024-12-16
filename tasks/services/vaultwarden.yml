@@ -1,17 +1,9 @@
 ---
-- name: 'Ensure Vaultwarden storage directories'
-  ansible.builtin.file:
-    path: "{{ podman_data_dir }}/vaultwarden"
-    state: 'directory'
-    owner: 'root'
-    group: 'root'
-    mode: '0700'
-
-- name: 'Ensure Vaultwarden container'
+- name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
-    name: 'vaultwarden'
-    image: "{{ podman_default_registry }}/vaultwarden/server:{{ vaultwarden_version }}"
-    state: 'present'
+    name: "{{ service['name'] }}"
+    image: "{{ vaultwarden_image_uri }}:{{ vaultwarden_version }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
     env:
       ROCKET_PORT: 3000
@@ -29,14 +21,14 @@
       SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
     ports:
       - "{{ vaultwarden_listen_uri }}:3000"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
     volume:
-      - "{{ podman_data_dir }}/vaultwarden:/data:z"
-    generate_systemd: "{{ podman_services_systemd_config }}"
-    labels:
-      io.containers.autoupdate: 'registry'
+      - "{{ service['name'] }}:/data:Z"
   register: 'service_config'
 
-- name: 'Add service to changelist'  # noqa no-handler
-  ansible.builtin.set_fact:
-    podman_services_changed: "{{ podman_services_changed + ['vaultwarden'] }}"
-  when: service_config['changed']
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

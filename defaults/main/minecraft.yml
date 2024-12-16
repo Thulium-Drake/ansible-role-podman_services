@@ -2,20 +2,17 @@
 # Images etc.
 minecraft_image_uri: 'docker.io/itzg/minecraft-server'
 minecraft_image_version: 'latest'
-minecraft_rcon_image_uri: 'docker.io/itzg/rcon'
-minecraft_rcon_version: 'latest'
+
+minecraft_curseforge_api_key: 'my_awesome_api_key'
 
 # Minecraft server settings
 minecraft_listen_port: 25565
-minecraft_initial_memory: '1G'
-minecraft_max_memory: '1G'
-minecraft_game_version: 'LATEST'
-
-# Mods
-# The server is setup to use either the contents of 'mods_list.txt' in the data directory
-# and auto-download the mods with the configured mod platform.
-#
-# Or, disable mods_list support and set a modpack URL which contains everything you need
-minecraft_mods_list_enabled: true  # when false, uses the modpack defined
-minecraft_mod_platform: 'FORGE'
-minecraft_modpack_url: 'http://example.com/mods/modpack.zip'
+minecraft_envvars:
+  EULA: "TRUE"
+  VERSION: 'LATEST'
+  TYPE: 'AUTO_CURSEFORGE'
+  CF_API_KEY: "{{ minecraft_curseforge_api_key | quote }}"
+  CF_SLUG: 'better-mc-forge-bmc4'
+  CF_EXCLUDE_MODS: 'yungs-menu-tweaks,xaeroplus'
+  INIT_MEMORY: '1G'
+  MAX_MEMORY: '1G'

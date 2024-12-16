@@ -1,28 +1,21 @@
 ---
-- name: 'Ensure storage directories'
-  ansible.builtin.file:
-    path: "{{ podman_data_dir }}/factorio"
-    state: 'directory'
-    owner: 'root'
-    group: 'root'
-    mode: '0700'
-
-- name: 'Ensure container'
+- name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
-    name: 'factorio'
+    name: "{{ service['name'] }}"
     image: "{{ factorio_image_uri }}:{{ factorio_version }}"
-    state: 'present'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
     ports:
       - "{{ factorio_listen_port }}:34197/udp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
     volume:
-      - "{{ podman_data_dir }}/factorio:/data:Z"
-    generate_systemd: "{{ podman_services_systemd_config }}"
-    labels:
-      io.containers.autoupdate: 'registry'
+      - "{{ service['name'] }}:/data:Z"
   register: 'service_config'
+  notify: 'Restart changed services'
 
-- name: 'Add service to changelist'  # noqa no-handler
-  ansible.builtin.set_fact:
-    podman_services_changed: "{{ podman_services_changed + ['factorio'] }}"
-  when: service_config['changed']
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

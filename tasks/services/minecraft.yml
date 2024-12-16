@@ -1,41 +1,20 @@
 ---
-- name: 'Ensure storage directories'
-  ansible.builtin.file:
-    path: "{{ podman_data_dir }}/{{ dir }}"
-    state: 'directory'
-    owner: 1000
-    group: 1000
-    mode: '0700'
-  loop:
-    - 'minecraft'
-  loop_control:
-    loop_var: 'dir'
-
 - name: 'Ensure container'
   containers.podman.podman_container:
-    name: 'minecraft'
+    name: "{{ service['name'] }}"
     image: "{{ minecraft_image_uri }}:{{ minecraft_image_version }}"
-    state: 'present'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
     ports:
       - "{{ minecraft_listen_port }}:25565/tcp"
     volume:
-      - "{{ podman_data_dir }}/minecraft:/data:Z"
-    generate_systemd: "{{ podman_services_systemd_config }}"
-    env:
-      EULA: "TRUE"
-      VERSION: "{{ minecraft_game_version }}"
-      TYPE: 'AUTO_CURSEFORGE'
-      CF_API_KEY: "{{ minecraft_curseforge_api_key | quote }}"
-      CF_SLUG: "{{ minecraft_curseforge_modpack_slug }}"
-      CF_EXCLUDE_MODS: "{{ minecraft_curseforge_modpack_exclude_slugs }}"
-      INIT_MEMORY: "{{ minecraft_initial_memory }}"
-      MAX_MEMORY: "{{ minecraft_max_memory }}"
-    labels:
-      io.containers.autoupdate: 'registry'
+      - "{{ service['name'] }}:/data:Z"
+    env: "{{ minecraft_envvars }}"
   register: 'service_config'
+  notify: 'Restart changed services'
 
-- name: 'Add service to changelist'  # noqa no-handler
-  ansible.builtin.set_fact:
-    podman_services_changed: "{{ podman_services_changed + ['minecraft'] }}"
-  when: service_config['changed']
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

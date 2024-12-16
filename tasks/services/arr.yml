@@ -1,0 +1,141 @@
+---
+- name: "Ensure container - {{ service['name'] }}-bazarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-bazarr"
+    image: 'lscr.io/linuxserver/bazarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ bazarr_port }}:6767/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-bazarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-prowlarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-prowlarr"
+    image: 'lscr.io/linuxserver/prowlarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ prowlarr_port }}:9696/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-prowlarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-radarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-radarr"
+    image: 'lscr.io/linuxserver/radarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ radarr_port }}:7878/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-radarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-readarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-readarr"
+    image: 'lscr.io/linuxserver/readarr:develop'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ readarr_port }}:8787/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-readarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-sonarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-sonarr"
+    image: 'lscr.io/linuxserver/sonarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ sonarr_port }}:8989/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-sonarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-transmission"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-transmission"
+    image: 'lscr.io/linuxserver/transmission:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ transmission_port }}:9091/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-tranmission_config:/config:Z"
+      - "{{ arr_data_folder }}:/data:z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up network'
+  ansible.builtin.import_tasks: '../network.yml'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

@@ -1,0 +1,9 @@
+---
+- name: "Ensure networks - {{ service['name'] }}"
+  containers.podman.podman_network:
+    name: "{{ network }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+  notify: 'Restart changed services'
+  loop: "{{ podman_networks[service['name']] }}"
+  loop_control:
+    loop_var: 'network'
