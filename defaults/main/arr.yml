@@ -1,5 +1,7 @@
 ---
 # Set this to the folder that _contains_ your downloads/movies/tv etc.
+# This can also be a podman nfs volume created with:
+#  podman volume create --opt type=nfs --opt o=async --opt device=nfs.example.nl:/exports/media media
 arr_data_folder: '/media'
 
 arr_data_container_uid: '0'
