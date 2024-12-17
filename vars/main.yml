@@ -12,6 +12,7 @@ podman_volumes:
     - 'arr-transmission_config'
   factorio:
     - 'factorio'
+  hello_world: []
   minecraft:
     - 'minecraft'
   vaultwarden:
@@ -21,6 +22,10 @@ podman_volumes:
 podman_networks:
   arr:
     - 'arr-backend'
+  factorio: []
+  hello_world: []
+  minecraft: []
+  vaultwarden: []
 
 # List of containers to create for each service
 podman_containers:
@@ -33,6 +38,8 @@ podman_containers:
     - 'arr-transmission'
   factorio:
     - 'factorio'
+  hello_world:
+    - 'hello_world'
   minecraft:
     - 'minecraft'
   vaultwarden:

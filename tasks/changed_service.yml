@@ -5,8 +5,3 @@
   when:
     - service_config['changed']
     - service['state'] | default('present') == 'present'
-
-- name: 'Reload systemd'
-  ansible.builtin.systemd:
-    daemon_reload: true
-    scope: "{{ (ansible_facts['effective_user_id'] > 0) | ternary('user', 'system', 'system') }}"

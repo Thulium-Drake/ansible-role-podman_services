@@ -3,7 +3,10 @@
   ansible.builtin.systemd:
     name: "{{ container }}"
     state: 'restarted'
-    scope: "{{ (ansible_facts['effective_user_id'] > 0) | ternary('user', 'system', 'system') }}"
+    daemon_reload: true
+    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system') }}"
+  become: "{{ (podman_user_account != 'root') | ternary(true, omit) }}"
+  become_user: "{{ podman_user_account }}"
   loop: "{{ podman_containers[service] }}"
   loop_control:
     loop_var: 'container'

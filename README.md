@@ -24,6 +24,16 @@ In order to use the services from this catalogue, do the following:
     - 'podman_services'
 ```
 
+## Deployment scenarios
+This role can support running rootless, but it requires one of the following:
+
+* Run the role with ```become: false```, the role will detect the current user and use that for configuring services.
+* Run the role with ```become: true``` and ```podman_user_account``` defined to the target user that runs the contianers.
+
+If you want to run the containers as root:
+
+* Run the role with ```become: true``` and no ```podman_user_account``` configured.
+
 ## ARR stack notes
 Configuring the ARR stack should mostly still be done by hand, all containers are reachable for each other by their container name (which is arr-$APP, e.g. arr-sonarr) on their default ports.
 
