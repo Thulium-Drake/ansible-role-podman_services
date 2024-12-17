@@ -17,7 +17,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-bazarr_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
@@ -39,7 +39,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-prowlarr_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
@@ -61,7 +61,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-radarr_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
@@ -83,7 +83,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-readarr_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
@@ -105,7 +105,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-sonarr_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
@@ -127,7 +127,7 @@
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
       - "{{ service['name'] }}-transmission_config:/config:Z"
-      - "{{ arr_data_folder }}:/data:z"
+      - "{{ arr_data_folder }}:/data"
   register: 'service_config'
   notify: 'Restart changed services'
 
