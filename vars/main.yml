@@ -13,6 +13,8 @@ podman_volumes:
   factorio:
     - 'factorio'
   hello_world: []
+  homeassistant:
+    - 'homeassistant'
   minecraft:
     - 'minecraft'
   vaultwarden:
@@ -24,6 +26,7 @@ podman_networks:
     - 'arr-backend'
   factorio: []
   hello_world: []
+  homeassistant: []
   minecraft: []
   vaultwarden: []
 
@@ -40,6 +43,8 @@ podman_containers:
     - 'factorio'
   hello_world:
     - 'hello_world'
+  homeassistant:
+    - 'homeassistant'
   minecraft:
     - 'minecraft'
   vaultwarden:
