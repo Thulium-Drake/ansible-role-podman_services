@@ -8,6 +8,8 @@
     ports: "{{ homeassistant_ports }}"
     pull: 'newer'
     quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}:/config:Z"
   register: service_config
   notify: 'Restart changed services'
 

@@ -5,6 +5,7 @@ The catalogus currently contains:
 
 * arr: A full arr stack with transmission
 * hello_world: a simple container that will return 'hello world' via a REST API
+* homeassistant: Open source home automation that puts local control and privacy first
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
 * factorio: The Factorio server
 * minecraft: The Minecraft Server
@@ -44,3 +45,18 @@ Configuring the integrations between the different apps works as follows:
   * Go to the source app -> Settings -> General and retrieve the API key
   * Go to the target app and paste the API key
   * The server address inside the app will be http://arr-$APP:$PORT (e.g. http://arr-prowlarr:9696 and http://arr-radarr:7878)
+
+## Homeassistant notes
+If you don't directly expose homeassistant to your network and use a reverse proxy, add the following to the ```configuration.yaml``` to enable reverse proxying:
+
+1. Go to the folder where the homeassistant volume's data is (default should be something like ```~/.local/share/containers/storage/volumes/homeassistant/_data``` or ```/var/lib/containers/storage/volumes/homeassistant/_data```
+2. Edit ```configuration.yaml``` and add the following:
+```
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1/32
+    - ::1/128
+```
+
+3. Restart the service
