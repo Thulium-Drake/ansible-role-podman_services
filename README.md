@@ -46,6 +46,11 @@ Configuring the integrations between the different apps works as follows:
   * Go to the target app and paste the API key
   * The server address inside the app will be http://arr-$APP:$PORT (e.g. http://arr-prowlarr:9696 and http://arr-radarr:7878)
 
+### Sabnzbd specific notes
+The application uses a sort of hostname matching to prevent all kinds of nastiness. You'll need to follow the instructions on https://sabnzbd.org/wiki/extra/hostname-check.html to configure the app properly.
+
+When doing so, also make sure to add ```arr-sabnzbd``` as a hostname in order for the integrations with the rest of the tools to work!
+
 ## Homeassistant notes
 If you don't directly expose homeassistant to your network and use a reverse proxy, add the following to the ```configuration.yaml``` to enable reverse proxying:
 

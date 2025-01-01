@@ -131,6 +131,28 @@
   register: 'service_config'
   notify: 'Restart changed services'
 
+- name: "Ensure container - {{ service['name'] }}-sabnzbd"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-sabnzbd"
+    image: 'lscr.io/linuxserver/sabnzbd:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ sabnzbd_port }}:8080/tcp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-sabnzbd_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
 - name: "Ensure container - {{ service['name'] }}-jellyfin"  # noqa name[template]
   containers.podman.podman_container:
     name: "{{ service['name'] }}-jellyfin"

@@ -9,6 +9,7 @@ podman_volumes:
     - 'arr-prowlarr_config'
     - 'arr-radarr_config'
     - 'arr-readarr_config'
+    - 'arr-sabnzbd_config'
     - 'arr-sonarr_config'
     - 'arr-transmission_config'
   factorio:
@@ -39,6 +40,7 @@ podman_containers:
     - 'arr-prowlarr'
     - 'arr-radarr'
     - 'arr-readarr'
+    - 'arr-sabnzbd'
     - 'arr-sonarr'
     - 'arr-transmission'
   factorio:
