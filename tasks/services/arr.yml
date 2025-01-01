@@ -131,6 +131,31 @@
   register: 'service_config'
   notify: 'Restart changed services'
 
+- name: "Ensure container - {{ service['name'] }}-jellyfin"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-jellyfin"
+    image: 'lscr.io/linuxserver/jellyfin:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+      JELLYFIN_PublishedServerUrl: "{{ jellyfin_autodiscovery_url }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ jellyfin_webui_port }}:8096/tcp"
+      - '1900:1900/udp'  # Hardcoded for Jellyfin clients
+      - '7359:7359/udp'  #
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-jellyfin_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
 - name: 'Set up network'
   ansible.builtin.import_tasks: '../network.yml'
 

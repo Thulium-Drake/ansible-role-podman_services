@@ -8,10 +8,13 @@ arr_data_container_uid: '0'
 arr_data_container_gid: '0'
 
 bazarr_port: 6767
+jellyfin_webui_port: 8096
 prowlarr_port: 9696
 radarr_port: 7878
 readarr_port: 8787
 sonarr_port: 8989
 transmission_port: 9091
+
+jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
 arr_timezone: 'Etc/UTC'

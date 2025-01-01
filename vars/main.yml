@@ -5,6 +5,7 @@ podman_services_changed: []
 podman_volumes:
   arr:
     - 'arr-bazarr_config'
+    - 'arr-jellyfin_config'
     - 'arr-prowlarr_config'
     - 'arr-radarr_config'
     - 'arr-readarr_config'
@@ -34,6 +35,7 @@ podman_networks:
 podman_containers:
   arr:
     - 'arr-bazarr'
+    - 'arr-jellyfin'
     - 'arr-prowlarr'
     - 'arr-radarr'
     - 'arr-readarr'
