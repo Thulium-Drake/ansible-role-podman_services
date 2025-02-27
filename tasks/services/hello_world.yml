@@ -1,0 +1,16 @@
+---
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: 'docker.io/thomaspoignant/hello-world-rest-json'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    ports:
+      - '8080:8080'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+  register: service_config
+  notify: 'Restart changed services'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

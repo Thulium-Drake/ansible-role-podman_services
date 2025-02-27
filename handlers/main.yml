@@ -1,0 +1,6 @@
+---
+- name: 'Restart changed services'
+  ansible.builtin.include_tasks: '../tasks/restart_container.yml'
+  loop: "{{ podman_services_changed }}"
+  loop_control:
+    loop_var: 'service'

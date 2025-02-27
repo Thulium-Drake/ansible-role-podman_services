@@ -1,0 +1,23 @@
+---
+- name: 'Ensure container'
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-proxy"
+    image: 'jc21/nginx-proxy-manager:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    ports:
+      - '80:80/tcp' # Public HTTP Port
+      - '443:443/tcp' # Public HTTPS Port
+      - '81:81/tcp' # Admin Web Port
+      - '2222:2222/tcp' # SSH Stream
+    volume:
+      - "{{ service['name'] }}:/data:Z"
+      - letsencrypt:/etc/letsencrypt
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

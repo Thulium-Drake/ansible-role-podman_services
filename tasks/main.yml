@@ -1,0 +1,27 @@
+---
+- name: 'Gather current effective user for systemd service restarts'
+  ansible.builtin.command: whoami
+  register: 'podman_effective_user'
+  changed_when: false  # gathers information only
+
+- name: 'Set fact for useraccount'
+  ansible.builtin.set_fact:
+    podman_user_account: "{{ podman_effective_user['stdout'] }}"
+  when: podman_user_account is not defined
+
+- name: 'Run without become if not needed'
+  become: "{{ (podman_user_account != 'root') | ternary(omit, true) }}"
+  become_user: "{{ podman_user_account }}"
+  block:
+    - name: 'Deploy services'
+      ansible.builtin.include_tasks: "services/{{ service['name'] }}.yml"
+      loop: "{{ podman_services }}"
+      loop_control:
+        loop_var: 'service'
+
+    - name: 'Workaround - remove services'
+      ansible.builtin.include_tasks: 'workaround_remove.yml'
+      when: service['state'] | default('present') == 'absent'
+      loop: "{{ podman_services }}"
+      loop_control:
+        loop_var: 'service'

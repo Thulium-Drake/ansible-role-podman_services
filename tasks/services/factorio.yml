@@ -1,0 +1,21 @@
+---
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: "{{ factorio_image_uri }}:{{ factorio_version }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    ports:
+      - "{{ factorio_listen_port }}:34197/udp"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}:/data:Z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

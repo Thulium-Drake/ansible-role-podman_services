@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: thulium_drake
+  description: Services for Podman
+  role_name: podman_services
+
+  license: GPLv3
+
+  min_ansible_version: '2.13'
+
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+    - name: EL
+      versions:
+        - '7'
+        - '8'
+
+  galaxy_tags:
+    - podman
+    - services
+
+dependencies: []

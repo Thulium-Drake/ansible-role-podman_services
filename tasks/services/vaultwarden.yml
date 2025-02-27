@@ -1,0 +1,34 @@
+---
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: "{{ vaultwarden_image_uri }}:{{ vaultwarden_version }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      ROCKET_PORT: 3000
+      DOMAIN: "https://{{ vaultwarden_domain }}"
+      SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
+      SIGNUPS_VERIFY: "{{ vaultwarden_signups_verify }}"
+      SIGNUPS_DOMAINS_WHITELIST: "{{ vaultwarden_signup_whitelist | join(',') | default(omit, true) }}"
+      INVITATIONS_ALLOWED: "{{ vaultwarden_invitations_allowed }}"
+      ADMIN_TOKEN: "{{ vaultwarden_admin_token | default(omit, true) }}"
+      SMTP_HOST: "{{ vaultwarden_smtp_server }}"
+      SMTP_PORT: "{{ vaultwarden_smtp_port }}"
+      SMTP_FROM: "{{ vaultwarden_smtp_from }}"
+      SMTP_SECURITY: "{{ vaultwarden_smtp_ssl | ternary('tls', 'off') }}"
+      SMTP_USERNAME: "{{ vaultwarden_smtp_user | default(omit, true) }}"
+      SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
+    ports:
+      - "{{ vaultwarden_listen_uri }}:3000"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}:/data:Z"
+  register: 'service_config'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

@@ -1,0 +1,25 @@
+---
+vaultwarden_version: 'alpine'
+vaultwarden_image_uri: 'docker.io/vaultwarden/server'
+
+# Set this token to enable the admin portal
+vaultwarden_admin_token: ''
+vaultwarden_domain: 'vault.example.nl'
+vaultwarden_invitations_allowed: false
+
+vaultwarden_signups_verify: false
+vaultwarden_signups_allowed: false
+# When set, vaultwarden_signups_allowed is ignored
+vaultwarden_signup_whitelist: []
+
+# The listening URI for vaultwarden
+# Either specify an IP address:port (e.g. 127.0.0.1:3000) or a port for listening on all interfaces
+# NOTE: Vaultwarden is not encrypted by default!
+vaultwarden_listen_uri: '3000'
+
+vaultwarden_smtp_server: 'mail.example.nl'
+vaultwarden_smtp_port: 25
+vaultwarden_smtp_from: "vault-noreply@example.nl"
+vaultwarden_smtp_ssl: false
+vaultwarden_smtp_user: ''
+vaultwarden_smtp_password: ''

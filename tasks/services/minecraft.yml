@@ -1,0 +1,20 @@
+---
+- name: 'Ensure container'
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: "{{ minecraft_image_uri }}:{{ minecraft_image_version }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    ports:
+      - "{{ minecraft_listen_port }}:25565/tcp"
+    volume:
+      - "{{ service['name'] }}:/data:Z"
+    env: "{{ minecraft_envvars }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

@@ -1,0 +1,30 @@
+---
+- name: 'Workaround - Remove quadlets for removed containers'
+  ansible.builtin.file:
+    path: "{{ (podman_user_account != 'root') | ternary('~/.config', '/etc') }}/containers/systemd/{{ container }}.container"
+    state: 'absent'
+  loop: "{{ podman_containers[service['name']] }}"
+  loop_control:
+    loop_var: 'container'
+
+- name: 'Workaround - Remove quadlets for removed volumes'
+  ansible.builtin.file:
+    path: "{{ (podman_user_account != 'root') | ternary('~/.config', '/etc') }}/containers/systemd/{{ volume }}.volume"
+    state: 'absent'
+  loop: "{{ podman_volumes[service['name']] }}"
+  loop_control:
+    loop_var: 'volume'
+
+- name: 'Workaround - Remove quadlets for removed networks'
+  ansible.builtin.file:
+    path: "{{ (podman_user_account != 'root') | ternary('~/.config', '/etc') }}/containers/systemd/{{ network }}.network"
+    state: 'absent'
+  loop: "{{ podman_networks[service['name']] }}"
+  loop_control:
+    loop_var: 'network'
+
+- name: 'Reload systemd config'
+  ansible.builtin.systemd:
+    daemon_reload: true
+    daemon_reexec: true
+    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system', 'system') }}"

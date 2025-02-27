@@ -1,0 +1,6 @@
+# Which image you wish to use, I build my own, see
+# https://github.com/Thulium-Drake/container-factorio/ for my version
+factorio_image_uri: 'repo.example.com/games/factorio'
+factorio_version: 'latest'
+
+factorio_listen_port: 34197

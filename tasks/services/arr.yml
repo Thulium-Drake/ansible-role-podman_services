@@ -1,0 +1,236 @@
+---
+- name: "Ensure container - {{ service['name'] }}-bazarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-bazarr"
+    image: 'lscr.io/linuxserver/bazarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ bazarr_port }}:6767/tcp"
+    healthcheck: 'wget --no-verbose --tries=1 --spider http://localhost:6767 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-bazarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-prowlarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-prowlarr"
+    image: 'lscr.io/linuxserver/prowlarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ prowlarr_port }}:9696/tcp"
+    healthcheck: 'nc -z localhost 9696 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-prowlarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-radarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-radarr"
+    image: 'lscr.io/linuxserver/radarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ radarr_port }}:7878/tcp"
+    healthcheck: 'nc -z localhost 7878 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-radarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-readarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-readarr"
+    image: 'lscr.io/linuxserver/readarr:develop'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ readarr_port }}:8787/tcp"
+    healthcheck: 'nc -z localhost 8787 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-readarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-sonarr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-sonarr"
+    image: 'lscr.io/linuxserver/sonarr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ sonarr_port }}:8989/tcp"
+    healthcheck: 'nc -z localhost 8989 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-sonarr_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-transmission"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-transmission"
+    image: 'docker.io/haugene/transmission-openvpn'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    privileged: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+      OPENVPN_PROVIDER: "{{ transmission_vpn_provider }}"
+      OPENVPN_CONFIG: "{{ transmission_vpn_config }}"
+      OPENVPN_USERNAME: "{{ transmission_vpn_username }}"
+      OPENVPN_PASSWORD: "{{ transmission_vpn_password }}"
+      LOCAL_NETWORK: "{{ transmission_local_network }}"
+      TRANSMISSION_PORT_FORWARDING_ENABLED: 'true'
+      TRANSMISSION_BIND_ADDRESS_IPV4: "{{ transmission_bind_address }}"
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ transmission_port }}:9091/tcp"
+    healthcheck: "[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 '[0-9]')\" ] && exit 1 || exit 0"
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-transmission_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+# - name: "Ensure container - {{ service['name'] }}-sabnzbd"  # noqa name[template]
+#   containers.podman.podman_container:
+#     name: "{{ service['name'] }}-sabnzbd"
+#     image: 'lscr.io/linuxserver/sabnzbd:latest'
+#     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+#     auto_remove: true
+#     env:
+#       PUID: "{{ arr_data_container_uid }}"
+#       PGID: "{{ arr_data_container_gid }}"
+#       TZ: "{{ arr_timezone }}"
+#     network:
+#       - 'arr-backend.network'
+#     ports:
+#       - "{{ sabnzbd_port }}:8080/tcp"
+#     pull: 'newer'
+#     quadlet_options: "{{ podman_quadlet_options }}"
+#     volume:
+#       - "{{ service['name'] }}-sabnzbd_config:/config:Z"
+#       - "{{ arr_data_folder }}:/data"
+#   register: 'service_config'
+#   notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-jellyseerr"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-jellyseerr"
+    image: 'docker.io/fallenbagel/jellyseerr:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ jellyseerr_port }}:5055/tcp"
+    healthcheck: 'nc -z localhost 5055 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-jellyfin"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-jellyfin"
+    image: 'lscr.io/linuxserver/jellyfin:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      PUID: "{{ arr_data_container_uid }}"
+      PGID: "{{ arr_data_container_gid }}"
+      TZ: "{{ arr_timezone }}"
+      JELLYFIN_PublishedServerUrl: "{{ jellyfin_autodiscovery_url }}"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+    network:
+      - 'arr-backend.network'
+    ports:
+      - "{{ jellyfin_webui_port }}:8096/tcp"
+      - '1900:1900/udp'  # Hardcoded for Jellyfin clients
+      - '7359:7359/udp'  #
+    healthcheck: 'nc -z localhost 8096 || exit 1'
+    healthcheck_interval: '60s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    volume:
+      - "{{ service['name'] }}-jellyfin_config:/config:Z"
+      - "{{ arr_data_folder }}:/data"
+    # Add these options for GPU support:
+    privileged: true
+    security_opt: 
+      - label=disable
+    hooks_dir: '/usr/share/containers/oci/hooks.d/'
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up network'
+  ansible.builtin.import_tasks: '../network.yml'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

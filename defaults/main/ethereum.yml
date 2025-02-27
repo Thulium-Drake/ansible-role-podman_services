@@ -1,0 +1,7 @@
+---
+# Suggested fee recipient
+ethereum_fee-recipient: '0x4D5F4A853000B9e7Be86aDf115576713d654F8C6'
+ethereum_wallet-dir: "{{ service['name'] }}/consensus/validator_keys"
+ethereum_wallet-password-file: "{{ ethereum_wallet-dir }}/wallet.txt"
+
+ethereum_timezone: 'Europe/Amsterdam'
