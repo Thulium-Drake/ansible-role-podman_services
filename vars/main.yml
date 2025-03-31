@@ -19,6 +19,9 @@ podman_volumes:
     - 'homeassistant'
   minecraft:
     - 'minecraft'
+  openbao:
+    - 'openbao_config'
+    - 'openbao_data'
   vaultwarden:
     - 'vaultwarden'
 
@@ -30,6 +33,7 @@ podman_networks:
   hello_world: []
   homeassistant: []
   minecraft: []
+  openbao: []
   vaultwarden: []
 
 # List of containers to create for each service
@@ -51,5 +55,7 @@ podman_containers:
     - 'homeassistant'
   minecraft:
     - 'minecraft'
+  openbao:
+    - 'openbao'
   vaultwarden:
     - 'vaultwarden'

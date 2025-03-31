@@ -65,3 +65,12 @@ http:
 ```
 
 3. Restart the service
+
+## OpenBao
+This application requires additional setup after deployment:
+
+  - Go to the URL of your OpenBao instance (http://<server>:8200)
+  - Generate the unseal keys and the root token
+  - Save these somewhere safe
+
+Also, the default setup of OpenBao is _without_ SSL, this should also be remediated with a reverse proxy!
