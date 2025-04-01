@@ -1,0 +1,13 @@
+---
+invoiceninja_tag: 'latest'
+invoiceninja_url: "http://{{ ansible_facts['fqdn'] }}:9000"
+
+# Generate one with the following command
+# openssl rand -base64 32
+# DO NOT USE THE ONE BELOW!
+invoiceninja_appkey: 'base64:LnyG4eI0nOoZxf7UiSYLkxlNZVBG4k8uM96zPB5ujyg='
+
+invoiceninja_db_password: 'AllYourInvoiceAreBelongToUs'
+
+invoiceninja_admin_email: 'admin@localhost'
+invoiceninja_admin_password: 'Invoices4All'

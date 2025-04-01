@@ -17,6 +17,10 @@ podman_volumes:
   hello_world: []
   homeassistant:
     - 'homeassistant'
+  invoiceninja:
+    - 'invoiceninja'
+    - 'invoiceninja_db'
+    - 'invoiceninja_web_config'
   minecraft:
     - 'minecraft'
   openbao:
@@ -32,6 +36,8 @@ podman_networks:
   factorio: []
   hello_world: []
   homeassistant: []
+  invoiceninja:
+    - 'invoiceninja-backend'
   minecraft: []
   openbao: []
   vaultwarden: []
@@ -53,6 +59,10 @@ podman_containers:
     - 'hello_world'
   homeassistant:
     - 'homeassistant'
+  invoiceninja:
+    - 'invoiceninja-db'
+    - 'invoiceninja'
+    - 'invoiceninja-web'
   minecraft:
     - 'minecraft'
   openbao:

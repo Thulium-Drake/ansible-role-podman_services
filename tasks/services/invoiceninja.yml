@@ -1,0 +1,97 @@
+---
+- name: "Ensure container - {{ service['name'] }}-db"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-db"
+    image: 'docker.io/library/mariadb:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ invoiceninja_db_password }}"
+      MYSQL_DATABASE: 'invoiceninja'
+      MYSQL_USER: 'invoiceninja'
+      MYSQL_PASSWORD: "{{ invoiceninja_db_password }}"
+    volume:
+      - "{{ service['name'] }}_db:/var/lib/mysql:Z"
+    network:
+      - 'invoiceninja-backend.network'
+    healthcheck: 'mariadb-admin ping -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD}'
+    healthcheck_interval: '5s'
+    healthcheck_retries: 10
+    healthcheck_timeout: '3s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: "docker.io/invoiceninja/invoiceninja:{{ invoiceninja_tag }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    env:
+      APP_DEBUG: true
+      APP_URL: "{{ invoiceninja_url }}"
+      APP_KEY: "{{ invoiceninja_appkey }}"
+      REQUIRE_HTTPS: false
+      PHANTOMJS_PDF_GENERATION: false
+      PDF_GENERATOR: 'snappdf'
+      TRUSTED_PROXIES: '*'
+      IN_USER_EMAIL: "{{ invoiceninja_admin_email }}"
+      IN_PASSWORD: "{{ invoiceninja_admin_password }}"
+      DB_HOST: "{{ service['name'] }}-db"
+      DB_PORT: 3306
+      DB_DATABASE: 'invoiceninja'
+      DB_USERNAME: 'invoiceninja'
+      DB_PASSWORD: "{{ invoiceninja_db_password }}"
+    volume:
+      - "{{ service['name'] }}_public:/var/www/app/public:z"
+      - "{{ service['name'] }}_storage:/var/www/app/storage:z"
+    network:
+      - 'invoiceninja-backend.network'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}-web"  # noqa name[template]
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-web"
+    image: 'docker.io/library/nginx:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    volume:
+      - "{{ service['name'] }}_web_config:/etc/nginx/conf.d:Z"
+      - "{{ service['name'] }}_public:/var/www/app/public:z,ro"
+    network:
+      - 'invoiceninja-backend.network'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja.service'] + ['After=invoiceninja.service'] }}"
+    ports:
+      - '9000:80'
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Set up config file'
+  when: service['state'] == 'present'
+  block:
+    - name: 'Get volume information'
+      containers.podman.podman_volume_info:
+        name: "{{ service['name'] }}_web_config"
+      register: 'volume_info'
+
+    - name: 'Ensure config file'
+      ansible.builtin.command:
+        cmd: >-
+          podman unshare cp "{{ role_path }}/files/invoiceninja/nginx.conf"
+          {{ volume_info['volumes'][0]['Mountpoint'] }}/invoiceninja.conf
+      args:
+        creates: "{{ volume_info['volumes'][0]['Mountpoint'] }}/invoiceninja.conf"
+
+- name: 'Set up network'
+  ansible.builtin.import_tasks: '../network.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'
