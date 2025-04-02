@@ -82,10 +82,16 @@
         name: "{{ service['name'] }}_web_config"
       register: 'volume_info'
 
+    - name: 'Ensure copy of file on target server'
+      ansible.builtin.copy:
+        src: "files/{{ service['name'] }}/nginx.conf"
+        dest: "/tmp/{{ service['name'] }}-nginx.conf"
+        mode: '0600'
+
     - name: 'Ensure config file'
       ansible.builtin.command:
         cmd: >-
-          podman unshare cp "{{ role_path }}/files/invoiceninja/nginx.conf"
+          podman unshare cp "/tmp/{{ service['name'] }}-nginx.conf"
           {{ volume_info['volumes'][0]['Mountpoint'] }}/invoiceninja.conf
       args:
         creates: "{{ volume_info['volumes'][0]['Mountpoint'] }}/invoiceninja.conf"
