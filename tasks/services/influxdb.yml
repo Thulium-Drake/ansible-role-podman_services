@@ -1,0 +1,68 @@
+---
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: 'docker.io/library/influxdb:2-alpine'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    ports:
+      - "{{ influxdb_listen_uri }}:8086"
+    pull: 'newer'
+    env:
+      DOCKER_INFLUXDB_INIT_MODE: 'setup'
+      DOCKER_INFLUXDB_INIT_USERNAME: "{{ influxdb_username }}"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "{{ influxdb_password }}"
+      DOCKER_INFLUXDB_INIT_ORG: "{{ influxdb_organization }}"
+      DOCKER_INFLUXDB_INIT_BUCKET: "{{ influxdb_bucket }}"
+    quadlet_options: "{{ podman_quadlet_options }}"
+    network:
+      - 'influxdb-backend.network'
+      - 'grafana-backend.network'
+    volume:
+      - "{{ service['name'] }}_config:/etc/influxdb2:Z"
+      - "{{ service['name'] }}_data:/var/lib/influxdb2:Z"
+  register: service_config
+  notify: 'Restart changed services'
+
+- name: 'Ensure container - telegraf instances'
+  containers.podman.podman_container:
+    name: "telegraf-{{ instance['name'] }}"
+    image: 'docker.io/library/telegraf:alpine'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    hostname: "telegraf-{{ instance['name'] }}"
+    command: "--config {{ instance['config_url'] }}"
+    cap_add:
+      - 'cap_net_raw'
+    auto_remove: true
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+    env:
+      INFLUX_TOKEN: "{{ instance['config_token'] }}"
+    network:
+      - 'influxdb-backend.network'
+  loop: "{{ influxdb_telegraf_instances }}"
+  loop_control:
+    loop_var: 'instance'
+  register: service_config
+  notify: 'Restart changed services'
+
+- name: 'Update container list for service'
+  ansible.builtin.set_fact:
+    podman_containers: >-
+      {{
+        podman_containers | combine({
+          'influxdb': (podman_containers['influxdb'] + ['telegraf-' + instance['name']])
+        })
+      }}
+  loop: "{{ influxdb_telegraf_instances }}"
+  loop_control:
+    loop_var: 'instance'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Set up network'
+  ansible.builtin.import_tasks: '../network.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

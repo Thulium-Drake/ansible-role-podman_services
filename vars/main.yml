@@ -14,9 +14,14 @@ podman_volumes:
     - 'arr-transmission_config'
   factorio:
     - 'factorio'
+  grafana:
+    - 'grafana'
   hello_world: []
   homeassistant:
     - 'homeassistant'
+  influxdb:
+    - 'influxdb_config'
+    - 'influxdb_data'
   invoiceninja:
     - 'invoiceninja'
     - 'invoiceninja_db'
@@ -34,8 +39,13 @@ podman_networks:
   arr:
     - 'arr-backend'
   factorio: []
+  grafana:
+    - 'grafana-backend'
   hello_world: []
   homeassistant: []
+  influxdb:
+    - 'influxdb-backend'
+    - 'grafana-backend'
   invoiceninja:
     - 'invoiceninja-backend'
   minecraft: []
@@ -55,10 +65,14 @@ podman_containers:
     - 'arr-transmission'
   factorio:
     - 'factorio'
+  grafana:
+    - 'grafana'
   hello_world:
     - 'hello_world'
   homeassistant:
     - 'homeassistant'
+  influxdb:
+    - 'influxdb'
   invoiceninja:
     - 'invoiceninja-db'
     - 'invoiceninja'

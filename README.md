@@ -74,3 +74,19 @@ This application requires additional setup after deployment:
   - Save these somewhere safe
 
 Also, the default setup of OpenBao is _without_ SSL, this should also be remediated with a reverse proxy!
+
+## InfluxDB
+Setting up InfluxDB itself is rather straightforward, however when adding telegraf instances, it gets a bit tricky. Here's what you need to do:
+
+  * Define a new Telegraf config in the InfluxDB WebUI
+    * Ensure that the URL for the output is 'http://influxdb:8086'
+    * Copy the URL and the Token
+  * Define a new instance (see defaults for an example)
+  * Run Ansible to start your new instance
+
+The telegraf containers will download their config on each start and will complain in journalctl when something's not right. If you're debugging/changing them, the steps to change the config are:
+
+  * Update the config in the InfluxDB WebUI
+  * Restart the service for that instance
+  * Wait for it to start, check journald for any logging
+  * Repeat

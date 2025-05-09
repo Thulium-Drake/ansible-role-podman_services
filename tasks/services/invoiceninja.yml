@@ -31,7 +31,7 @@
     env:
       APP_DEBUG: true
       APP_URL: "{{ invoiceninja_url }}"
-      APP_KEY: "{{ invoiceninja_appkey }}"
+      APP_KEY: "base64:{{ invoiceninja_appkey }}"
       REQUIRE_HTTPS: false
       PHANTOMJS_PDF_GENERATION: false
       PDF_GENERATOR: 'snappdf'
