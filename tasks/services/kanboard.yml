@@ -1,4 +1,5 @@
 ---
+### POSTGRES STEPS <- comments are just for me bc its a little tough to read
 - name: "Ensure container - {{ service['name'] }}-db"  # noqa name[template]
   containers.podman.podman_container:
     name: "{{ service['name'] }}-db"
@@ -21,6 +22,9 @@
   register: 'service_config'
   notify: 'Restart changed services'
 
+
+
+### APPLICATION STEPS
 - name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
     name: "{{ service['name'] }}"
