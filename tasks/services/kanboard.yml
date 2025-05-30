@@ -1,5 +1,4 @@
 ---
-### POSTGRES STEPS <- comments are just for me bc its a little tough to read
 - name: "Ensure container - {{ service['name'] }}-db" 
   containers.podman.podman_container:
     name: "{{ service['name'] }}-db"
@@ -22,20 +21,18 @@
   register: 'service_config'
   notify: 'Restart changed services'
 
-
-
-### APPLICATION STEPS
 - name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
     name: "{{ service['name'] }}"
     image: 'docker.io/library/kanboard:latest'
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     env:
-      DATABASE_URL: 'postgres://kanboard:kanboard-secret@db/kanboard'
+      DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@db/kanboard"
     volume:
       - "{{ service['name'] }}_data:/var/www/app/data:z"
       - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
-      - "{{ service['name'] }}_certs:/var/nginx/ssl:z"
+    ports:
+      - "{{ kanboard_listen_uri }}:80"
     network:
       - 'kanboard-backend.network'
     pull: 'newer'
