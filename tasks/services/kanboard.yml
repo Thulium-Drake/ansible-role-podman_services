@@ -24,7 +24,7 @@
 - name: "Ensure container - {{ service['name'] }}"
   containers.podman.podman_container:
     name: "{{ service['name'] }}"
-    image: 'docker.io/library/kanboard:latest'
+    image: 'docker.io/kanboard/kanboard:latest'
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     env:
       DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@db/kanboard"
