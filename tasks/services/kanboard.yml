@@ -27,7 +27,7 @@
     image: 'docker.io/kanboard/kanboard:latest'
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     env:
-      DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@db/kanboard"
+      DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@kanboard-db/kanboard"
     volume:
       - "{{ service['name'] }}_data:/var/www/app/data:z"
       - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
