@@ -1,0 +1,50 @@
+---
+- name: "Ensure container - {{ service['name'] }}-db" 
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}-db"
+    image: 'docker.io/library/postgres:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    env:
+      POSTGRES_USER: 'kanboard'
+      POSTGRES_PASSWORD: "{{ kanboard_db_password }}"
+      POSTGRES_DB: 'kanboard'
+    volume:
+      - "{{ service['name'] }}_db:/var/lib/postgresql/data:Z"
+    network:
+      - 'kanboard-backend.network'
+    healthcheck: 'pg_isready -U${POSTGRES_USER}'
+    healthcheck_interval: '5s'
+    healthcheck_retries: 10
+    healthcheck_timeout: '3s'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: "Ensure container - {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: "{{ service['name'] }}"
+    image: 'docker.io/kanboard/kanboard:latest'
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    env:
+      DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@kanboard-db/kanboard"
+    volume:
+      - "{{ service['name'] }}_data:/var/www/app/data:z"
+      - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
+    ports:
+      - "{{ kanboard_listen_uri }}:80"
+    network:
+      - 'kanboard-backend.network'
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=kanboard-db.service'] + ['After=kanboard-db.service'] }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Set up volume'
+  ansible.builtin.import_tasks: '../volume.yml'
+
+- name: 'Set up network'
+  ansible.builtin.import_tasks: '../network.yml'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: '../changed_service.yml'

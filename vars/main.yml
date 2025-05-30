@@ -26,6 +26,10 @@ podman_volumes:
     - 'invoiceninja'
     - 'invoiceninja_db'
     - 'invoiceninja_web_config'
+  kanboard:
+    - 'kanboard_data'
+    - 'kanboard_db'
+    - 'kanboard_plugins'
   minecraft:
     - 'minecraft'
   openbao:
@@ -48,6 +52,8 @@ podman_networks:
     - 'grafana-backend'
   invoiceninja:
     - 'invoiceninja-backend'
+  kanboard:
+    - 'kanboard-backend'
   minecraft: []
   openbao: []
   vaultwarden: []
@@ -77,6 +83,9 @@ podman_containers:
     - 'invoiceninja-db'
     - 'invoiceninja'
     - 'invoiceninja-web'
+  kanboard:
+    - 'kanboard'
+    - 'kanboard-db'
   minecraft:
     - 'minecraft'
   openbao:
