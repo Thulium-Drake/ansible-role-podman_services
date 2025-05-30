@@ -1,5 +1,5 @@
 ---
-- name: "Ensure container - {{ service['name'] }}-db" 
+- name: "Ensure container - {{ service['name'] }}-db"  # noqa name[template]
   containers.podman.podman_container:
     name: "{{ service['name'] }}-db"
     image: 'docker.io/library/postgres:latest'

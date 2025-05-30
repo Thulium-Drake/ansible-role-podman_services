@@ -11,7 +11,7 @@
     cap_add:
       - 'IPC_LOCK'
     ports:
-      - '8200:8200'
+      - "{{ openbao_listen_uri }}:8200"
     pull: 'newer'
     quadlet_options: "{{ podman_quadlet_options }}"
     volume:
