@@ -1,0 +1,7 @@
+---
+kanboard_db_password: 'allyourtaskarebelongtous'
+
+# The listening URI for Kanboard
+# Either specify an IP address:port (e.g. 127.0.0.1:3000) or a port for listening on all in    terfaces
+# NOTE: Kanboard is not encrypted by default!
+vaultwarden_listen_uri: '3023'
