@@ -28,6 +28,10 @@
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     env:
       DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@kanboard-db/kanboard"
+      REVERSE_PROXY_AUTH: "{{ kanboard_reverse_proxy_auth }}"
+      REVERSE_PROXY_USER_HEADER: "{{ kanboard_reverse_proxy_header }}"
+      HIDE_LOGIN_FORM: "{{ not kanboard_reverse_proxy_auth }}"
+      DISABLE_LOGOUT: "{{ not kanboard_reverse_proxy_auth }}"
     volume:
       - "{{ service['name'] }}_data:/var/www/app/data:z"
       - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
