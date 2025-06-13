@@ -8,7 +8,7 @@ kanboard_reverse_proxy_header: 'REMOTE_USER'
 # Email
 kanboard_smtp_hostname: 'mail.example.nl'
 kanboard_smtp_port: 25
-kanboard_smtp_encryption: 'null'
+kanboard_smtp_encryption: ''  # ssl, tls or leave empty
 kanboard_smtp_username: 'mailer'
 kanboard_smtp_password: 'AllTheTasks!'
 

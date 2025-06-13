@@ -35,7 +35,7 @@
       MAIL_TRANSPORT: 'smtp'
       MAIL_SMTP_HOSTNAME: "{{ kanboard_smtp_hostname }}"
       MAIL_SMTP_PORT: "{{ kanboard_smtp_port }}"
-      MAIL_SMTP_ENCRYPTION: "{{ kanboard_smtp_encryption }}"
+      MAIL_SMTP_ENCRYPTION: "{{ kanboard_smtp_encryption | default(omit, true) }}"
       MAIL_SMTP_USERNAME: "{{ kanboard_smtp_username | default(omit, true) }}"
       MAIL_SMTP_PASSWORD: "{{ kanboard_smtp_password | default(omit, true) }}"
     volume:
