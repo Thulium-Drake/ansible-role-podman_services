@@ -5,6 +5,13 @@ kanboard_db_password: 'allyourtaskarebelongtous'
 kanboard_reverse_proxy_auth: false
 kanboard_reverse_proxy_header: 'REMOTE_USER'
 
+# Email
+kanboard_smtp_hostname: 'mail.example.nl'
+kanboard_smtp_port: 25
+kanboard_smtp_encryption: 'null'
+kanboard_smtp_username: 'mailer'
+kanboard_smtp_password: 'AllTheTasks!'
+
 # The listening URI for Kanboard
 # Either specify an IP address:port (e.g. 127.0.0.1:3000) or a port for listening on all in    terfaces
 # NOTE: Kanboard is not encrypted by default!

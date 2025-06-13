@@ -32,6 +32,12 @@
       REVERSE_PROXY_USER_HEADER: "{{ kanboard_reverse_proxy_header }}"
       HIDE_LOGIN_FORM: "{{ not kanboard_reverse_proxy_auth }}"
       DISABLE_LOGOUT: "{{ not kanboard_reverse_proxy_auth }}"
+      MAIL_TRANSPORT: 'smtp'
+      MAIL_SMTP_HOSTNAME: "{{ kanboard_smtp_hostname }}"
+      MAIL_SMTP_PORT: "{{ kanboard_smtp_port }}"
+      MAIL_SMTP_ENCRYPTION: "{{ kanboard_smtp_encryption }}"
+      MAIL_SMTP_USERNAME: "{{ kanboard_smtp_username }}"
+      MAIL_SMTP_PASSWORD: "{{ kanboard_smtp_password }}"
     volume:
       - "{{ service['name'] }}_data:/var/www/app/data:z"
       - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
