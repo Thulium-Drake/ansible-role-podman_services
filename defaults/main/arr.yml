@@ -34,6 +34,9 @@ transmission_local_network: '192.168.0.0/16'
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
+# GPU Support (options: 'none', 'nvidia')
+arr_gpu: 'none'
+
 # ARR service volumes and networks
 podman_volumes_arr:
   arr:

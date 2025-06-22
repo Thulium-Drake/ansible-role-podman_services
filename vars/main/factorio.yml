@@ -14,5 +14,5 @@ podman_service_containers_factorio:
         UPDATE_MODS_ON_START: "{{ factorio_update_mods | default('false') }}"
         RCON_PASSWORD: "{{ factorio_rcon_password | default('changeme-rcon') }}"
       network:
-        - "{{ service['name'] }}-factorio.network"
+        - "{{ service['name'] }}-factorio"
       restart_policy: '{{ factorio_restart_policy | default("unless-stopped") }}'

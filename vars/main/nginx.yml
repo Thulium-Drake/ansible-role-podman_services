@@ -1,23 +1,17 @@
 ---
-# NGINX reverse proxy service container definitions
+# NGINX Proxy Manager service container definitions
 podman_service_containers_nginx:
   nginx:
-    nginx:
-      image: '{{ nginx_image | default("docker.io/library/nginx:alpine") }}'
+    proxy:
+      image: '{{ nginx_proxy_manager_image | default("docker.io/jc21/nginx-proxy-manager:latest") }}'
       ports:
         - "{{ nginx_http_port | default('80') }}:80"
         - "{{ nginx_https_port | default('443') }}:443"
+        - "{{ nginx_admin_port | default('81') }}:81"
+        - "{{ nginx_ssh_stream_port | default('2222') }}:2222"
       volumes:
-        - "{{ service['name'] }}-nginx_config:/etc/nginx/conf.d:Z"
-        - "{{ service['name'] }}-nginx_html:/usr/share/nginx/html:Z"
-        - "{{ service['name'] }}-nginx_ssl:/etc/nginx/ssl:Z"
-        - "{{ service['name'] }}-nginx_logs:/var/log/nginx:Z"
-      network:
-        - "{{ service['name'] }}-frontend.network"
-      restart_policy: '{{ nginx_restart_policy | default("unless-stopped") }}'
-      healthcheck:
-        test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
-        start_period: "{{ nginx_healthcheck_start_period | default('30s') }}"
-        interval: "{{ nginx_healthcheck_interval | default('30s') }}"
-        retries: "{{ nginx_healthcheck_retries | default('3') }}"
-        timeout: "{{ nginx_healthcheck_timeout | default('10s') }}"
+        - "nginx:/data:Z"
+        - "letsencrypt:/etc/letsencrypt:Z"
+      env:
+        DB_SQLITE_FILE: "{{ nginx_db_sqlite_file | default('/data/database.sqlite') }}"
+        DISABLE_IPV6: "{{ nginx_disable_ipv6 | default('true') }}"

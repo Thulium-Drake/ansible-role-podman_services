@@ -18,5 +18,5 @@ podman_service_containers_minecraft:
         MOTD: "{{ minecraft_motd | default('A Minecraft Server') }}"
         SPAWN_PROTECTION: "{{ minecraft_spawn_protection | default('16') }}"
       network:
-        - "{{ service['name'] }}-minecraft.network"
+        - "{{ service['name'] }}-minecraft"
       restart_policy: '{{ minecraft_restart_policy | default("unless-stopped") }}'

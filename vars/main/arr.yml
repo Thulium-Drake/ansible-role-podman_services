@@ -115,7 +115,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/jellyfin:latest'
       network:
         - 'arr-backend.network'
-      privileged: true
+      privileged: "{{ (arr_gpu == 'nvidia') | ternary(true, false) }}"
       healthcheck: 'curl -f http://localhost:8096/health || exit 1'
       volumes:
         - "{{ service['name'] }}-jellyfin_config:/config:Z"
@@ -125,11 +125,10 @@ podman_service_containers_arr:
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
         JELLYFIN_PublishedServerUrl: "{{ jellyfin_autodiscovery_url }}"
-        NVIDIA_VISIBLE_DEVICES: all
-        NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+        NVIDIA_VISIBLE_DEVICES: "{{ (arr_gpu == 'nvidia') | ternary('all', omit) }}"
+        NVIDIA_DRIVER_CAPABILITIES: "{{ (arr_gpu == 'nvidia') | ternary('compute,video,utility', omit) }}"
       ports:
         - "{{ jellyfin_webui_port }}:8096/tcp"
         - '1900:1900/udp'
         - '7359:7359/udp'
-      device:
-        - 'nvidia.com/gpu=all'
+      device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'], omit) }}"
