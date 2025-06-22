@@ -19,17 +19,18 @@ jellyseerr_port: 5055
 transmission_port: 9091
 
 # Transmission Network Settings
-transmission_vpn_provider: 'TORGUARD'
-transmission_vpn_config: 'Static'
-transmission_vpn_username: 'b061b8holzzc1f2'
-transmission_vpn_password: 'OcIzaH0Cg27aKaN'
-transmission_local_network: '192.168.0.0/16,127.0.0.1/32'
-transmission_bind_address: '5.253.204.58'
+transmission_vpn_provider: 'VPN Provider'
+transmission_vpn_config: 'VPN Config'
+transmission_vpn_username: 'vpn_username'
+transmission_vpn_password: 'vpn_password'
+transmission_local_network: '192.168.0.0/16'
+# transmission_bind_address: '1.2.3.4' # Optional, set to your public IP if needed
+
 # Transmission Web UI
 # options are:
 # combustion, kettu, transmission-web-control,
 # flood-for-transmission, shift, transmissionic
-transmission_web_ui: 'flood-for-transmission'
+# transmission_web_ui: 'flood-for-transmission' # Optional, set to your preferred UI
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 

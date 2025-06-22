@@ -1,7 +1,7 @@
 ---
 - name: 'Add changed containers to changelist'  # noqa no-handler
   ansible.builtin.set_fact:
-    podman_containers_changed: "{{ podman_containers_changed | default([]) + [item.item.key == service['name'] | ternary(item.item.key, service['name'] + '-' + item.item.key)] }}"
+    podman_containers_changed: "{{ podman_containers_changed | default([]) + [(item.item.key == service['name']) | ternary(service['name'], service['name'] + '-' + item.item.key)] }}"
   loop: "{{ service_config.results }}"
   when:
     - item.changed

@@ -1,0 +1,99 @@
+---
+# Ethereum service container definitions
+podman_service_containers_ethereum:
+  ethereum:
+    geth:
+      name: "{{ service['name'] }}-geth"
+      image: docker.io/ethereum/client-go:stable
+      state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+      command:
+        - --state.scheme=path
+        - "--cache={{ ethereum_geth_cache }}"
+        - --datadir=/ethereum/execution/data
+        - --ws
+        - --ws.origins=*
+        - --ws.api=eth,net,web3,debug
+        - --http
+        - --http.addr=0.0.0.0
+        - --http.vhosts=*
+        - --http.corsdomain=*
+        - --http.api=eth,net,engine,admin,web3
+        - "--syncmode={{ ethereum_geth_syncmode }}"
+        - "--gcmode={{ ethereum_geth_gcmode }}"
+        - --authrpc.vhosts=*
+        - --mainnet
+      auto_remove: true
+      timezone: "{{ ethereum_timezone }}"
+      user: "{{ ethereum_user_id }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      ports:
+        - 30303:30303/tcp
+        - 8545:8545/tcp
+        - 8546:8546/tcp
+        - 8547:8547/tcp
+      pull: newer
+      quadlet_options: "{{ podman_quadlet_options }}"
+      volumes:
+        - "/ethereum:/ethereum"
+      healthcheck: wget --no-verbose --tries=1 --spider http://localhost:8545 || exit 1
+      healthcheck_interval: 60s
+      healthcheck_start_period: 5m
+
+    beacon:
+      name: "{{ service['name'] }}-beacon"
+      image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
+      state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+      command:
+        - --datadir=/ethereum/execution/data
+        - --execution-endpoint=/ethereum/execution/data/geth.ipc
+        - --grpc-gateway-host=0.0.0.0
+        - --rpc-host=0.0.0.0
+        - --monitoring-host=0.0.0.0
+        - --accept-terms-of-use
+        - "--suggested-fee-recipient={{ ethereum_fee_recipient }}"
+        - "--checkpoint-sync-url={{ ethereum_checkpoint_sync_url }}"
+        - "--genesis-beacon-api-url={{ ethereum_genesis_beacon_api_url }}"
+      auto_remove: true
+      timezone: "{{ ethereum_timezone }}"
+      user: "{{ ethereum_user_id }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      ports:
+        - 3500:3500/tcp
+        - 4000:4000/tcp
+        - 8080:8080/tcp
+        - 13000:13000/tcp
+        - 12000:12000/udp
+      pull: newer
+      quadlet_options: "{{ podman_quadlet_options }}"
+      cap_add:
+        - NET_ADMIN
+      volumes:
+        - "/ethereum:/ethereum"
+
+    validator:
+      name: "{{ service['name'] }}-validator"
+      image: gcr.io/prysmaticlabs/prysm/validator:stable
+      state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+      command:
+        - --wallet-dir=/ethereum/consensus/validator_keys
+        - --wallet-password-file=/ethereum/consensus/validator_keys/wallet.txt
+        - --web
+        - --grpc-gateway-host=0.0.0.0
+        - --rpc-host=0.0.0.0
+        - --monitoring-host=0.0.0.0
+        - "--beacon-rpc-provider={{ service['name'] }}-beacon:4000"
+        - --accept-terms-of-use
+        - "--suggested-fee-recipient={{ ethereum_fee_recipient }}"
+      auto_remove: true
+      timezone: "{{ ethereum_timezone }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      ports:
+        - 7500:7500/tcp
+        - 8081:8081/tcp
+      pull: newer
+      quadlet_options: "{{ podman_quadlet_options }}"
+      volumes:
+        - "/ethereum:/ethereum"
