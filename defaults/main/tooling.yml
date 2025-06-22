@@ -1,0 +1,36 @@
+---
+# Tooling container configuration defaults
+
+# Container images
+tooling_vscode_image: 'docker.io/linuxserver/code-server:latest'
+tooling_firefox_image: 'docker.io/linuxserver/firefox:latest'
+
+# Port configuration
+tooling_vscode_port: '3000'
+tooling_firefox_port: '3001'
+
+# User/Group configuration
+tooling_user_id: '1000'
+tooling_group_id: '1000'
+tooling_timezone: 'UTC'
+
+# Security configuration - should be overridden with vault values
+tooling_vscode_password: 'changeme-vscode-password'
+tooling_vscode_sudo_password: 'changeme-sudo-password'
+
+# Container restart policy
+tooling_restart_policy: 'unless-stopped'
+
+# Firefox specific
+tooling_firefox_shm_size: '1gb'
+
+# Tooling service volumes and networks
+podman_volumes_tooling:
+  tooling:
+    - name: 'tooling-vscode_config'
+    - name: 'tooling-vscode_workspace'
+    - name: 'tooling-firefox_config'
+
+podman_networks_tooling:
+  tooling:
+    - 'tooling-tooling'

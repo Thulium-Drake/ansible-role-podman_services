@@ -1,0 +1,35 @@
+---
+# Tooling service container definitions - Development tools and utilities
+podman_service_containers_tooling:
+  tooling:
+    vscode:
+      image: '{{ tooling_vscode_image | default("docker.io/linuxserver/code-server:latest") }}'
+      ports:
+        - "{{ tooling_vscode_port | default('3000') }}:8443"
+      volumes:
+        - "{{ service['name'] }}-vscode_config:/config:Z"
+        - "{{ service['name'] }}-vscode_workspace:/workspace:Z"
+      environment:
+        PUID: "{{ tooling_user_id | default('1000') }}"
+        PGID: "{{ tooling_group_id | default('1000') }}"
+        TZ: "{{ tooling_timezone | default('UTC') }}"
+        PASSWORD: "{{ tooling_vscode_password | default('changeme-vscode') }}"
+        SUDO_PASSWORD: "{{ tooling_vscode_sudo_password | default('changeme-sudo') }}"
+      network:
+        - "{{ service['name'] }}-tooling.network"
+      restart_policy: '{{ tooling_restart_policy | default("unless-stopped") }}'
+      
+    firefox:
+      image: '{{ tooling_firefox_image | default("docker.io/linuxserver/firefox:latest") }}'
+      ports:
+        - "{{ tooling_firefox_port | default('3001') }}:3000"
+      volumes:
+        - "{{ service['name'] }}-firefox_config:/config:Z"
+      environment:
+        PUID: "{{ tooling_user_id | default('1000') }}"
+        PGID: "{{ tooling_group_id | default('1000') }}"
+        TZ: "{{ tooling_timezone | default('UTC') }}"
+      network:
+        - "{{ service['name'] }}-tooling.network"
+      restart_policy: '{{ tooling_restart_policy | default("unless-stopped") }}'
+      shm_size: '{{ tooling_firefox_shm_size | default("1gb") }}'

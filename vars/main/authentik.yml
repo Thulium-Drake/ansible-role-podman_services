@@ -3,7 +3,7 @@
 podman_service_containers_authentik:
   authentik:
     postgresql:
-      image: 'docker.io/library/postgres:16-alpine'
+      image: '{{ authentik_postgresql_image }}'
       env:
         POSTGRES_PASSWORD: "{{ authentik_postgres_password }}"
         POSTGRES_USER: "{{ authentik_postgres_user }}"
@@ -12,31 +12,31 @@ podman_service_containers_authentik:
         - "{{ service['name'] }}-backend.network"
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"]
-        start_period: 20s
-        interval: 30s
-        retries: 5
-        timeout: 5s
+        start_period: "{{ authentik_postgres_healthcheck_start_period }}"
+        interval: "{{ authentik_postgres_healthcheck_interval }}"
+        retries: "{{ authentik_postgres_healthcheck_retries }}"
+        timeout: "{{ authentik_postgres_healthcheck_timeout }}"
       volumes:
         - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
-      restart_policy: 'unless-stopped'
+      restart_policy: '{{ authentik_restart_policy }}'
     
     redis:
-      image: 'docker.io/library/redis:alpine'
-      command: ["--save", "60", "1", "--loglevel", "warning"]
+      image: '{{ authentik_redis_image }}'
+      command: ["--save", "{{ authentik_redis_save_interval }}", "{{ authentik_redis_save_changes }}", "--loglevel", "{{ authentik_redis_loglevel }}"]
       network:
         - "{{ service['name'] }}-backend.network"
       healthcheck:
         test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-        start_period: 20s
-        interval: 30s
-        retries: 5
-        timeout: 3s
+        start_period: "{{ authentik_redis_healthcheck_start_period }}"
+        interval: "{{ authentik_redis_healthcheck_interval }}"
+        retries: "{{ authentik_redis_healthcheck_retries }}"
+        timeout: "{{ authentik_redis_healthcheck_timeout }}"
       volumes:
         - "{{ service['name'] }}-redis_data:/data:Z"
-      restart_policy: 'unless-stopped'
+      restart_policy: '{{ authentik_restart_policy }}'
     
     server:
-      image: 'ghcr.io/goauthentik/server:2025.6.2'
+      image: '{{ authentik_server_image }}'
       command: ["server"]
       env:
         AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
@@ -53,10 +53,10 @@ podman_service_containers_authentik:
       volumes:
         - "{{ service['name'] }}-media:/media:Z"
         - "{{ service['name'] }}-templates:/templates:Z"
-      restart_policy: 'unless-stopped'
+      restart_policy: '{{ authentik_restart_policy }}'
     
     worker:
-      image: 'ghcr.io/goauthentik/server:2025.6.2'
+      image: '{{ authentik_worker_image }}'
       command: ["worker"]
       env:
         AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
@@ -73,4 +73,4 @@ podman_service_containers_authentik:
           ([service['name'] + '-media:/media:Z', service['name'] + '-certs:/certs:Z', service['name'] + '-templates:/templates:Z'] +
           (authentik_worker_docker_socket | ternary(['/var/run/docker.sock:/var/run/docker.sock'], [])))
         }}
-      restart_policy: 'unless-stopped'
+      restart_policy: '{{ authentik_restart_policy }}'

@@ -1,0 +1,23 @@
+---
+# NGINX reverse proxy service container definitions
+podman_service_containers_nginx:
+  nginx:
+    nginx:
+      image: '{{ nginx_image | default("docker.io/library/nginx:alpine") }}'
+      ports:
+        - "{{ nginx_http_port | default('80') }}:80"
+        - "{{ nginx_https_port | default('443') }}:443"
+      volumes:
+        - "{{ service['name'] }}-nginx_config:/etc/nginx/conf.d:Z"
+        - "{{ service['name'] }}-nginx_html:/usr/share/nginx/html:Z"
+        - "{{ service['name'] }}-nginx_ssl:/etc/nginx/ssl:Z"
+        - "{{ service['name'] }}-nginx_logs:/var/log/nginx:Z"
+      network:
+        - "{{ service['name'] }}-frontend.network"
+      restart_policy: '{{ nginx_restart_policy | default("unless-stopped") }}'
+      healthcheck:
+        test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+        start_period: "{{ nginx_healthcheck_start_period | default('30s') }}"
+        interval: "{{ nginx_healthcheck_interval | default('30s') }}"
+        retries: "{{ nginx_healthcheck_retries | default('3') }}"
+        timeout: "{{ nginx_healthcheck_timeout | default('10s') }}"

@@ -1,0 +1,30 @@
+---
+# NGINX container configuration defaults
+
+# Container image
+nginx_image: 'docker.io/library/nginx:alpine'
+
+# Port configuration
+nginx_http_port: '80'
+nginx_https_port: '443'
+
+# Container restart policy
+nginx_restart_policy: 'unless-stopped'
+
+# Healthcheck configuration
+nginx_healthcheck_start_period: '30s'
+nginx_healthcheck_interval: '30s'
+nginx_healthcheck_retries: '3'
+nginx_healthcheck_timeout: '10s'
+
+# NGINX service volumes and networks
+podman_volumes_nginx:
+  nginx:
+    - name: 'nginx-nginx_config'
+    - name: 'nginx-nginx_html'
+    - name: 'nginx-nginx_ssl'
+    - name: 'nginx-nginx_logs'
+
+podman_networks_nginx:
+  nginx:
+    - 'nginx-frontend'

@@ -1,0 +1,22 @@
+---
+# Minecraft server service container definitions
+podman_service_containers_minecraft:
+  minecraft:
+    minecraft:
+      image: '{{ minecraft_image | default("docker.io/itzg/minecraft-server:latest") }}'
+      ports:
+        - "{{ minecraft_port | default('25565') }}:25565"
+      volumes:
+        - "{{ service['name'] }}-minecraft_data:/data:Z"
+      environment:
+        EULA: "{{ minecraft_eula | default('TRUE') }}"
+        VERSION: "{{ minecraft_version | default('LATEST') }}"
+        TYPE: "{{ minecraft_type | default('VANILLA') }}"
+        MEMORY: "{{ minecraft_memory | default('1G') }}"
+        DIFFICULTY: "{{ minecraft_difficulty | default('easy') }}"
+        MAX_PLAYERS: "{{ minecraft_max_players | default('20') }}"
+        MOTD: "{{ minecraft_motd | default('A Minecraft Server') }}"
+        SPAWN_PROTECTION: "{{ minecraft_spawn_protection | default('16') }}"
+      network:
+        - "{{ service['name'] }}-minecraft.network"
+      restart_policy: '{{ minecraft_restart_policy | default("unless-stopped") }}'

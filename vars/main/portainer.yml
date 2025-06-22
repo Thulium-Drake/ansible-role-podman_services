@@ -1,0 +1,15 @@
+---
+# Portainer service container definitions - Container management UI
+podman_service_containers_portainer:
+  portainer:
+    portainer:
+      image: '{{ portainer_image | default("docker.io/portainer/portainer-ce:latest") }}'
+      ports:
+        - "{{ portainer_port | default('9000') }}:9000"
+      volumes:
+        - "{{ service['name'] }}-portainer_data:/data:Z"
+        - "/var/run/docker.sock:/var/run/docker.sock"
+      network:
+        - "{{ service['name'] }}-portainer.network"
+      restart_policy: '{{ portainer_restart_policy | default("unless-stopped") }}'
+      command: ["--host", "unix:///var/run/docker.sock"]
