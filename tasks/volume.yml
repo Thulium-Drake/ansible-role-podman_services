@@ -1,9 +1,10 @@
 ---
 - name: "Ensure volumes - {{ service['name'] }}"
   containers.podman.podman_volume:
-    name: "{{ volume }}"
+    name: "{{ volume.name }}"
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
-    driver: "{{ podman_volume_driver }}"
+    driver: "{{ volume.driver | default(podman_volume_driver) }}"
+    options: "{{ volume.options | default(omit) }}"
   notify: 'Restart changed services'
   loop: "{{ podman_volumes[service['name']] }}"
   loop_control:

@@ -27,7 +27,7 @@ vaultwarden_smtp_password: ''
 # Vaultwarden service volumes and networks
 podman_volumes_vaultwarden:
   vaultwarden:
-    - 'vaultwarden'
+    - name: 'vaultwarden'
 
 podman_networks_vaultwarden:
   vaultwarden: []

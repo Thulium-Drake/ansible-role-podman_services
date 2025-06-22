@@ -8,7 +8,7 @@ homeassistant_ports:
 # Home Assistant service volumes and networks
 podman_volumes_homeassistant:
   homeassistant:
-    - 'homeassistant'
+    - name: 'homeassistant'
 
 podman_networks_homeassistant:
   homeassistant: []

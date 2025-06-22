@@ -18,11 +18,11 @@ authentik_worker_user_root: true
 # Authentik service volumes and networks
 podman_volumes_authentik:
   authentik:
-    - 'authentik-postgresql_data'
-    - 'authentik-redis_data'
-    - 'authentik-media'
-    - 'authentik-templates'
-    - 'authentik-certs'
+    - name: 'authentik-postgresql_data'
+    - name: 'authentik-redis_data'
+    - name: 'authentik-media'
+    - name: 'authentik-templates'
+    - name: 'authentik-certs'
 
 podman_networks_authentik:
   authentik:
