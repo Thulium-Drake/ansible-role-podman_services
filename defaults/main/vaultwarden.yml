@@ -23,3 +23,15 @@ vaultwarden_smtp_from: "vault-noreply@example.nl"
 vaultwarden_smtp_ssl: false
 vaultwarden_smtp_user: ''
 vaultwarden_smtp_password: ''
+
+# Vaultwarden service volumes and networks
+podman_volumes_vaultwarden:
+  vaultwarden:
+    - 'vaultwarden'
+
+podman_networks_vaultwarden:
+  vaultwarden: []
+
+podman_containers_vaultwarden:
+  vaultwarden:
+    - 'vaultwarden'

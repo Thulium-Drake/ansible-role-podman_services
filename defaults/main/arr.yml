@@ -6,7 +6,9 @@ arr_data_folder: 'arr-data'
 
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'
+arr_timezone: 'Europe/Amsterdam'
 
+# Port variables for ARR services
 bazarr_port: 6767
 jellyfin_webui_port: 8096
 prowlarr_port: 9696
@@ -15,15 +17,46 @@ readarr_port: 8787
 sabnzbd_port: 8080
 sonarr_port: 8989
 jellyseerr_port: 5055
-
 transmission_port: 9091
+
+# Transmission Network Settings
 transmission_vpn_provider: 'TORGUARD'
 transmission_vpn_config: 'Static'
 transmission_vpn_username: 'b061b8holzzc1f2'
 transmission_vpn_password: 'OcIzaH0Cg27aKaN'
 transmission_local_network: '192.168.0.0/16,127.0.0.1/32'
 transmission_bind_address: '5.253.204.58'
+# Transmission Web UI
+# options are:
+# combustion, kettu, transmission-web-control,
+# flood-for-transmission, shift, transmissionic
+transmission_web_ui: 'flood-for-transmission'
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
-arr_timezone: 'Europe/Amsterdam'
+# ARR service volumes and networks
+podman_volumes_arr:
+  arr:
+    - 'arr-bazarr_config'
+    - 'arr-prowlarr_config'
+    - 'arr-radarr_config'
+    - 'arr-readarr_config'
+    - 'arr-sonarr_config'
+    - 'arr-transmission_config'
+    - 'arr-jellyseerr_config'
+    - 'arr-jellyfin_config'
+
+podman_networks_arr:
+  arr:
+    - 'arr-backend'
+
+podman_containers_arr:
+  arr:
+    - 'arr-bazarr'
+    - 'arr-prowlarr'
+    - 'arr-radarr'
+    - 'arr-readarr'
+    - 'arr-sonarr'
+    - 'arr-transmission'
+    - 'arr-jellyseerr'
+    - 'arr-jellyfin'

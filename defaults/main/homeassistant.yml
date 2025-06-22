@@ -4,3 +4,15 @@ homeassistant_version: 'stable'
 # If you run plugins that need additional ports, specify them here
 homeassistant_ports:
   - '8123:8123'
+
+# Home Assistant service volumes and networks
+podman_volumes_homeassistant:
+  homeassistant:
+    - 'homeassistant'
+
+podman_networks_homeassistant:
+  homeassistant: []
+
+podman_containers_homeassistant:
+  homeassistant:
+    - 'homeassistant'

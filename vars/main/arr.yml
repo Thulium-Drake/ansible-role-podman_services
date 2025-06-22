@@ -1,0 +1,135 @@
+---
+# ARR service container definitions
+podman_service_containers_arr:
+  arr:
+    bazarr:
+      image: 'lscr.io/linuxserver/bazarr:latest'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ bazarr_port }}:6767/tcp"
+      healthcheck: 'curl -f http://localhost:6767/api/system/ping || exit 1'
+      volumes:
+        - "{{ service['name'] }}-bazarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    prowlarr:
+      image: 'lscr.io/linuxserver/prowlarr:latest'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ prowlarr_port }}:9696/tcp"
+      healthcheck: 'nc -z localhost 9696 || exit 1'
+      volumes:
+        - "{{ service['name'] }}-prowlarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    radarr:
+      image: 'lscr.io/linuxserver/radarr:latest'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ radarr_port }}:7878/tcp"
+      healthcheck: 'nc -z localhost 7878 || exit 1'
+      volumes:
+        - "{{ service['name'] }}-radarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    readarr:
+      image: 'lscr.io/linuxserver/readarr:develop'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ readarr_port }}:8787/tcp"
+      healthcheck: 'nc -z localhost 8787 || exit 1'
+      volumes:
+        - "{{ service['name'] }}-readarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    sonarr:
+      image: 'lscr.io/linuxserver/sonarr:latest'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ sonarr_port }}:8989/tcp"
+      healthcheck: 'nc -z localhost 8989 || exit 1'
+      volumes:
+        - "{{ service['name'] }}-sonarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    transmission:
+      image: 'docker.io/haugene/transmission-openvpn'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ transmission_port }}:9091/tcp"
+      privileged: true
+      healthcheck: "[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 '[0-9]')\" ] && exit 1 || exit 0"
+      volumes:
+        - "{{ service['name'] }}-transmission_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+        OPENVPN_PROVIDER: "{{ transmission_vpn_provider }}"
+        OPENVPN_CONFIG: "{{ transmission_vpn_config }}"
+        OPENVPN_USERNAME: "{{ transmission_vpn_username }}"
+        OPENVPN_PASSWORD: "{{ transmission_vpn_password }}"
+        LOCAL_NETWORK: "{{ transmission_local_network }}"
+        TRANSMISSION_PORT_FORWARDING_ENABLED: 'true'
+        TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address }}"
+        TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit) }}"
+
+    jellyseerr:
+      image: 'docker.io/fallenbagel/jellyseerr:latest'
+      network:
+        - 'arr-backend.network'
+      ports:
+        - "{{ jellyseerr_port }}:5055/tcp"
+      healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
+      volumes:
+        - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
+
+    jellyfin:
+      image: 'lscr.io/linuxserver/jellyfin:latest'
+      network:
+        - 'arr-backend.network'
+      privileged: true
+      healthcheck: 'curl -f http://localhost:8096/health || exit 1'
+      volumes:
+        - "{{ service['name'] }}-jellyfin_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+        JELLYFIN_PublishedServerUrl: "{{ jellyfin_autodiscovery_url }}"
+        NVIDIA_VISIBLE_DEVICES: all
+        NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+      ports:
+        - "{{ jellyfin_webui_port }}:8096/tcp"
+        - '1900:1900/udp'
+        - '7359:7359/udp'
+      device:
+        - 'nvidia.com/gpu=all'

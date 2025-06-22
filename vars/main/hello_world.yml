@@ -1,0 +1,8 @@
+---
+# Hello World service container definitions
+podman_service_containers_hello_world:
+  hello_world:
+    hello_world:
+      image: 'docker.io/thomaspoignant/hello-world-rest-json'
+      ports:
+        - '8080:8080'

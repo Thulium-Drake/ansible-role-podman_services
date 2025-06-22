@@ -1,0 +1,36 @@
+---
+# PostgreSQL configuration
+authentik_postgres_user: 'authentik'
+authentik_postgres_db: 'authentik'
+authentik_postgres_password: 'changeme'
+
+# Authentik configuration
+authentik_secret_key: 'changeme-please-use-a-secure-random-key'
+
+# Port configuration
+authentik_http_port: '9000'
+authentik_https_port: '9443'
+
+# Worker configuration - whether to enable docker socket integration
+authentik_worker_docker_socket: true
+authentik_worker_user_root: true
+
+# Authentik service volumes and networks
+podman_volumes_authentik:
+  authentik:
+    - 'authentik-postgresql_data'
+    - 'authentik-redis_data'
+    - 'authentik-media'
+    - 'authentik-templates'
+    - 'authentik-certs'
+
+podman_networks_authentik:
+  authentik:
+    - 'authentik-backend'
+
+podman_containers_authentik:
+  authentik:
+    - 'authentik-postgresql'
+    - 'authentik-redis'
+    - 'authentik-server'
+    - 'authentik-worker'

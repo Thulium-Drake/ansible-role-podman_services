@@ -4,6 +4,7 @@ This role contains a collection of services that run on a Podman node. All persi
 The catalogus currently contains:
 
 * arr: A full arr stack with transmission
+* authentik: Open-source Identity Provider focused on flexibility and versatility
 * hello_world: a simple container that will return 'hello world' via a REST API
 * homeassistant: Open source home automation that puts local control and privacy first
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
@@ -65,3 +66,48 @@ http:
 ```
 
 3. Restart the service
+
+## Authentik notes
+Authentik is an open-source Identity Provider that provides authentication and authorization services. The service consists of multiple containers:
+
+* **PostgreSQL**: Database backend for authentik
+* **Redis**: Cache and message broker
+* **Server**: Main authentik web interface and API
+* **Worker**: Background task processor
+
+### Important configuration
+Before deploying authentik, you **must** change the following default values:
+
+1. **authentik_secret_key**: Generate a secure random key (at least 50 characters)
+2. **authentik_postgres_password**: Set a strong database password
+
+### Initial setup
+1. After deployment, access authentik at `http://your-host:9000` (or your configured port)
+2. The initial setup wizard will guide you through creating an admin account
+3. Configure your authentication flows and providers as needed
+
+### Docker socket access
+The worker container can optionally access the Docker socket for container management features. This is controlled by:
+* `authentik_worker_docker_socket: true/false`
+* `authentik_worker_user_root: true/false` (required for socket access)
+
+If you don't need container management features, set both to `false` for better security.
+
+### Containers and networking
+The authentik service consists of multiple containers that communicate via a dedicated network:
+* `authentik-postgresql`: Database backend
+* `authentik-redis`: Cache and message broker
+* `authentik-server`: Main web interface and API (exposed on configured ports)
+* `authentik-worker`: Background task processor
+
+All containers communicate via the `authentik-backend` network.
+
+### Volumes
+The service creates the following Podman volumes for persistent data:
+* `authentik-postgresql_data`: PostgreSQL database data
+* `authentik-redis_data`: Redis cache data
+* `authentik-media`: Media files and uploads
+* `authentik-templates`: Custom templates
+* `authentik-certs`: SSL certificates
+
+All volumes use the configured `podman_volume_driver` (default: 'local').

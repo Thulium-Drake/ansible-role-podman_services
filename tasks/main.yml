@@ -14,7 +14,7 @@
   become_user: "{{ podman_user_account }}"
   block:
     - name: 'Deploy services'
-      ansible.builtin.include_tasks: "services/{{ service['name'] }}.yml"
+      ansible.builtin.include_tasks: "deploy_service.yml"
       loop: "{{ podman_services }}"
       loop_control:
         loop_var: 'service'

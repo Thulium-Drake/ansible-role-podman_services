@@ -1,0 +1,76 @@
+---
+# Authentik service container definitions
+podman_service_containers_authentik:
+  authentik:
+    postgresql:
+      image: 'docker.io/library/postgres:16-alpine'
+      env:
+        POSTGRES_PASSWORD: "{{ authentik_postgres_password }}"
+        POSTGRES_USER: "{{ authentik_postgres_user }}"
+        POSTGRES_DB: "{{ authentik_postgres_db }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"]
+        start_period: 20s
+        interval: 30s
+        retries: 5
+        timeout: 5s
+      volumes:
+        - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
+      restart_policy: 'unless-stopped'
+    
+    redis:
+      image: 'docker.io/library/redis:alpine'
+      command: ["--save", "60", "1", "--loglevel", "warning"]
+      network:
+        - "{{ service['name'] }}-backend.network"
+      healthcheck:
+        test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+        start_period: 20s
+        interval: 30s
+        retries: 5
+        timeout: 3s
+      volumes:
+        - "{{ service['name'] }}-redis_data:/data:Z"
+      restart_policy: 'unless-stopped'
+    
+    server:
+      image: 'ghcr.io/goauthentik/server:2025.6.2'
+      command: ["server"]
+      env:
+        AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
+        AUTHENTIK_REDIS__HOST: "{{ service['name'] }}-redis"
+        AUTHENTIK_POSTGRESQL__HOST: "{{ service['name'] }}-postgresql"
+        AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
+        AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
+        AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      ports:
+        - "{{ authentik_http_port }}:9000"
+        - "{{ authentik_https_port }}:9443"
+      volumes:
+        - "{{ service['name'] }}-media:/media:Z"
+        - "{{ service['name'] }}-templates:/templates:Z"
+      restart_policy: 'unless-stopped'
+    
+    worker:
+      image: 'ghcr.io/goauthentik/server:2025.6.2'
+      command: ["worker"]
+      env:
+        AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
+        AUTHENTIK_REDIS__HOST: "{{ service['name'] }}-redis"
+        AUTHENTIK_POSTGRESQL__HOST: "{{ service['name'] }}-postgresql"
+        AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
+        AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
+        AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
+      network:
+        - "{{ service['name'] }}-backend.network"
+      user: "{{ authentik_worker_user_root | ternary('root', omit) }}"
+      volumes: >
+        {{
+          ([service['name'] + '-media:/media:Z', service['name'] + '-certs:/certs:Z', service['name'] + '-templates:/templates:Z'] +
+          (authentik_worker_docker_socket | ternary(['/var/run/docker.sock:/var/run/docker.sock'], [])))
+        }}
+      restart_policy: 'unless-stopped'

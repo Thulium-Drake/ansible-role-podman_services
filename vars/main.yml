@@ -1,70 +1,9 @@
 ---
-podman_services_changed: []
-
-# List of volumes to create for each service
-podman_volumes:
-  arr:
-    - 'arr-bazarr_config'
-    - 'arr-jellyfin_config'
-    - 'arr-jellyseerr_config'
-    - 'arr-prowlarr_config'
-    - 'arr-radarr_config'
-    - 'arr-readarr_config'
-    #- 'arr-sabnzbd_config'
-    - 'arr-sonarr_config'
-    - 'arr-transmission_config'
-  factorio:
-    - 'factorio'
-  hello_world: []
-  homeassistant:
-    - 'homeassistant'
-  minecraft:
-    - 'minecraft'
-  vaultwarden:
-    - 'vaultwarden'
-  ethereum:
-    - 'ethereum'
-  nginx:
-    - 'nginx'
-    - 'letsencrypt'
-
-# List of networks to create for each service
-podman_networks:
-  arr:
-    - 'arr-backend'
-  factorio: []
-  hello_world: []
-  homeassistant: []
-  minecraft: []
-  vaultwarden: []
-  ethereum:
-    - 'ethereum-backend'
-
-# List of containers to create for each service
-podman_containers:
-  arr:
-    - 'arr-bazarr'
-    - 'arr-jellyfin'
-    - 'arr-prowlarr'
-    - 'arr-radarr'
-    - 'arr-readarr'
-    # - 'arr-sabnzbd'
-    - 'arr-sonarr'
-    - 'arr-transmission'
-    - 'arr-jellyseerr'
-  factorio:
-    - 'factorio'
-  hello_world:
-    - 'hello_world'
-  homeassistant:
-    - 'homeassistant'
-  minecraft:
-    - 'minecraft'
-  vaultwarden:
-    - 'vaultwarden'
-  ethereum:
-    - 'ethereum-geth'
-    - 'ethereum-beacon'
-    - 'ethereum-validator'
-  nginx:
-    - 'nginx-proxy'
+# Merge all service container definitions using community.general.merge_vars
+podman_service_containers: >-
+  {{
+    lookup('community.general.merge_vars',
+           '^podman_service_containers_.*',
+           'dict'
+    )
+  }}

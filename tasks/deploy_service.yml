@@ -1,0 +1,44 @@
+---
+# Generic service deployment task that handles all service types
+# This replaces all individual service task files
+
+- name: 'Set up networks'
+  ansible.builtin.import_tasks: 'network.yml'
+  when: podman_networks[service['name']] | default([]) | length > 0
+
+- name: 'Set up volumes'
+  ansible.builtin.import_tasks: 'volume.yml'
+  when: podman_volumes[service['name']] | default([]) | length > 0
+
+- name: "Deploy containers for {{ service['name'] }}"
+  containers.podman.podman_container:
+    name: >-
+      {{
+        (item.key == service['name']) |
+        ternary(
+          service['name'],
+          service['name'] + '-' + item.key
+        )
+      }}
+    image: "{{ item.value.image }}"
+    state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
+    auto_remove: true
+    privileged: "{{ item.value.privileged | default(false) }}"
+    env: "{{ item.value.env | default({}) }}"
+    network: "{{ item.value.network | default([]) }}"
+    ports: "{{ item.value.ports | default([]) }}"
+    volume: "{{ item.value.volumes | default([]) }}"
+    device: "{{ item.value.device | default(omit) }}"
+    command: "{{ item.value.command | default(omit) }}"
+    user: "{{ item.value.user | default(omit) }}"
+    healthcheck: "{{ item.value.healthcheck | default(omit) }}"
+    healthcheck_interval: "{{ item.value.healthcheck_interval | default('60s') }}"
+    restart_policy: "{{ item.value.restart_policy | default(omit) }}"
+    pull: 'newer'
+    quadlet_options: "{{ podman_quadlet_options }}"
+  loop: "{{ podman_service_containers[service['name']] | dict2items }}"
+  register: 'service_config'
+  notify: 'Restart changed services'
+
+- name: 'Add to changed service list'
+  ansible.builtin.import_tasks: 'changed_service.yml'
