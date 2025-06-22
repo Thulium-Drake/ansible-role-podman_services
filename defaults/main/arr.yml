@@ -50,13 +50,3 @@ podman_networks_arr:
   arr:
     - 'arr-backend'
 
-podman_containers_arr:
-  arr:
-    - 'arr-bazarr'
-    - 'arr-prowlarr'
-    - 'arr-radarr'
-    - 'arr-readarr'
-    - 'arr-sonarr'
-    - 'arr-transmission'
-    - 'arr-jellyseerr'
-    - 'arr-jellyfin'

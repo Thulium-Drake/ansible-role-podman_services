@@ -1,9 +1,0 @@
----
-# Merge all service container definitions using community.general.merge_vars
-podman_service_containers: >-
-  {{
-    lookup('community.general.merge_vars',
-           '^podman_service_containers_.*',
-           'dict'
-    )
-  }}

@@ -32,6 +32,3 @@ podman_volumes_vaultwarden:
 podman_networks_vaultwarden:
   vaultwarden: []
 
-podman_containers_vaultwarden:
-  vaultwarden:
-    - 'vaultwarden'

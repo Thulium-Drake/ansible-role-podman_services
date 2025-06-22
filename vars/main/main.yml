@@ -1,29 +1,9 @@
 ---
-podman_services_changed: []
+# Service volumes - dynamically merged from individual service defaults
+podman_volumes: "{{ lookup('community.general.merge_variables', 'podman_volumes_', pattern_type='prefix') }}"
 
-# Merge all service volumes using community.general.merge_vars
-podman_volumes: >-
-  {{
-    lookup('community.general.merge_vars',
-           '^podman_volumes_.*',
-           'dict'
-    )
-  }}
+# Service networks - dynamically merged from individual service defaults
+podman_networks: "{{ lookup('community.general.merge_variables', 'podman_networks_', pattern_type='prefix') }}"
 
-# Merge all service networks using community.general.merge_vars
-podman_networks: >-
-  {{
-    lookup('community.general.merge_vars',
-           '^podman_networks_.*',
-           'dict'
-    )
-  }}
-
-# Merge all service containers using community.general.merge_vars
-podman_containers: >-
-  {{
-    lookup('community.general.merge_vars',
-           '^podman_containers_.*',
-           'dict'
-    )
-  }}
+# Service container definitions - dynamically merged from individual service files
+podman_service_containers: "{{ lookup('community.general.merge_variables', 'podman_service_containers_', pattern_type='prefix') }}"

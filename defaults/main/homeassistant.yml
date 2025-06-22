@@ -13,6 +13,3 @@ podman_volumes_homeassistant:
 podman_networks_homeassistant:
   homeassistant: []
 
-podman_containers_homeassistant:
-  homeassistant:
-    - 'homeassistant'

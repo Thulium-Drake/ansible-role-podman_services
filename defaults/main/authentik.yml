@@ -28,9 +28,3 @@ podman_networks_authentik:
   authentik:
     - 'authentik-backend'
 
-podman_containers_authentik:
-  authentik:
-    - 'authentik-postgresql'
-    - 'authentik-redis'
-    - 'authentik-server'
-    - 'authentik-worker'

@@ -9,6 +9,15 @@
     podman_user_account: "{{ podman_effective_user['stdout'] }}"
   when: podman_user_account is not defined
 
+- name: 'Load service container definitions'
+  ansible.builtin.include_vars: "main/{{ service['name'] }}.yml"
+  loop: "{{ podman_services }}"
+  loop_control:
+    loop_var: 'service'
+
+- name: 'Load main vars file'
+  ansible.builtin.include_vars: "main/main.yml"
+
 - name: 'Run without become if not needed'
   become: "{{ (podman_user_account != 'root') | ternary(omit, true) }}"
   become_user: "{{ podman_user_account }}"
