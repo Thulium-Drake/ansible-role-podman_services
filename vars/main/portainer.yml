@@ -11,5 +11,4 @@ podman_service_containers_portainer:
         - "/var/run/docker.sock:/var/run/docker.sock"
       network:
         - "{{ service['name'] }}-portainer"
-      restart_policy: '{{ portainer_restart_policy | default("unless-stopped") }}'
       command: ["--host", "unix:///var/run/docker.sock"]

@@ -17,7 +17,6 @@ podman_service_containers_tooling:
         SUDO_PASSWORD: "{{ tooling_vscode_sudo_password | default('changeme-sudo') }}"
       network:
         - "{{ service['name'] }}-tooling.network"
-      restart_policy: '{{ tooling_restart_policy | default("unless-stopped") }}'
       
     firefox:
       image: '{{ tooling_firefox_image | default("docker.io/linuxserver/firefox:latest") }}'
@@ -31,5 +30,4 @@ podman_service_containers_tooling:
         TZ: "{{ tooling_timezone | default('UTC') }}"
       network:
         - "{{ service['name'] }}-tooling.network"
-      restart_policy: '{{ tooling_restart_policy | default("unless-stopped") }}'
       shm_size: '{{ tooling_firefox_shm_size | default("1gb") }}'

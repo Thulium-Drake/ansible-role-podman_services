@@ -40,17 +40,16 @@ arr_gpu: 'none'
 # ARR service volumes and networks
 podman_volumes_arr:
   arr:
-    - name: 'arr-bazarr_config'
-    - name: 'arr-prowlarr_config'
-    - name: 'arr-radarr_config'
-    - name: 'arr-readarr_config'
-    - name: 'arr-sonarr_config'
-    - name: 'arr-transmission_config'
-    - name: 'arr-jellyseerr_config'
-    - name: 'arr-jellyfin_config'
-    - name: 'arr-data'
+    - 'arr-bazarr_config'
+    - 'arr-prowlarr_config'
+    - 'arr-radarr_config'
+    - 'arr-readarr_config'
+    - 'arr-sonarr_config'
+    - 'arr-transmission_config'
+    - 'arr-jellyseerr_config'
+    - 'arr-jellyfin_config'
+    - 'arr-data'
 
 podman_networks_arr:
   arr:
     - 'arr-backend'
-

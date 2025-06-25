@@ -4,73 +4,71 @@ podman_service_containers_authentik:
   authentik:
     postgresql:
       image: '{{ authentik_postgresql_image }}'
+      network:
+        - 'authentik-backend.network'
+      healthcheck: 'pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}'
+      volumes:
+        - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
       env:
         POSTGRES_PASSWORD: "{{ authentik_postgres_password }}"
         POSTGRES_USER: "{{ authentik_postgres_user }}"
         POSTGRES_DB: "{{ authentik_postgres_db }}"
-      network:
-        - "{{ service['name'] }}-backend.network"
-      healthcheck:
-        test: ["CMD-SHELL", "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"]
-        start_period: "{{ authentik_postgres_healthcheck_start_period }}"
-        interval: "{{ authentik_postgres_healthcheck_interval }}"
-        retries: "{{ authentik_postgres_healthcheck_retries }}"
-        timeout: "{{ authentik_postgres_healthcheck_timeout }}"
-      volumes:
-        - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
-      restart_policy: '{{ authentik_restart_policy }}'
-    
+
     redis:
       image: '{{ authentik_redis_image }}'
-      command: ["--save", "{{ authentik_redis_save_interval }}", "{{ authentik_redis_save_changes }}", "--loglevel", "{{ authentik_redis_loglevel }}"]
       network:
-        - "{{ service['name'] }}-backend.network"
-      healthcheck:
-        test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-        start_period: "{{ authentik_redis_healthcheck_start_period }}"
-        interval: "{{ authentik_redis_healthcheck_interval }}"
-        retries: "{{ authentik_redis_healthcheck_retries }}"
-        timeout: "{{ authentik_redis_healthcheck_timeout }}"
+        - 'authentik-backend.network'
+      healthcheck: 'redis-cli ping | grep PONG'
       volumes:
         - "{{ service['name'] }}-redis_data:/data:Z"
-      restart_policy: '{{ authentik_restart_policy }}'
-    
+      command: '--save 60 1 --loglevel warning'
+
     server:
-      image: '{{ authentik_server_image }}'
-      command: ["server"]
-      env:
-        AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
-        AUTHENTIK_REDIS__HOST: "{{ service['name'] }}-redis"
-        AUTHENTIK_POSTGRESQL__HOST: "{{ service['name'] }}-postgresql"
-        AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
-        AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
-        AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
+      image: '{{ authentik_image }}'
       network:
-        - "{{ service['name'] }}-backend.network"
+        - 'authentik-backend.network'
       ports:
-        - "{{ authentik_http_port }}:9000"
-        - "{{ authentik_https_port }}:9443"
+        - "{{ authentik_http_port }}:9000/tcp"
+        - "{{ authentik_https_port }}:9443/tcp"
+      command: 'server'
+      privileged: true
       volumes:
         - "{{ service['name'] }}-media:/media:Z"
         - "{{ service['name'] }}-templates:/templates:Z"
-      restart_policy: '{{ authentik_restart_policy }}'
-    
-    worker:
-      image: '{{ authentik_worker_image }}'
-      command: ["worker"]
       env:
         AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
-        AUTHENTIK_REDIS__HOST: "{{ service['name'] }}-redis"
-        AUTHENTIK_POSTGRESQL__HOST: "{{ service['name'] }}-postgresql"
+        AUTHENTIK_REDIS__HOST: "authentik-redis"
+        AUTHENTIK_POSTGRESQL__HOST: "authentik-postgresql"
         AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
         AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
         AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
+
+    worker:
+      image: '{{ authentik_image }}'
       network:
-        - "{{ service['name'] }}-backend.network"
-      user: "{{ authentik_worker_user_root | ternary('root', omit) }}"
-      volumes: >
-        {{
-          ([service['name'] + '-media:/media:Z', service['name'] + '-certs:/certs:Z', service['name'] + '-templates:/templates:Z'] +
-          (authentik_worker_docker_socket | ternary(['/var/run/docker.sock:/var/run/docker.sock'], [])))
-        }}
-      restart_policy: '{{ authentik_restart_policy }}'
+        - 'authentik-backend.network'
+      command: 'worker'
+      privileged: true
+      volumes:
+        - "{{ service['name'] }}-media:/media:Z"
+        - "{{ service['name'] }}-templates:/templates:Z"
+        - '/run/podman/podman.sock:/var/run/docker.sock:Z'
+      env:
+        AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
+        AUTHENTIK_REDIS__HOST: "authentik-redis"
+        AUTHENTIK_POSTGRESQL__HOST: "authentik-postgresql"
+        AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
+        AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
+        AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
+
+    ldap:
+      image: '{{ authentik_ldap }}:{{ authentik_version }}'
+      network:
+        - 'authentik-backend.network'
+      ports:
+        - "{{ authentik_ldap_port }}:3389/tcp"
+        - "{{ authentik_ldaps_port }}:6636/tcp"
+      env:
+        AUTHENTIK_HOST: 'https://{{ ansible_host }}:{{ authentik_https_port }}'
+        AUTHENTIK_INSECURE: 'false'
+        AUTHENTIK_TOKEN: '{{ authentik_ldap_token }}'

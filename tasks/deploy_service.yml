@@ -33,7 +33,6 @@
     user: "{{ item.value.user | default(omit) }}"
     healthcheck: "{{ item.value.healthcheck | default(omit) }}"
     healthcheck_interval: "{{ item.value.healthcheck_interval | default('60s') }}"
-    restart_policy: "{{ item.value.restart_policy | default(omit) }}"
     pull: 'newer'
     quadlet_options: "{{ podman_quadlet_options }}"
   loop: "{{ podman_service_containers[service['name']] | dict2items }}"

@@ -1,56 +1,38 @@
 ---
+# Authentik service configuration
+# REQUIRED: Set authentik_postgres_password and authentik_secret_key in your environment
+
 # Container images
+authentik_image: 'ghcr.io/goauthentik/server'
+authentik_ldap: 'ghcr.io/goauthentik/ldap'
+authentik_version: '2025.6.2'
 authentik_postgresql_image: 'docker.io/library/postgres:16-alpine'
 authentik_redis_image: 'docker.io/library/redis:alpine'
-authentik_server_image: 'ghcr.io/goauthentik/server:2025.6.2'
-authentik_worker_image: 'ghcr.io/goauthentik/server:2025.6.2'
 
-# PostgreSQL configuration
-authentik_postgres_user: 'authentik'
-authentik_postgres_db: 'authentik'
-authentik_postgres_password: 'changeme'
-
-# PostgreSQL healthcheck configuration
-authentik_postgres_healthcheck_start_period: '20s'
-authentik_postgres_healthcheck_interval: '30s'
-authentik_postgres_healthcheck_retries: 5
-authentik_postgres_healthcheck_timeout: '5s'
-
-# Redis configuration
-authentik_redis_save_interval: '60'
-authentik_redis_save_changes: '1'
-authentik_redis_loglevel: 'warning'
-
-# Redis healthcheck configuration
-authentik_redis_healthcheck_start_period: '20s'
-authentik_redis_healthcheck_interval: '30s'
-authentik_redis_healthcheck_retries: 5
-authentik_redis_healthcheck_timeout: '3s'
-
-# Authentik configuration
-authentik_secret_key: 'changeme-please-use-a-secure-random-key'
+# Required secrets - MUST be overridden in group_vars or host_vars
+authentik_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
+authentik_secret_key: !unsafe 'CHANGE_ME_SECRET_KEY_MINIMUM_50_CHARS'
+authentik_ldap_token: !unsafe 'CHANGE_ME_LDAP_OUTPOST_TOKEN'
 
 # Port configuration
 authentik_http_port: '9000'
 authentik_https_port: '9443'
+authentik_ldap_port: '389'
+authentik_ldaps_port: '636'
 
-# Container restart policy
-authentik_restart_policy: 'unless-stopped'
-
-# Worker configuration - whether to enable docker socket integration
-authentik_worker_docker_socket: true
-authentik_worker_user_root: true
+# Optional overrides (defaults are production-ready)
+authentik_postgres_user: 'authentik'
+authentik_postgres_db: 'authentik'
 
 # Authentik service volumes and networks
 podman_volumes_authentik:
   authentik:
-    - name: 'authentik-postgresql_data'
-    - name: 'authentik-redis_data'
-    - name: 'authentik-media'
-    - name: 'authentik-templates'
-    - name: 'authentik-certs'
+    - 'authentik-postgresql_data'
+    - 'authentik-redis_data'
+    - 'authentik-media'
+    - 'authentik-templates'
+    - 'authentik-certs'
 
 podman_networks_authentik:
   authentik:
     - 'authentik-backend'
-
