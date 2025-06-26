@@ -3,19 +3,19 @@
 podman_service_containers_minecraft:
   minecraft:
     minecraft:
-      image: '{{ minecraft_image | default("docker.io/itzg/minecraft-server:latest") }}'
+      image: "{{ minecraft_image }}"
       ports:
-        - "{{ minecraft_port | default('25565') }}:25565"
+        - "{{ minecraft_port }}:25565/tcp"
+        - "{{ minecraft_port }}:25565/udp"
       volumes:
-        - "{{ service['name'] }}-minecraft_data:/data:Z"
-      environment:
-        EULA: "{{ minecraft_eula | default('TRUE') }}"
-        VERSION: "{{ minecraft_version | default('LATEST') }}"
-        TYPE: "{{ minecraft_type | default('VANILLA') }}"
-        MEMORY: "{{ minecraft_memory | default('1G') }}"
-        DIFFICULTY: "{{ minecraft_difficulty | default('easy') }}"
-        MAX_PLAYERS: "{{ minecraft_max_players | default('20') }}"
-        MOTD: "{{ minecraft_motd | default('A Minecraft Server') }}"
-        SPAWN_PROTECTION: "{{ minecraft_spawn_protection | default('16') }}"
-      network:
-        - "{{ service['name'] }}-minecraft"
+        - "{{ service['name'] }}-data:/data:Z"
+      env:
+        EULA: "{{ minecraft_eula }}"
+        VERSION: "{{ minecraft_version }}"
+        TYPE: "{{ minecraft_type }}"
+        MEMORY: "{{ minecraft_memory }}"
+        DIFFICULTY: "{{ minecraft_difficulty }}"
+        MAX_PLAYERS: "{{ minecraft_max_players }}"
+        MOTD: "{{ minecraft_motd }}"
+        SPAWN_PROTECTION: "{{ minecraft_spawn_protection }}"
+      healthcheck: 'mc-monitor status --host localhost --port 25565'

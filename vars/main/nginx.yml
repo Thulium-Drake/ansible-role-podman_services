@@ -3,7 +3,7 @@
 podman_service_containers_nginx:
   nginx:
     proxy:
-      image: '{{ nginx_proxy_manager_image | default("docker.io/jc21/nginx-proxy-manager:latest") }}'
+      image: "{{ nginx_proxy_manager_image | default('docker.io/jc21/nginx-proxy-manager:latest') }}"
       ports:
         - "{{ nginx_http_port | default('80') }}:80"
         - "{{ nginx_https_port | default('443') }}:443"

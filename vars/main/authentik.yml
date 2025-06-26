@@ -3,10 +3,10 @@
 podman_service_containers_authentik:
   authentik:
     postgresql:
-      image: '{{ authentik_postgresql_image }}'
+      image: "{{ authentik_postgresql_image }}"
       network:
         - 'authentik-backend.network'
-      healthcheck: 'pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}'
+      healthcheck: "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"
       volumes:
         - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
       env:
@@ -15,7 +15,7 @@ podman_service_containers_authentik:
         POSTGRES_DB: "{{ authentik_postgres_db }}"
 
     redis:
-      image: '{{ authentik_redis_image }}'
+      image: "{{ authentik_redis_image }}"
       network:
         - 'authentik-backend.network'
       healthcheck: 'redis-cli ping | grep PONG'
@@ -24,7 +24,7 @@ podman_service_containers_authentik:
       command: '--save 60 1 --loglevel warning'
 
     server:
-      image: '{{ authentik_image }}'
+      image: "{{ authentik_image }}:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       ports:
@@ -37,14 +37,14 @@ podman_service_containers_authentik:
         - "{{ service['name'] }}-templates:/templates:Z"
       env:
         AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
-        AUTHENTIK_REDIS__HOST: "authentik-redis"
-        AUTHENTIK_POSTGRESQL__HOST: "authentik-postgresql"
+        AUTHENTIK_REDIS__HOST: 'authentik-redis'
+        AUTHENTIK_POSTGRESQL__HOST: 'authentik-postgresql'
         AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
         AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
         AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
 
     worker:
-      image: '{{ authentik_image }}'
+      image: "{{ authentik_image }}:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       command: 'worker'
@@ -55,20 +55,20 @@ podman_service_containers_authentik:
         - '/run/podman/podman.sock:/var/run/docker.sock:Z'
       env:
         AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
-        AUTHENTIK_REDIS__HOST: "authentik-redis"
-        AUTHENTIK_POSTGRESQL__HOST: "authentik-postgresql"
+        AUTHENTIK_REDIS__HOST: 'authentik-redis'
+        AUTHENTIK_POSTGRESQL__HOST: 'authentik-postgresql'
         AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgres_user }}"
         AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
         AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
 
     ldap:
-      image: '{{ authentik_ldap }}:{{ authentik_version }}'
+      image: "{{ authentik_ldap }}:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       ports:
         - "{{ authentik_ldap_port }}:3389/tcp"
         - "{{ authentik_ldaps_port }}:6636/tcp"
       env:
-        AUTHENTIK_HOST: 'https://{{ ansible_host }}:{{ authentik_https_port }}'
-        AUTHENTIK_INSECURE: 'false'
-        AUTHENTIK_TOKEN: '{{ authentik_ldap_token }}'
+        AUTHENTIK_HOST: 'http://authentik-server:9000'
+        AUTHENTIK_INSECURE: false
+        AUTHENTIK_TOKEN: "{{ authentik_ldap_token }}"

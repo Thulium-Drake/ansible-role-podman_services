@@ -1,18 +1,26 @@
 ---
-# Images etc.
-minecraft_image_uri: 'docker.io/itzg/minecraft-server'
-minecraft_image_version: 'latest'
+# Minecraft server configuration - Override these in group_vars as needed
 
-minecraft_curseforge_api_key: 'my_awesome_api_key'
+# Container configuration
+minecraft_image: 'docker.io/itzg/minecraft-server:latest'
+minecraft_port: '25565'
 
-# Minecraft server settings
-minecraft_listen_port: 25565
-minecraft_envvars:
-  EULA: "TRUE"
-  VERSION: 'LATEST'
-  TYPE: 'AUTO_CURSEFORGE'
-  CF_API_KEY: "{{ minecraft_curseforge_api_key | quote }}"
-  CF_SLUG: 'better-mc-forge-bmc4'
-  CF_EXCLUDE_MODS: 'yungs-menu-tweaks,xaeroplus'
-  INIT_MEMORY: '1G'
-  MAX_MEMORY: '1G'
+# Server configuration
+minecraft_eula: true
+minecraft_version: 'LATEST'
+minecraft_type: 'VANILLA'
+minecraft_memory: '1G'
+minecraft_difficulty: 'easy'
+minecraft_max_players: '20'
+minecraft_motd: 'A Minecraft Server'
+minecraft_spawn_protection: '16'
+
+# Volumes for Minecraft service
+podman_volumes_minecraft:
+  minecraft:
+    - name: minecraft-data
+      driver: "{{ podman_volume_driver }}"
+
+# Networks for Minecraft service
+podman_networks_minecraft:
+  minecraft: []

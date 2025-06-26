@@ -16,14 +16,14 @@
     loop_var: 'service'
 
 - name: 'Load main vars file'
-  ansible.builtin.include_vars: "main/main.yml"
+  ansible.builtin.include_vars: 'main/main.yml'
 
 - name: 'Run without become if not needed'
   become: "{{ (podman_user_account != 'root') | ternary(omit, true) }}"
   become_user: "{{ podman_user_account }}"
   block:
     - name: 'Deploy services'
-      ansible.builtin.include_tasks: "deploy_service.yml"
+      ansible.builtin.include_tasks: 'deploy_service.yml'
       loop: "{{ podman_services }}"
       loop_control:
         loop_var: 'service'

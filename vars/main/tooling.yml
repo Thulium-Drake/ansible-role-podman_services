@@ -3,31 +3,33 @@
 podman_service_containers_tooling:
   tooling:
     vscode:
-      image: '{{ tooling_vscode_image | default("docker.io/linuxserver/code-server:latest") }}'
+      image: "{{ tooling_vscode_image }}"
       ports:
-        - "{{ tooling_vscode_port | default('3000') }}:8443"
+        - "{{ tooling_vscode_port }}:8443"
       volumes:
-        - "{{ service['name'] }}-vscode_config:/config:Z"
-        - "{{ service['name'] }}-vscode_workspace:/workspace:Z"
-      environment:
-        PUID: "{{ tooling_user_id | default('1000') }}"
-        PGID: "{{ tooling_group_id | default('1000') }}"
-        TZ: "{{ tooling_timezone | default('UTC') }}"
-        PASSWORD: "{{ tooling_vscode_password | default('changeme-vscode') }}"
-        SUDO_PASSWORD: "{{ tooling_vscode_sudo_password | default('changeme-sudo') }}"
+        - 'tooling-vscode_config:/config:Z'
+        - 'tooling-vscode_workspace:/workspace:Z'
+      env:
+        PUID: "{{ tooling_user_id }}"
+        PGID: "{{ tooling_group_id }}"
+        TZ: "{{ tooling_timezone }}"
+        PASSWORD: "{{ tooling_vscode_password }}"
+        SUDO_PASSWORD: "{{ tooling_vscode_sudo_password }}"
       network:
-        - "{{ service['name'] }}-tooling.network"
-      
+        - 'tooling-tooling.network'
+      healthcheck: 'curl -f http://localhost:8443/ || exit 1'
+
     firefox:
-      image: '{{ tooling_firefox_image | default("docker.io/linuxserver/firefox:latest") }}'
+      image: "{{ tooling_firefox_image }}"
       ports:
-        - "{{ tooling_firefox_port | default('3001') }}:3000"
+        - "{{ tooling_firefox_port }}:3000"
       volumes:
-        - "{{ service['name'] }}-firefox_config:/config:Z"
-      environment:
-        PUID: "{{ tooling_user_id | default('1000') }}"
-        PGID: "{{ tooling_group_id | default('1000') }}"
-        TZ: "{{ tooling_timezone | default('UTC') }}"
+        - 'tooling-firefox_config:/config:Z'
+      env:
+        PUID: "{{ tooling_user_id }}"
+        PGID: "{{ tooling_group_id }}"
+        TZ: "{{ tooling_timezone }}"
       network:
-        - "{{ service['name'] }}-tooling.network"
-      shm_size: '{{ tooling_firefox_shm_size | default("1gb") }}'
+        - 'tooling-tooling.network'
+      shm_size: "{{ tooling_firefox_shm_size }}"
+      healthcheck: 'curl -f http://localhost:3000/ || exit 1'

@@ -3,15 +3,13 @@
 podman_service_containers_factorio:
   factorio:
     factorio:
-      image: '{{ factorio_image | default("docker.io/factoriotools/factorio:latest") }}'
+      image: "{{ factorio_image }}"
       ports:
-        - "{{ factorio_port | default('34197') }}:34197/udp"
-        - "{{ factorio_rcon_port | default('27015') }}:27015/tcp"
+        - "{{ factorio_port }}:34197/udp"
+        - "{{ factorio_rcon_port }}:27015/tcp"
       volumes:
-        - "{{ service['name'] }}-factorio_data:/factorio:Z"
-      environment:
-        SAVE_NAME: "{{ factorio_save_name | default('default') }}"
-        UPDATE_MODS_ON_START: "{{ factorio_update_mods | default('false') }}"
-        RCON_PASSWORD: "{{ factorio_rcon_password | default('changeme-rcon') }}"
-      network:
-        - "{{ service['name'] }}-factorio"
+        - "{{ service['name'] }}-data:/factorio:Z"
+      env:
+        SAVE_NAME: "{{ factorio_save_name }}"
+        UPDATE_MODS_ON_START: "{{ factorio_update_mods }}"
+        RCON_PASSWORD: "{{ factorio_rcon_password }}"

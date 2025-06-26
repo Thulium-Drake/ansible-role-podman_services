@@ -97,7 +97,7 @@ podman_service_containers_arr:
         OPENVPN_USERNAME: "{{ transmission_vpn_username }}"
         OPENVPN_PASSWORD: "{{ transmission_vpn_password }}"
         LOCAL_NETWORK: "{{ transmission_local_network }}"
-        TRANSMISSION_PORT_FORWARDING_ENABLED: 'true'
+        TRANSMISSION_PORT_FORWARDING_ENABLED: true
         TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address | default(omit) }}"
         TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit) }}"
 

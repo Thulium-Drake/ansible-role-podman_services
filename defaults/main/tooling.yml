@@ -1,5 +1,5 @@
 ---
-# Tooling container configuration defaults
+# Tooling container configuration - Override these in group_vars as needed
 
 # Container images
 tooling_vscode_image: 'docker.io/linuxserver/code-server:latest'
@@ -15,8 +15,8 @@ tooling_group_id: '1000'
 tooling_timezone: 'UTC'
 
 # Security configuration - should be overridden with vault values
-tooling_vscode_password: 'changeme-vscode-password'
-tooling_vscode_sudo_password: 'changeme-sudo-password'
+tooling_vscode_password: 'changeme-vscode'
+tooling_vscode_sudo_password: 'changeme-sudo'
 
 # Firefox specific
 tooling_firefox_shm_size: '1gb'

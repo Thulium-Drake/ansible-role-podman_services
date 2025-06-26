@@ -12,7 +12,7 @@ nginx_ssh_stream_port: '2222' # SSH Stream Port
 
 # Environment configuration
 nginx_db_sqlite_file: '/data/database.sqlite'
-nginx_disable_ipv6: 'true'
+nginx_disable_ipv6: true
 
 # NGINX Proxy Manager service volumes and networks
 podman_volumes_nginx:
