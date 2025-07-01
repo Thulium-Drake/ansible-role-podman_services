@@ -1,0 +1,30 @@
+---
+# Git service configuration - Override these in group_vars as needed
+
+# Container images
+git_image: 'codeberg.org/forgejo/forgejo:11-rootless'
+git_runner_image: 'docker.io/gitea/act_runner:nightly'
+
+# Port configuration
+git_http_port: '3000'
+git_ssh_port: '2222'
+
+# Forgejo configuration
+git_timezone: 'Europe/Amsterdam'
+
+# Gitea Act Runner configuration
+git_runner_count: 2
+git_runner_url: 'http://git-server:3000'  # Uses container name on backend network
+git_runner_token: ''  # Override with vault in group_vars - get from Forgejo admin panel
+
+# Volumes for Git service
+podman_volumes_git:
+  git:
+    - 'git-data'
+    - 'git-runner1-config'
+    - 'git-runner2-config'
+
+# Networks for Git service
+podman_networks_git:
+  git:
+    - 'git-backend'
