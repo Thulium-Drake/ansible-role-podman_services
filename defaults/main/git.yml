@@ -14,8 +14,9 @@ git_timezone: 'Europe/Amsterdam'
 
 # Gitea Act Runner configuration
 git_runner_count: 2
-git_runner_url: 'http://git-server:3000'  # Uses container name on backend network
+git_runner_url: 'http://git-server:3000'  # Default internal URL - override in group_vars with external URL
 git_runner_token: ''  # Override with vault in group_vars - get from Forgejo admin panel
+git_runner_dns: []  # Override with DNS servers for runners, e.g., ['192.168.20.254']
 
 # Volumes for Git service
 podman_volumes_git:

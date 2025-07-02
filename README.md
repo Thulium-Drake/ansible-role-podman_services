@@ -5,11 +5,13 @@ The catalogus currently contains:
 
 * arr: A full arr stack with transmission
 * authentik: Open-source Identity Provider focused on flexibility and versatility
+* git: Forgejo (Gitea fork) with Act Runners for CI/CD
 * hello_world: a simple container that will return 'hello world' via a REST API
 * homeassistant: Open source home automation that puts local control and privacy first
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
 * factorio: The Factorio server
 * minecraft: The Minecraft Server
+* vikunja: Task management and todo application
 
 # Deployment
 In order to use the services from this catalogue, do the following:
@@ -111,3 +113,50 @@ The service creates the following Podman volumes for persistent data:
 * `authentik-certs`: SSL certificates
 
 All volumes use the configured `podman_volume_driver` (default: 'local').
+
+## Git notes
+The git service provides a complete Git hosting solution with CI/CD capabilities using Forgejo (a Gitea fork) and Act Runners.
+
+### Service Components
+The git service consists of multiple containers:
+* **git-server**: Main Forgejo instance providing Git hosting, web interface, and API
+* **git-runner1**: First Act Runner instance for CI/CD workflows
+* **git-runner2**: Second Act Runner instance for load distribution and redundancy
+
+### Important configuration
+Before deploying the git service, you **must** configure:
+
+1. **git_runner_token**: Generate a runner token from the Forgejo admin panel
+2. **git_runner_url**: Set the external URL for runner registration (e.g., 'https://git.overwrite.io')
+
+### DNS Resolution for Job Containers
+The git service includes special DNS configuration for Act Runner job containers to resolve external dependencies:
+
+```yaml
+git_runner_job_container_options: '--dns=8.8.8.8'  # External DNS for job containers
+```
+
+This configuration ensures that CI/CD workflows can download dependencies from external sources like GitHub, npm, etc.
+
+### Initial setup
+1. After deployment, access Forgejo at the configured port (default: 3000)
+2. Complete the initial setup wizard to create an admin account
+3. Navigate to Site Administration → Actions → Runners to register the runners
+4. Use the generated token to update the `git_runner_token` configuration
+
+### Networking
+The git service uses a dedicated network (`git-backend`) for internal communication between the server and runners. Job containers are created with external DNS servers to ensure proper dependency resolution.
+
+### Volumes
+The service creates the following Podman volumes for persistent data:
+* `git-data`: Main Forgejo data including repositories, database, and configuration
+* `git-runner1-config`: Configuration and state for the first runner
+* `git-runner2-config`: Configuration and state for the second runner
+
+### Troubleshooting
+If CI/CD workflows fail with DNS resolution errors, verify:
+1. The `git_runner_job_container_options` includes external DNS servers
+2. Runners have been restarted after configuration changes
+3. Job containers show correct DNS configuration in `/etc/resolv.conf`
+
+For detailed troubleshooting, see `TROUBLESHOOTING-GIT-RUNNERS.md` in the ansible-overwrite project.

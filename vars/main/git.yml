@@ -23,6 +23,7 @@ podman_service_containers_git:
         - '/run/podman/podman.sock:/var/run/docker.sock:Z'
         - "{{ service['name'] }}-runner1-config:/data:Z"
       privileged: true
+      dns: "{{ git_runner_dns | default(omit) }}"
       env:
         TZ: "{{ git_timezone }}"
         GITEA_INSTANCE_URL: "{{ git_runner_url }}"
@@ -38,6 +39,7 @@ podman_service_containers_git:
         - '/run/podman/podman.sock:/var/run/docker.sock:Z'
         - "{{ service['name'] }}-runner2-config:/data:Z"
       privileged: true
+      dns: "{{ git_runner_dns | default(omit) }}"
       env:
         TZ: "{{ git_timezone }}"
         GITEA_INSTANCE_URL: "{{ git_runner_url }}"
