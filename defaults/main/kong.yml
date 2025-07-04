@@ -1,0 +1,35 @@
+---
+# Kong API Gateway configuration
+kong_version: 'latest'
+kong_database: 'postgres'
+kong_pg_database: 'kong'
+kong_pg_user: 'kong'
+kong_pg_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
+
+# Kong service ports
+kong_proxy_port: '8000'
+kong_proxy_ssl_port: '8443'
+kong_admin_port: '8001'
+kong_admin_ssl_port: '8444'
+kong_admin_gui_port: '8002'
+
+# Kong configuration
+kong_prefix: '/var/run/kong'
+kong_declarative_config: '/opt/kong/kong.yaml'
+
+# PostgreSQL configuration
+kong_postgres_image: 'docker.io/library/postgres:16-alpine'
+kong_postgres_db: 'kong'
+kong_postgres_user: 'kong'
+kong_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
+
+# Volume definitions
+podman_volumes_kong:
+  kong:
+    - 'kong-data'
+    - 'kong-postgresql-data'
+
+# Network definitions
+podman_networks_kong:
+  kong:
+    - 'kong-backend'

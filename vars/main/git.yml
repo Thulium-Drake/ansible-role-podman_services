@@ -20,7 +20,7 @@ podman_service_containers_git:
       image: "{{ git_runner_image }}"
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
-        - '/run/podman/podman.sock:/var/run/docker.sock:Z'
+        - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
         - "{{ service['name'] }}-runner1-config:/data:Z"
       privileged: true
       dns: "{{ git_runner_dns | default(omit) }}"
@@ -37,7 +37,7 @@ podman_service_containers_git:
       image: "{{ git_runner_image }}"
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
-        - '/run/podman/podman.sock:/var/run/docker.sock:Z'
+        - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
         - "{{ service['name'] }}-runner2-config:/data:Z"
       privileged: true
       dns: "{{ git_runner_dns | default(omit) }}"
