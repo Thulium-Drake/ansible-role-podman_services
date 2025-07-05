@@ -1,0 +1,23 @@
+---
+# Pi-hole service container definitions
+podman_service_containers_pihole:
+  pihole:
+    pihole:
+      image: "{{ pihole_image }}"
+      ports:
+        - "{{ pihole_dns_port }}:53/tcp"
+        - "{{ pihole_dns_port }}:53/udp"
+        - "{{ pihole_web_port }}:80/tcp"
+      volumes:
+        - "{{ service['name'] }}-etc:/etc/pihole:Z"
+        - "{{ service['name'] }}-dnsmasq:/etc/dnsmasq.d:Z"
+      env:
+        TZ: "{{ pihole_timezone }}"
+        FTLCONF_webserver_api_password: "{{ pihole_web_password }}"
+        FTLCONF_dns_listeningMode: "{{ pihole_dns_listening_mode }}"
+        FTLCONF_dns_upstreamServers: "{{ pihole_dns_upstream_1 }};{{ pihole_dns_upstream_2 }}"
+        FTLCONF_webserver_interface: "{{ pihole_webinterface }}"
+        FTLCONF_dnsmasq_listening: "{{ pihole_dnsmasq_listening }}"
+      cap_add:
+        - NET_ADMIN
+      healthcheck: 'dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1'
