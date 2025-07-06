@@ -1,0 +1,21 @@
+---
+# Wiki.js configuration defaults
+
+# Container image
+wiki_image: 'ghcr.io/requarks/wiki:2'
+
+# Port configuration
+wiki_port: '3000'  # Wiki.js application port
+
+# Database configuration
+wiki_db_type: 'sqlite'
+wiki_db_filepath: '/wiki/database.sqlite'
+
+# Wiki.js service volumes
+podman_volumes_wiki:
+  wiki:
+    - 'wiki-data'
+
+# Wiki.js service networks
+podman_networks_wiki:
+  wiki: []

@@ -1,0 +1,21 @@
+---
+# NGINX Proxy Manager container configuration defaults
+
+# Container image
+nginx_proxy_manager_image: 'docker.io/jc21/nginx-proxy-manager:latest'
+
+# Port configuration
+nginx_http_port: '80'        # Public HTTP Port
+nginx_https_port: '443'      # Public HTTPS Port
+nginx_admin_port: '81'       # Admin Web Port
+nginx_ssh_stream_port: '2222' # SSH Stream Port
+
+# Environment configuration
+nginx_db_sqlite_file: '/data/database.sqlite'
+nginx_disable_ipv6: true
+
+# NGINX Proxy Manager service volumes and networks
+podman_volumes_nginx:
+  nginx:
+    - 'nginx'
+    - 'letsencrypt'

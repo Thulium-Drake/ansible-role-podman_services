@@ -7,6 +7,6 @@
     scope: "{{ (podman_user_account != 'root') | ternary('user', 'system') }}"
   become: "{{ (podman_user_account != 'root') | ternary(true, omit) }}"
   become_user: "{{ podman_user_account }}"
-  loop: "{{ podman_containers[service] }}"
+  loop: "{{ podman_containers_changed | default([]) }}"
   loop_control:
     loop_var: 'container'

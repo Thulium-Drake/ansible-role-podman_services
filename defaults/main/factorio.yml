@@ -1,6 +1,22 @@
-# Which image you wish to use, I build my own, see
-# https://github.com/Thulium-Drake/container-factorio/ for my version
-factorio_image_uri: 'repo.example.com/games/factorio'
-factorio_version: 'latest'
+---
+# Factorio server configuration - Override these in group_vars as needed
 
-factorio_listen_port: 34197
+# Container configuration
+factorio_image: 'docker.io/factoriotools/factorio:latest'
+factorio_port: '34197'
+factorio_rcon_port: '27015'
+
+# Game configuration
+factorio_save_name: 'default'
+factorio_update_mods: false
+factorio_rcon_password: 'changeme-rcon'
+
+# Volumes for Factorio service
+podman_volumes_factorio:
+  factorio:
+    - name: factorio-data
+      driver: "{{ podman_volume_driver }}"
+
+# Networks for Factorio service
+podman_networks_factorio:
+  factorio: []

@@ -1,0 +1,21 @@
+---
+# Minecraft server service container definitions
+podman_service_containers_minecraft:
+  minecraft:
+    minecraft:
+      image: "{{ minecraft_image }}"
+      ports:
+        - "{{ minecraft_port }}:25565/tcp"
+        - "{{ minecraft_port }}:25565/udp"
+      volumes:
+        - "{{ service['name'] }}-data:/data:Z"
+      env:
+        EULA: "{{ minecraft_eula }}"
+        VERSION: "{{ minecraft_version }}"
+        TYPE: "{{ minecraft_type }}"
+        MEMORY: "{{ minecraft_memory }}"
+        DIFFICULTY: "{{ minecraft_difficulty }}"
+        MAX_PLAYERS: "{{ minecraft_max_players }}"
+        MOTD: "{{ minecraft_motd }}"
+        SPAWN_PROTECTION: "{{ minecraft_spawn_protection }}"
+      healthcheck: 'mc-monitor status --host localhost --port 25565'

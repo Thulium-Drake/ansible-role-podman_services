@@ -1,0 +1,15 @@
+---
+# Factorio server service container definitions
+podman_service_containers_factorio:
+  factorio:
+    factorio:
+      image: "{{ factorio_image }}"
+      ports:
+        - "{{ factorio_port }}:34197/udp"
+        - "{{ factorio_rcon_port }}:27015/tcp"
+      volumes:
+        - "{{ service['name'] }}-data:/factorio:Z"
+      env:
+        SAVE_NAME: "{{ factorio_save_name }}"
+        UPDATE_MODS_ON_START: "{{ factorio_update_mods }}"
+        RCON_PASSWORD: "{{ factorio_rcon_password }}"

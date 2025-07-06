@@ -1,5 +1,16 @@
 ---
-portainer_version: 'latest'
-# The listening URI for portainer
-# Either specify an IP address:port (e.g. 127.0.0.1:9443) or a port for listening on all interfaces
-portainer_listen_uri: '9443'
+# Portainer container management UI configuration - Override these in group_vars as needed
+
+# Container configuration
+portainer_image: 'docker.io/portainer/portainer-ce:latest'
+portainer_port: '9443'
+
+# Volumes for Portainer service
+podman_volumes_portainer:
+  portainer:
+    - name: portainer-data
+      driver: "{{ podman_volume_driver }}"
+
+# Networks for Portainer service
+podman_networks_portainer:
+  portainer: []

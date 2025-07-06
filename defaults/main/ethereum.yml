@@ -1,7 +1,17 @@
 ---
-# Suggested fee recipient
-ethereum_fee-recipient: '0x4D5F4A853000B9e7Be86aDf115576713d654F8C6'
-ethereum_wallet-dir: "{{ service['name'] }}/consensus/validator_keys"
-ethereum_wallet-password-file: "{{ ethereum_wallet-dir }}/wallet.txt"
-
+# Ethereum node configuration
+ethereum_fee_recipient: 'dev-null.eth'
+ethereum_checkpoint_sync_url: 'https://beaconstate-mainnet.chainsafe.io'
+ethereum_genesis_beacon_api_url: 'https://beaconstate-mainnet.chainsafe.io'
 ethereum_timezone: 'Europe/Amsterdam'
+ethereum_user_id: '1001:1002'
+
+# Geth configuration
+ethereum_geth_cache: '4096'
+ethereum_geth_syncmode: 'snap'
+ethereum_geth_gcmode: 'full'
+
+# Network definitions
+podman_networks_ethereum:
+  ethereum:
+    - 'ethereum-backend'

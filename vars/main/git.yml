@@ -1,0 +1,51 @@
+---
+# Git service container definitions - Forgejo with Gitea Act Runners
+podman_service_containers_git:
+  git:
+    server:
+      image: "{{ git_image }}"
+      ports:
+        - "{{ git_http_port }}:3000"
+        - "{{ git_ssh_port }}:2222"
+      volumes:
+        - "{{ service['name'] }}-data:/var/lib/gitea:Z"
+        - '/etc/localtime:/etc/localtime:ro'
+      env:
+        TZ: "{{ git_timezone }}"
+      healthcheck: 'wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1'
+      network:
+        - 'git-backend.network'
+
+    runner1:
+      image: "{{ git_runner_image }}"
+      volumes:
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
+        - "{{ service['name'] }}-runner1-config:/data:Z"
+      privileged: true
+      dns: "{{ git_runner_dns | default(omit) }}"
+      env:
+        TZ: "{{ git_timezone }}"
+        GITEA_INSTANCE_URL: "{{ git_runner_url }}"
+        GITEA_RUNNER_REGISTRATION_TOKEN: "{{ git_runner_token }}"
+        GITEA_RUNNER_NAME: "{{ service['name'] }}-runner1"
+        CONFIG_FILE: '/data/config.yaml'
+      network:
+        - 'git-backend.network'
+
+    runner2:
+      image: "{{ git_runner_image }}"
+      volumes:
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
+        - "{{ service['name'] }}-runner2-config:/data:Z"
+      privileged: true
+      dns: "{{ git_runner_dns | default(omit) }}"
+      env:
+        TZ: "{{ git_timezone }}"
+        GITEA_INSTANCE_URL: "{{ git_runner_url }}"
+        GITEA_RUNNER_REGISTRATION_TOKEN: "{{ git_runner_token }}"
+        GITEA_RUNNER_NAME: "{{ service['name'] }}-runner2"
+        CONFIG_FILE: '/data/config.yaml'
+      network:
+        - 'git-backend.network'

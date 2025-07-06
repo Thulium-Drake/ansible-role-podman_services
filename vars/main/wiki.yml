@@ -1,0 +1,14 @@
+---
+# Wiki.js service container definitions
+podman_service_containers_wiki:
+  wiki:
+    wiki:
+      image: "{{ wiki_image }}"
+      ports:
+        - "{{ wiki_port }}:3000"
+      volumes:
+        - "{{ service['name'] }}-data:/wiki:Z"
+      env:
+        DB_TYPE: "{{ wiki_db_type }}"
+        DB_FILEPATH: "{{ wiki_db_filepath }}"
+      healthcheck: 'curl -f http://localhost:3000/healthz || exit 1'

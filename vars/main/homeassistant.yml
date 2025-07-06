@@ -1,0 +1,9 @@
+---
+# Home Assistant service container definitions
+podman_service_containers_homeassistant:
+  homeassistant:
+    homeassistant:
+      image: "ghcr.io/home-assistant/home-assistant:{{ homeassistant_version }}"
+      ports: "{{ homeassistant_ports }}"
+      volumes:
+        - "{{ service['name'] }}:/config:Z"

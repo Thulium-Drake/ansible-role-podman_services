@@ -1,0 +1,12 @@
+---
+# Portainer service container definitions - Container management UI
+podman_service_containers_portainer:
+  portainer:
+    portainer:
+      image: "{{ portainer_image }}"
+      ports:
+        - "{{ portainer_port }}:9443"
+      volumes:
+        - "{{ service['name'] }}-data:/data:Z"
+        - "/run/user/{{ ansible_user_uid }}/podman/podman.sock:/var/run/docker.sock:Z"
+      healthcheck: 'curl -f https://localhost:9443/ || exit 1'

@@ -1,0 +1,17 @@
+---
+# NGINX Proxy Manager service container definitions
+podman_service_containers_nginx:
+  nginx:
+    proxy:
+      image: "{{ nginx_proxy_manager_image | default('docker.io/jc21/nginx-proxy-manager:latest') }}"
+      ports:
+        - "{{ nginx_http_port | default('80') }}:80"
+        - "{{ nginx_https_port | default('443') }}:443"
+        - "{{ nginx_admin_port | default('81') }}:81"
+        - "{{ nginx_ssh_stream_port | default('2222') }}:2222"
+      volumes:
+        - "nginx:/data:Z"
+        - "letsencrypt:/etc/letsencrypt:Z"
+      env:
+        DB_SQLITE_FILE: "{{ nginx_db_sqlite_file | default('/data/database.sqlite') }}"
+        DISABLE_IPV6: "{{ nginx_disable_ipv6 | default('true') }}"
