@@ -1,8 +1,24 @@
 ---
-# Hello World service volumes and networks
+# Hello World service configuration
+# Simple test service for basic container deployment
+
+# Container image configuration
+hello_world_version: 'latest'
+
+# Port configuration
+hello_world_port: 8080
+
+# Authentication/Security configuration
+# No authentication required
+
+# Service-specific configuration
+# Simple one-time run container
+
+# Volume configuration
 podman_volumes_hello_world:
   hello_world: []
 
+# Network configuration
 podman_networks_hello_world:
   hello_world: []
 

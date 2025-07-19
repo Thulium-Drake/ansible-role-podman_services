@@ -3,6 +3,6 @@
 podman_service_containers_hello_world:
   hello_world:
     hello_world:
-      image: 'docker.io/thomaspoignant/hello-world-rest-json'
+      image: "docker.io/thomaspoignant/hello-world-rest-json:{{ hello_world_version }}"
       ports:
-        - '8080:8080'
+        - "{{ hello_world_port }}:8080"

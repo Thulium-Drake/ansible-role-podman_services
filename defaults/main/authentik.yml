@@ -2,12 +2,8 @@
 # Authentik service configuration
 # REQUIRED: Set authentik_postgres_password and authentik_secret_key in your environment
 
-# Container images
-authentik_image: 'ghcr.io/goauthentik/server'
-authentik_ldap: 'ghcr.io/goauthentik/ldap'
+# Container image configuration
 authentik_version: '2025.6.2'
-authentik_postgresql_image: 'docker.io/library/postgres:16-alpine'
-authentik_redis_image: 'docker.io/library/redis:alpine'
 
 # Required secrets - MUST be overridden in group_vars or host_vars
 authentik_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
@@ -24,7 +20,7 @@ authentik_ldaps_port: '636'
 authentik_postgres_user: 'authentik'
 authentik_postgres_db: 'authentik'
 
-# Authentik service volumes and networks
+# Volume configuration
 podman_volumes_authentik:
   authentik:
     - 'authentik-postgresql_data'
@@ -33,6 +29,7 @@ podman_volumes_authentik:
     - 'authentik-templates'
     - 'authentik-certs'
 
+# Network configuration
 podman_networks_authentik:
   authentik:
     - 'authentik-backend'

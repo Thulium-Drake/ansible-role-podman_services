@@ -3,7 +3,7 @@
 podman_service_containers_kong:
   kong:
     postgresql:
-      image: "{{ kong_postgres_image }}"
+      image: "docker.io/library/postgres:16-alpine"
       network:
         - 'kong-backend.network'
       healthcheck: "pg_isready -d {{ kong_postgres_db }} -U {{ kong_postgres_user }}"
@@ -15,7 +15,7 @@ podman_service_containers_kong:
         POSTGRES_DB: "{{ kong_postgres_db }}"
     
     kong-migrations:
-      image: "kong:{{ kong_version }}"
+      image: "docker.io/library/kong:{{ kong_version }}"
       command: 'kong migrations bootstrap'
       network:
         - 'kong-backend.network'
@@ -30,7 +30,7 @@ podman_service_containers_kong:
       restart: 'on-failure'
     
     kong-migrations-up:
-      image: "kong:{{ kong_version }}"
+      image: "docker.io/library/kong:{{ kong_version }}"
       command: 'kong migrations up && kong migrations finish'
       network:
         - 'kong-backend.network'
@@ -45,7 +45,7 @@ podman_service_containers_kong:
       restart: 'on-failure'
     
     kong:
-      image: "kong:{{ kong_version }}"
+      image: "docker.io/library/kong:{{ kong_version }}"
       user: 'kong'
       network:
         - 'kong-backend.network'

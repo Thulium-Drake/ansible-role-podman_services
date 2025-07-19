@@ -3,7 +3,7 @@
 podman_service_containers_authentik:
   authentik:
     postgresql:
-      image: "{{ authentik_postgresql_image }}"
+      image: "docker.io/library/postgres:16-alpine"
       network:
         - 'authentik-backend.network'
       healthcheck: "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"
@@ -15,7 +15,7 @@ podman_service_containers_authentik:
         POSTGRES_DB: "{{ authentik_postgres_db }}"
 
     redis:
-      image: "{{ authentik_redis_image }}"
+      image: "docker.io/library/redis:alpine"
       network:
         - 'authentik-backend.network'
       healthcheck: 'redis-cli ping | grep PONG'
@@ -24,7 +24,7 @@ podman_service_containers_authentik:
       command: '--save 60 1 --loglevel warning'
 
     server:
-      image: "{{ authentik_image }}:{{ authentik_version }}"
+      image: "ghcr.io/goauthentik/server:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       ports:
@@ -44,7 +44,7 @@ podman_service_containers_authentik:
         AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
 
     worker:
-      image: "{{ authentik_image }}:{{ authentik_version }}"
+      image: "ghcr.io/goauthentik/server:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       command: 'worker'
@@ -62,7 +62,7 @@ podman_service_containers_authentik:
         AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgres_password }}"
 
     ldap:
-      image: "{{ authentik_ldap }}:{{ authentik_version }}"
+      image: "ghcr.io/goauthentik/ldap:{{ authentik_version }}"
       network:
         - 'authentik-backend.network'
       ports:

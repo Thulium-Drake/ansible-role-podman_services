@@ -1,12 +1,18 @@
 ---
-# Minecraft server configuration - Override these in group_vars as needed
+# Minecraft service configuration
+# Dedicated game server
 
-# Container configuration
-minecraft_image: 'docker.io/itzg/minecraft-server:latest'
-minecraft_port: '25565'
+# Container image configuration
+minecraft_container_version: 'latest'
 
-# Server configuration
+# Port configuration
+minecraft_port: '25565' # Game port
+
+# Authentication/Security configuration
+# Server requires EULA acceptance
 minecraft_eula: true
+
+# Service-specific configuration
 minecraft_version: 'LATEST'
 minecraft_type: 'VANILLA'
 minecraft_memory: '1G'
@@ -15,12 +21,12 @@ minecraft_max_players: '20'
 minecraft_motd: 'A Minecraft Server'
 minecraft_spawn_protection: '16'
 
-# Volumes for Minecraft service
+# Volume configuration
 podman_volumes_minecraft:
   minecraft:
     - name: minecraft-data
       driver: "{{ podman_volume_driver }}"
 
-# Networks for Minecraft service
+# Network configuration
 podman_networks_minecraft:
   minecraft: []

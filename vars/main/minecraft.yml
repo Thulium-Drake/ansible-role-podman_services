@@ -3,7 +3,7 @@
 podman_service_containers_minecraft:
   minecraft:
     minecraft:
-      image: "{{ minecraft_image }}"
+      image: "docker.io/itzg/minecraft-server:{{ minecraft_container_version }}"
       ports:
         - "{{ minecraft_port }}:25565/tcp"
         - "{{ minecraft_port }}:25565/udp"

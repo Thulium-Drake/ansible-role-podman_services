@@ -1,22 +1,29 @@
 ---
-# Set this to the folder that _contains_ your downloads/movies/tv etc.
-# When using the NFS volume (arr-data), this should match the volume name
-arr_data_folder: 'arr-data'
+# ARR service configuration
+# Complete media automation stack (Sonarr, Radarr, Prowlarr, etc.)
 
+# Container image configuration
+# Images are defined in vars/main/arr.yml using LinuxServer.io images
+
+# Port configuration
+bazarr_port: '6767'
+jellyfin_webui_port: '8096'
+prowlarr_port: '9696'
+radarr_port: '7878'
+readarr_port: '8787'
+sabnzbd_port: '8080'
+sonarr_port: '8989'
+jellyseerr_port: '5055'
+transmission_port: '9091'
+
+# Authentication/Security configuration
+# Set in group_vars for transmission VPN
+
+# Service-specific configuration
+arr_data_folder: 'arr-data'  # Folder that contains downloads/movies/tv etc.
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'
 arr_timezone: 'Europe/Amsterdam'
-
-# Port variables for ARR services
-bazarr_port: 6767
-jellyfin_webui_port: 8096
-prowlarr_port: 9696
-radarr_port: 7878
-readarr_port: 8787
-sabnzbd_port: 8080
-sonarr_port: 8989
-jellyseerr_port: 5055
-transmission_port: 9091
 
 # Transmission Network Settings
 transmission_vpn_provider: 'VPN Provider'
@@ -37,7 +44,7 @@ jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 # GPU Support (options: 'none', 'nvidia')
 arr_gpu: 'none'
 
-# ARR service volumes and networks
+# Volume configuration
 podman_volumes_arr:
   arr:
     - 'arr-bazarr_config'
@@ -50,6 +57,7 @@ podman_volumes_arr:
     - 'arr-jellyfin_config'
     - 'arr-data'
 
+# Network configuration
 podman_networks_arr:
   arr:
     - 'arr-backend'

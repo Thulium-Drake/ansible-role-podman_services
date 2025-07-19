@@ -3,7 +3,7 @@
 podman_service_containers_wiki:
   wiki:
     wiki:
-      image: "{{ wiki_image }}"
+      image: "ghcr.io/requarks/wiki:{{ wiki_version }}"
       ports:
         - "{{ wiki_port }}:3000"
       volumes:

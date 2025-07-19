@@ -4,7 +4,7 @@ podman_service_containers_ethereum:
   ethereum:
     geth:
       name: "{{ service['name'] }}-geth"
-      image: docker.io/ethereum/client-go:stable
+      image: "docker.io/ethereum/client-go:{{ ethereum_geth_version }}"
       state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
       command:
         - --state.scheme=path
@@ -42,7 +42,7 @@ podman_service_containers_ethereum:
 
     beacon:
       name: "{{ service['name'] }}-beacon"
-      image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
+      image: "gcr.io/prysmaticlabs/prysm/beacon-chain:{{ ethereum_beacon_version }}"
       state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
       command:
         - --datadir=/ethereum/execution/data
@@ -74,7 +74,7 @@ podman_service_containers_ethereum:
 
     validator:
       name: "{{ service['name'] }}-validator"
-      image: gcr.io/prysmaticlabs/prysm/validator:stable
+      image: "gcr.io/prysmaticlabs/prysm/validator:{{ ethereum_validator_version }}"
       state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
       command:
         - --wallet-dir=/ethereum/consensus/validator_keys

@@ -3,7 +3,7 @@
 podman_service_containers_pihole:
   pihole:
     pihole:
-      image: "{{ pihole_image }}"
+      image: "docker.io/pihole/pihole:{{ pihole_version }}"
       ports:
         - "{{ pihole_dns_port }}:53/tcp"
         - "{{ pihole_dns_port }}:53/udp"
@@ -15,7 +15,7 @@ podman_service_containers_pihole:
         TZ: "{{ pihole_timezone }}"
         FTLCONF_webserver_api_password: "{{ pihole_web_password }}"
         FTLCONF_dns_listeningMode: "{{ pihole_dns_listening_mode }}"
-        FTLCONF_dns_upstreamServers: "{{ pihole_dns_upstream_1 }};{{ pihole_dns_upstream_2 }}"
+        FTLCONF_dns_upstreamServers: "{{ pihole_dns_upstreams | join(';') }}"
         FTLCONF_webserver_interface: "{{ pihole_webinterface }}"
         FTLCONF_dnsmasq_listening: "{{ pihole_dnsmasq_listening }}"
       cap_add:

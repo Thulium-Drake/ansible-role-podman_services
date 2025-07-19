@@ -1,35 +1,38 @@
 ---
-# Kong API Gateway configuration
+# Kong service configuration
+# API Gateway with PostgreSQL backend
+# REQUIRED: Override kong_pg_password in group_vars
+
+# Container image configuration
 kong_version: 'latest'
+
+# Port configuration
+kong_proxy_port: '8000'    # HTTP proxy
+kong_proxy_ssl_port: '8443' # HTTPS proxy
+kong_admin_port: '8001'    # Admin API
+kong_admin_ssl_port: '8444' # Admin API SSL
+kong_admin_gui_port: '8002' # Admin GUI
+
+# Authentication/Security configuration
+kong_pg_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'  # REQUIRED: Override!
+kong_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
+
+# Service-specific configuration
 kong_database: 'postgres'
 kong_pg_database: 'kong'
 kong_pg_user: 'kong'
-kong_pg_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
-
-# Kong service ports
-kong_proxy_port: '8000'
-kong_proxy_ssl_port: '8443'
-kong_admin_port: '8001'
-kong_admin_ssl_port: '8444'
-kong_admin_gui_port: '8002'
-
-# Kong configuration
+kong_postgres_db: 'kong'
+kong_postgres_user: 'kong'
 kong_prefix: '/var/run/kong'
 kong_declarative_config: '/opt/kong/kong.yaml'
 
-# PostgreSQL configuration
-kong_postgres_image: 'docker.io/library/postgres:16-alpine'
-kong_postgres_db: 'kong'
-kong_postgres_user: 'kong'
-kong_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
-
-# Volume definitions
+# Volume configuration
 podman_volumes_kong:
   kong:
     - 'kong-data'
     - 'kong-postgresql-data'
 
-# Network definitions
+# Network configuration
 podman_networks_kong:
   kong:
     - 'kong-backend'

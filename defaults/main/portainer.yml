@@ -1,16 +1,25 @@
 ---
-# Portainer container management UI configuration - Override these in group_vars as needed
+# Portainer service configuration
+# Container management web interface
 
-# Container configuration
-portainer_image: 'docker.io/portainer/portainer-ce:latest'
+# Container image configuration
+portainer_version: 'latest'
+
+# Port configuration
 portainer_port: '9443'
 
-# Volumes for Portainer service
+# Authentication/Security configuration
+# Default admin credentials set on first login
+
+# Service-specific configuration
+# Configured for rootless Podman
+
+# Volume configuration
 podman_volumes_portainer:
   portainer:
     - name: portainer-data
       driver: "{{ podman_volume_driver }}"
 
-# Networks for Portainer service
+# Network configuration
 podman_networks_portainer:
   portainer: []

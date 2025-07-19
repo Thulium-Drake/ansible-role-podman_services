@@ -3,7 +3,7 @@
 podman_service_containers_factorio:
   factorio:
     factorio:
-      image: "{{ factorio_image }}"
+      image: "docker.io/factoriotools/factorio:{{ factorio_version }}"
       ports:
         - "{{ factorio_port }}:34197/udp"
         - "{{ factorio_rcon_port }}:27015/tcp"

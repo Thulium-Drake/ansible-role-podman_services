@@ -1,15 +1,27 @@
 ---
+# Home Assistant service configuration
+# Home automation platform
+
+# Container image configuration
 homeassistant_version: 'stable'
 
-# If you run plugins that need additional ports, specify them here
-homeassistant_ports:
-  - '8123:8123'
+# Port configuration
+homeassistant_port: '8123'
 
-# Home Assistant service volumes and networks
+# Service-specific configuration
+# If you run plugins that need additional ports, add them here
+homeassistant_additional_ports: []
+# Example:
+# homeassistant_additional_ports:
+#   - '1883:1883'  # MQTT
+#   - '5353:5353/udp'  # mDNS
+
+# Volume configuration
 podman_volumes_homeassistant:
   homeassistant:
     - 'homeassistant'
 
+# Network configuration
 podman_networks_homeassistant:
   homeassistant: []
 

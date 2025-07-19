@@ -1,22 +1,27 @@
 ---
-# Factorio server configuration - Override these in group_vars as needed
+# Factorio service configuration
+# Dedicated game server
 
-# Container configuration
-factorio_image: 'docker.io/factoriotools/factorio:latest'
-factorio_port: '34197'
-factorio_rcon_port: '27015'
+# Container image configuration
+factorio_version: 'latest'
 
-# Game configuration
+# Port configuration
+factorio_port: '34197'    # Game port (UDP)
+factorio_rcon_port: '27015' # RCON port
+
+# Authentication/Security configuration
+factorio_rcon_password: 'changeme-rcon'  # Override in group_vars
+
+# Service-specific configuration
 factorio_save_name: 'default'
 factorio_update_mods: false
-factorio_rcon_password: 'changeme-rcon'
 
-# Volumes for Factorio service
+# Volume configuration
 podman_volumes_factorio:
   factorio:
     - name: factorio-data
       driver: "{{ podman_volume_driver }}"
 
-# Networks for Factorio service
+# Network configuration
 podman_networks_factorio:
   factorio: []

@@ -1,32 +1,36 @@
 ---
-# Pi-hole DNS server configuration defaults
+# Pi-hole service configuration
+# DNS server with ad-blocking capabilities
+# IMPORTANT: Override pihole_web_password in group_vars!
 
-# Container image
-pihole_image: 'docker.io/pihole/pihole:latest'
+# Container image configuration
+pihole_version: 'latest'
 
 # Port configuration
-pihole_web_port: '8080'     # Web interface port
-pihole_dns_port: '53'       # DNS service port
+pihole_dns_port: '53'      # DNS service port
+pihole_web_port: '8080'    # Web interface port
 
-# Environment configuration
-pihole_timezone: 'UTC'
+# Authentication/Security configuration
 pihole_web_password: 'changeme'  # IMPORTANT: Override this in group_vars!
 
-# DNS configuration
-pihole_dns_upstream_1: '9.9.9.9'
-pihole_dns_upstream_2: '149.112.112.112'
-pihole_dns_listening_mode: 'all'
-pihole_dnsmasq_listening: 'all'
-
-# Web interface settings
+# Service-specific configuration
+pihole_timezone: 'UTC'
 pihole_webinterface: 'true'
 
-# Pi-hole service volumes
+# DNS configuration
+pihole_dns_listening_mode: 'all'
+pihole_dnsmasq_listening: 'all'
+# List of upstream DNS servers (can be one or many)
+pihole_dns_upstreams:
+  - '9.9.9.9'          # Quad9
+  - '149.112.112.112'  # Quad9 secondary
+
+# Volume configuration
 podman_volumes_pihole:
   pihole:
     - 'pihole-etc'
     - 'pihole-dnsmasq'
 
-# Pi-hole service networks
+# Network configuration
 podman_networks_pihole:
   pihole: []

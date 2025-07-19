@@ -1,21 +1,25 @@
 ---
-# Wiki.js configuration defaults
+# Wiki service configuration
+# Wiki.js documentation platform
 
-# Container image
-wiki_image: 'ghcr.io/requarks/wiki:2'
+# Container image configuration
+wiki_version: '2'
 
 # Port configuration
-wiki_port: '3000'  # Wiki.js application port
+wiki_port: '3000'
 
-# Database configuration
+# Authentication/Security configuration
+# Admin account setup on first login
+
+# Service-specific configuration
 wiki_db_type: 'sqlite'
 wiki_db_filepath: '/wiki/database.sqlite'
 
-# Wiki.js service volumes
+# Volume configuration
 podman_volumes_wiki:
   wiki:
     - 'wiki-data'
 
-# Wiki.js service networks
+# Network configuration
 podman_networks_wiki:
   wiki: []

@@ -1,31 +1,35 @@
 ---
-# Git service configuration - Override these in group_vars as needed
+# Git service configuration
+# Forgejo git hosting with CI/CD runners
+# REQUIRED: Set git_runner_token from Forgejo admin panel
 
-# Container images
-git_image: 'codeberg.org/forgejo/forgejo:11-rootless'
-git_runner_image: 'docker.io/gitea/act_runner:nightly'
+# Container image configuration
+git_version: '11-rootless'
+git_runner_version: 'nightly'
 
 # Port configuration
 git_http_port: '3000'
 git_ssh_port: '2222'
 
-# Forgejo configuration
+# Authentication/Security configuration
+git_runner_token: ''  # REQUIRED: Override with token from Forgejo admin panel
+
+# Service-specific configuration
 git_timezone: 'Europe/Amsterdam'
-
-# Gitea Act Runner configuration
 git_runner_count: 2
-git_runner_url: 'http://git-server:3000'  # Default internal URL - override in group_vars with external URL
-git_runner_token: ''  # Override with vault in group_vars - get from Forgejo admin panel
-git_runner_dns: []  # Override with DNS servers for runners, e.g., ['192.168.20.254']
+git_runner_url: 'http://git-server:3000'  # Default internal URL
 
-# Volumes for Git service
+# Advanced/Optional configuration
+# git_runner_dns: ['192.168.20.254']  # DNS servers for runners
+
+# Volume configuration
 podman_volumes_git:
   git:
     - 'git-data'
     - 'git-runner1-config'
     - 'git-runner2-config'
 
-# Networks for Git service
+# Network configuration
 podman_networks_git:
   git:
     - 'git-backend'

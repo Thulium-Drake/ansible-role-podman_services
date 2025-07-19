@@ -3,7 +3,7 @@
 podman_service_containers_portainer:
   portainer:
     portainer:
-      image: "{{ portainer_image }}"
+      image: "docker.io/portainer/portainer-ce:{{ portainer_version }}"
       ports:
         - "{{ portainer_port }}:9443"
       volumes:
