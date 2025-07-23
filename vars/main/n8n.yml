@@ -1,0 +1,20 @@
+---
+# n8n service container definitions
+podman_service_containers_n8n:
+  n8n:
+    n8n:
+      # N8N + Heavy Python dependencies
+      image: "git.overwrite.io/kevin/container-n8n:{{ n8n_version }}"
+      # Original image:
+      #image: "docker.n8n.io/n8nio/n8n:{{ n8n_version }}"
+      privileged: true
+      ports:
+        - '{{ n8n_port }}:5678'
+      env:
+        N8N_HOST: "{{ n8n_webhook_url }}"
+        WEBHOOK_URL: "{{ n8n_webhook_url }}"
+        NODE_ENV: 'production'
+        GENERIC_TIMEZONE: "{{ n8n_timezone }}"
+      volumes:
+        - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
+        - "{{ service['name'] }}-data:/home/node/.n8n:Z"

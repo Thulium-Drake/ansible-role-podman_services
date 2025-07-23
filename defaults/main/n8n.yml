@@ -1,0 +1,22 @@
+---
+# n8n service configuration
+# Workflow automation platform
+
+# Container image configuration
+n8n_version: 'latest'
+
+# Port configuration
+n8n_port: '5678'
+
+# Service-specific configuration
+n8n_webhook_url: "http://{{ inventory_hostname }}:{{ n8n_port }}"
+n8n_timezone: 'Europe/Amsterdam'
+
+# Volume configuration
+podman_volumes_n8n:
+  n8n:
+    - n8n-data
+
+# Network configuration
+podman_networks_n8n:
+  n8n: []
