@@ -12,6 +12,14 @@ n8n_port: '5678'
 n8n_webhook_url: "http://{{ inventory_hostname }}:{{ n8n_port }}"
 n8n_timezone: 'Europe/Amsterdam'
 
+# Database configuration
+n8n_database_type: 'sqlite'  # or 'postgresdb' for PostgreSQL
+# n8n_database_host: 'localhost'  # PostgreSQL only
+# n8n_database_port: '5432'       # PostgreSQL only
+# n8n_database_name: 'n8n'        # PostgreSQL only
+# n8n_database_user: 'n8n'        # PostgreSQL only
+# n8n_database_password: !unsafe 'CHANGE_ME_DB_PASSWORD'  # PostgreSQL only - REQUIRED: Override in group_vars
+
 # Volume configuration
 podman_volumes_n8n:
   n8n:

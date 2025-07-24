@@ -44,6 +44,7 @@
   loop: "{{ merged_service_containers[service['name']] | dict2items }}"
   register: 'service_config'
   notify: 'Restart changed services'
+  no_log: "{{ not (podman_debug | default(false)) }}"
 
 - name: 'Add to changed service list'
   ansible.builtin.import_tasks: 'changed_service.yml'

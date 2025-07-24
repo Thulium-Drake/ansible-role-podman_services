@@ -9,6 +9,9 @@ podman_services: []
 # Which driver to use for volume storage, this role does not set up the driver!
 podman_volume_driver: 'local'
 
+# Which DNS server to use for containers, this role does not set up the DNS server!
+podman_dns: '9.9.9.9'
+
 # Default options for all generated container quadlets
 # Enable automatic updates and ensure that it is started by default
 podman_quadlet_options:
