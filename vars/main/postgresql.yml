@@ -1,0 +1,15 @@
+---
+# PostgreSQL service container definitions
+podman_service_containers_postgresql:
+  postgresql:
+    postgresql:
+      image: "docker.io/library/postgres:{{ postgresql_version }}"
+      ports:
+        - "{{ postgresql_port }}:5432"
+      env:
+        POSTGRES_USER: "{{ postgresql_user }}"
+        POSTGRES_PASSWORD: "{{ postgresql_password }}"
+        POSTGRES_DB: "{{ postgresql_database }}"
+      volumes:
+        - "{{ service['name'] }}-data:/var/lib/postgresql/data:Z"
+      healthcheck: 'pg_isready || exit 1'

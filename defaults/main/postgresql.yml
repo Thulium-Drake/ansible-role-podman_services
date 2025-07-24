@@ -1,0 +1,23 @@
+---
+# PostgreSQL service configuration
+# PostgreSQL database server
+
+# Container image configuration
+postgresql_version: '17'
+
+# Port configuration
+postgresql_port: '5432'
+
+# Authentication configuration
+postgresql_user: 'postgres'
+postgresql_password: !unsafe 'CHANGE_ME_DATABASE_PASSWORD'  # REQUIRED: Override in group_vars
+postgresql_database: 'postgres'  # Initial database to create
+
+# Volume configuration
+podman_volumes_postgresql:
+  postgresql:
+    - 'postgresql-data'
+
+# Network configuration
+podman_networks_postgresql:
+  postgresql: []
