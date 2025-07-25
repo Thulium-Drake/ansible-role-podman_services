@@ -15,7 +15,7 @@ podman_service_containers_tooling:
       image: "docker.io/linuxserver/code-server:{{ tooling_vscode_version }}"
       ports:
         - "{{ tooling_vscode_port }}:8443"
-      volumes: "{{ ['tooling-vscode_config:/config:Z', 'tooling-vscode_workspace:/workspace:Z'] + (tooling_vscode_extra_volumes|default([])) }}"
+      volumes: "{{ ['tooling-vscode_config:/config:Z', 'tooling-vscode_workspace:/workspace:Z'] + (tooling_vscode_extra_volumes | default([])) }}"
       env:
         PUID: "{{ tooling_user_id }}"
         PGID: "{{ tooling_group_id }}"
@@ -30,7 +30,7 @@ podman_service_containers_tooling:
       image: "docker.io/linuxserver/firefox:{{ tooling_firefox_version }}"
       ports:
         - "{{ tooling_firefox_port }}:3000"
-      volumes: "{{ ['tooling-firefox_config:/config:Z'] + (tooling_firefox_extra_volumes|default([])) }}"
+      volumes: "{{ ['tooling-firefox_config:/config:Z'] + (tooling_firefox_extra_volumes | default([])) }}"
       env:
         PUID: "{{ tooling_user_id }}"
         PGID: "{{ tooling_group_id }}"

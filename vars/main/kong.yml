@@ -20,7 +20,7 @@ podman_service_containers_kong:
         POSTGRES_PASSWORD: "{{ kong_postgres_password }}"
         POSTGRES_USER: "{{ kong_postgres_user }}"
         POSTGRES_DB: "{{ kong_postgres_db }}"
-    
+
     kong-migrations:
       image: "docker.io/library/kong:{{ kong_version }}"
       command: 'kong migrations bootstrap'
@@ -35,7 +35,7 @@ podman_service_containers_kong:
       depends_on:
         - 'postgresql'
       restart: 'on-failure'
-    
+
     kong-migrations-up:
       image: "docker.io/library/kong:{{ kong_version }}"
       command: 'kong migrations up && kong migrations finish'
@@ -50,7 +50,7 @@ podman_service_containers_kong:
       depends_on:
         - 'postgresql'
       restart: 'on-failure'
-    
+
     kong:
       image: "docker.io/library/kong:{{ kong_version }}"
       user: 'kong'
