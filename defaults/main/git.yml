@@ -1,23 +1,14 @@
 ---
-# Git service configuration
-# Forgejo git hosting with CI/CD runners
-# REQUIRED: Set git_runner_token from Forgejo admin panel
-
-# Container image configuration
 git_version: '11-rootless'
 git_runner_version: 'nightly'
 
-# Port configuration
 git_http_port: '3000'
 git_ssh_port: '2222'
 
-# Authentication/Security configuration
 git_runner_token: ''  # REQUIRED: Override with token from Forgejo admin panel
 
-# Service-specific configuration
 git_timezone: 'Europe/Amsterdam'
 git_runner_count: 2
 git_runner_url: 'http://git-server:3000'  # Default internal URL
 
-# Advanced/Optional configuration
 # git_runner_dns: ["{{ podman_dns }}"]  # DNS servers for runners

@@ -1,13 +1,9 @@
 ---
-# Pi-hole service container definitions
-
-# Volume configuration
 podman_volumes_pihole:
   pihole:
     - 'pihole-etc'
     - 'pihole-dnsmasq'
 
-# Network configuration
 podman_networks_pihole:
   pihole: []
 

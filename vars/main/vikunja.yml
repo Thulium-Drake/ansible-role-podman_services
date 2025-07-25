@@ -1,13 +1,9 @@
 ---
-# Vikunja service container definitions
-
-# Volume configuration
 podman_volumes_vikunja:
   vikunja:
     - 'vikunja-files'
     - 'vikunja-db'
 
-# Network configuration
 podman_networks_vikunja:
   vikunja: []
 

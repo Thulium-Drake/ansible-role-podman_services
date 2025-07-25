@@ -1,26 +1,16 @@
 ---
-# Pi-hole service configuration
-# DNS server with ad-blocking capabilities
 # IMPORTANT: Override pihole_web_password in group_vars!
 
-# Container image configuration
 pihole_version: 'latest'
 
-# Port configuration
-pihole_dns_port: '53'      # DNS service port
-pihole_web_port: '8080'    # Web interface port
+pihole_dns_port: '53'
+pihole_web_port: '8080'
 
-# Authentication/Security configuration
 pihole_web_password: 'changeme'  # IMPORTANT: Override this in group_vars!
 
-# Service-specific configuration
 pihole_timezone: 'UTC'
 pihole_webinterface: true
 
-# DNS configuration
 pihole_dns_listening_mode: 'all'
 pihole_dnsmasq_listening: 'all'
-# List of upstream DNS servers (can be one or many)
-pihole_dns_upstreams:
-  - '9.9.9.9'          # Quad9
-  - '149.112.112.112'  # Quad9 secondary
+pihole_dns_upstreams: "{{ podman_dns: }}"

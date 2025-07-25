@@ -1,11 +1,4 @@
 ---
-# ARR service configuration
-# Complete media automation stack (Sonarr, Radarr, Prowlarr, etc.)
-
-# Container image configuration
-# Images are defined in vars/main/arr.yml using LinuxServer.io images
-
-# Port configuration
 bazarr_port: '6767'
 jellyfin_webui_port: '8096'
 prowlarr_port: '9696'
@@ -16,16 +9,12 @@ sonarr_port: '8989'
 jellyseerr_port: '5055'
 transmission_port: '9091'
 
-# Authentication/Security configuration
-# Set in group_vars for transmission VPN
-
-# Service-specific configuration
 arr_data_folder: 'arr-data'  # Folder that contains downloads/movies/tv etc.
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'
 arr_timezone: 'Europe/Amsterdam'
 
-# Transmission Network Settings
+# Set in group_vars for transmission VPN
 transmission_vpn_provider: 'VPN Provider'
 transmission_vpn_config: 'VPN Config'
 transmission_vpn_username: 'vpn_username'
@@ -33,13 +22,10 @@ transmission_vpn_password: 'vpn_password'
 transmission_local_network: '192.168.0.0/16'
 # transmission_bind_address: '1.2.3.4' # Optional, set to your public IP if needed
 
-# Transmission Web UI
-# options are:
-# combustion, kettu, transmission-web-control,
+# Transmission Web UI options: combustion, kettu, transmission-web-control,
 # flood-for-transmission, shift, transmissionic
 # transmission_web_ui: 'flood-for-transmission' # Optional, set to your preferred UI
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
-# GPU Support (options: 'none', 'nvidia')
-arr_gpu: 'none'
+arr_gpu: 'none'  # Options: 'none', 'nvidia'

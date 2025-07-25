@@ -1,15 +1,7 @@
 ---
-# Portainer service configuration
-# Container management web interface
-
-# Container image configuration
 portainer_version: 'latest'
 
-# Port configuration
 portainer_port: '9443'
 
-# Authentication/Security configuration
 # Default admin credentials set on first login
-
-# Service-specific configuration
 # Configured for rootless Podman

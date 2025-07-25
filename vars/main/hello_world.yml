@@ -1,11 +1,7 @@
 ---
-# Hello World service container definitions
-
-# Volume configuration
 podman_volumes_hello_world:
   hello_world: []
 
-# Network configuration
 podman_networks_hello_world:
   hello_world: []
 

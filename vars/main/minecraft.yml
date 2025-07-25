@@ -1,13 +1,9 @@
 ---
-# Minecraft server service container definitions
-
-# Volume configuration
 podman_volumes_minecraft:
   minecraft:
     - name: minecraft-data
       driver: "{{ podman_volume_driver }}"
 
-# Network configuration
 podman_networks_minecraft:
   minecraft: []
 

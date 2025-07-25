@@ -1,7 +1,4 @@
 ---
-# Generic service deployment task that handles all service types
-# This replaces all individual service task files
-
 - name: 'Set up networks'
   ansible.builtin.import_tasks: 'network.yml'
   when: podman_networks[service['name']] | default([]) | length > 0
@@ -11,7 +8,7 @@
   when: podman_volumes[service['name']] | default([]) | length > 0
 
 - name: 'Set merged containers fact'
-  set_fact:
+  ansible.builtin.set_fact:
     merged_service_containers: "{{ lookup('community.general.merge_variables', 'podman_service_containers_', pattern_type='prefix') }}"
   run_once: true
 
@@ -19,10 +16,10 @@
   containers.podman.podman_container:
     name: >-
       {{
-        (item.key == service['name']) |
+        (item['key'] == service['name']) |
         ternary(
           service['name'],
-          service['name'] + '-' + item.key
+          service['name'] + '-' + item['key']
         )
       }}
     image: "{{ item['value']['image'] }}"

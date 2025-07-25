@@ -1,26 +1,18 @@
 ---
-# Vaultwarden service configuration
-# Bitwarden-compatible password manager
 # NOTE: Vaultwarden is not encrypted by default!
 
-# Container image configuration
 vaultwarden_version: 'alpine'
 
-# Port configuration
 vaultwarden_listen_uri: '3000'  # Either specify IP:port (e.g. 127.0.0.1:3000) or just port
 
-# Authentication/Security configuration
 vaultwarden_admin_token: ''  # Set this to enable the admin portal
 vaultwarden_domain: 'vault.example.nl'
 
-# Service-specific configuration
-# User registration settings
 vaultwarden_signups_allowed: false
 vaultwarden_signups_verify: false
 vaultwarden_signup_whitelist: []  # When set, vaultwarden_signups_allowed is ignored
 vaultwarden_invitations_allowed: false
 
-# SMTP configuration
 vaultwarden_smtp_server: 'mail.example.nl'
 vaultwarden_smtp_port: '25'
 vaultwarden_smtp_from: 'vault-noreply@example.nl'

@@ -27,4 +27,4 @@
   ansible.builtin.systemd:
     daemon_reload: true
     daemon_reexec: true
-    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system', 'system') }}"
+    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system') }}"

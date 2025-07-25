@@ -1,18 +1,11 @@
 ---
-# n8n service configuration
-# Workflow automation platform
-
-# Container image configuration
 n8n_version: 'latest'
 
-# Port configuration
 n8n_port: '5678'
 
-# Service-specific configuration
 n8n_webhook_url: "http://{{ inventory_hostname }}:{{ n8n_port }}"
 n8n_timezone: 'Europe/Amsterdam'
 
-# Database configuration
 n8n_database_type: 'sqlite'  # or 'postgresdb' for PostgreSQL
 # n8n_database_host: 'localhost'  # PostgreSQL only
 # n8n_database_port: '5432'       # PostgreSQL only

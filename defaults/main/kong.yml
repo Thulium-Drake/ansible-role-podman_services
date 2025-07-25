@@ -1,23 +1,17 @@
 ---
-# Kong service configuration
-# API Gateway with PostgreSQL backend
 # REQUIRED: Override kong_pg_password in group_vars
 
-# Container image configuration
 kong_version: 'latest'
 
-# Port configuration
 kong_proxy_port: '8000'    # HTTP proxy
 kong_proxy_ssl_port: '8443' # HTTPS proxy
 kong_admin_port: '8001'    # Admin API
 kong_admin_ssl_port: '8444' # Admin API SSL
 kong_admin_gui_port: '8002' # Admin GUI
 
-# Authentication/Security configuration
 kong_pg_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'  # REQUIRED: Override!
 kong_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
 
-# Service-specific configuration
 kong_database: 'postgres'
 kong_pg_database: 'kong'
 kong_pg_user: 'kong'

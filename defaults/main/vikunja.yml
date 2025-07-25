@@ -1,17 +1,11 @@
 ---
-# Vikunja service configuration
-# Task management and to-do list service
 # IMPORTANT: Override vikunja_jwt_secret in group_vars!
 
-# Container image configuration
 vikunja_version: 'latest'
 
-# Port configuration
 vikunja_port: '3456'
 
-# Authentication/Security configuration
 vikunja_jwt_secret: 'change-me-to-a-super-secure-random-secret'  # IMPORTANT: Override!
 
-# Service-specific configuration
 vikunja_public_url: 'http://localhost:3456/'
 vikunja_database_path: '/db/vikunja.db'

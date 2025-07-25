@@ -1,25 +1,17 @@
 ---
-# Tooling service configuration
-# Development tools (VS Code server, Firefox browser)
-
-# Container image configuration
 tooling_vscode_version: 'latest'
 tooling_firefox_version: 'latest'
 
-# Port configuration
 tooling_vscode_port: '3000'
 tooling_firefox_port: '3001'
 
-# Authentication/Security configuration
 tooling_vscode_password: 'changeme-vscode'      # Override with vault
 tooling_vscode_sudo_password: 'changeme-sudo'  # Override with vault
 
-# Service-specific configuration
 tooling_user_id: '1000'
 tooling_group_id: '1000'
 tooling_timezone: 'UTC'
 
-# Firefox-specific settings
 tooling_firefox_shm_size: '1gb'
 
 # Additional host mount volumes (optional)

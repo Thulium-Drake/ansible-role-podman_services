@@ -1,13 +1,9 @@
 ---
-# NGINX Proxy Manager service container definitions
-
-# Volume configuration
 podman_volumes_nginx:
   nginx:
     - 'nginx'
     - 'letsencrypt'
 
-# Network configuration
 podman_networks_nginx:
   nginx: []
 

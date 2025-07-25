@@ -1,22 +1,15 @@
 ---
-# Authentik service configuration
-# REQUIRED: Set authentik_postgres_password and authentik_secret_key in your environment
-
-# Container image configuration
 authentik_version: '2025.6.2'
 
-# Required secrets - MUST be overridden in group_vars or host_vars
+# MUST be overridden in group_vars or host_vars
 authentik_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
 authentik_secret_key: !unsafe 'CHANGE_ME_SECRET_KEY_MINIMUM_50_CHARS'
 authentik_ldap_token: !unsafe 'CHANGE_ME_LDAP_OUTPOST_TOKEN'
 
-# Port configuration
 authentik_http_port: '9000'
 authentik_https_port: '9443'
 authentik_ldap_port: '389'
 authentik_ldaps_port: '636'
 
-# Optional overrides (defaults are production-ready)
 authentik_postgres_user: 'authentik'
 authentik_postgres_db: 'authentik'
-

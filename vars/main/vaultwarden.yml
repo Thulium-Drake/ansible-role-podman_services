@@ -1,12 +1,8 @@
 ---
-# Vaultwarden service container definitions
-
-# Volume configuration
 podman_volumes_vaultwarden:
   vaultwarden:
     - 'vaultwarden'
 
-# Network configuration
 podman_networks_vaultwarden:
   vaultwarden: []
 

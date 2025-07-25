@@ -1,14 +1,8 @@
 ---
-# Home Assistant service configuration
-# Home automation platform
-
-# Container image configuration
 homeassistant_version: 'stable'
 
-# Port configuration
 homeassistant_port: '8123'
 
-# Service-specific configuration
 # If you run plugins that need additional ports, add them here
 homeassistant_additional_ports: []
 # Example:

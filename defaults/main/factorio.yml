@@ -1,17 +1,10 @@
 ---
-# Factorio service configuration
-# Dedicated game server
-
-# Container image configuration
 factorio_version: 'latest'
 
-# Port configuration
 factorio_port: '34197'    # Game port (UDP)
 factorio_rcon_port: '27015' # RCON port
 
-# Authentication/Security configuration
 factorio_rcon_password: 'changeme-rcon'  # Override in group_vars
 
-# Service-specific configuration
 factorio_save_name: 'default'
 factorio_update_mods: false

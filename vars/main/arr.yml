@@ -1,7 +1,4 @@
 ---
-# ARR service container definitions
-
-# Volume configuration
 podman_volumes_arr:
   arr:
     - 'arr-bazarr_config'
@@ -14,7 +11,6 @@ podman_volumes_arr:
     - 'arr-jellyfin_config'
     - 'arr-data'
 
-# Network configuration
 podman_networks_arr:
   arr:
     - 'arr-backend'

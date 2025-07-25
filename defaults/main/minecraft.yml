@@ -1,18 +1,10 @@
 ---
-# Minecraft service configuration
-# Dedicated game server
-
-# Container image configuration
 minecraft_container_version: 'latest'
 
-# Port configuration
-minecraft_port: '25565' # Game port
+minecraft_port: '25565'
 
-# Authentication/Security configuration
-# Server requires EULA acceptance
-minecraft_eula: true
+minecraft_eula: true  # Server requires EULA acceptance
 
-# Service-specific configuration
 minecraft_version: 'LATEST'
 minecraft_type: 'VANILLA'
 minecraft_memory: '1G'

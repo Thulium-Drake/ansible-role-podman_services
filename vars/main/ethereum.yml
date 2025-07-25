@@ -1,11 +1,7 @@
 ---
-# Ethereum service container definitions
-
-# Volume configuration
 podman_volumes_ethereum:
   ethereum: []
 
-# Network configuration
 podman_networks_ethereum:
   ethereum:
     - 'ethereum-backend'

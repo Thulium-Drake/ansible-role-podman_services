@@ -1,23 +1,15 @@
 ---
-# NGINX service configuration
-# Proxy Manager with Let's Encrypt support
-
-# Container image configuration
 nginx_version: 'latest'
 
-# Port configuration
-nginx_http_port: '80'      # Public HTTP Port
-nginx_https_port: '443'    # Public HTTPS Port
-nginx_admin_port: '81'     # Admin Web Port
+nginx_http_port: '80'
+nginx_https_port: '443'
+nginx_admin_port: '81'
 
-# Authentication/Security configuration
 # Default admin: admin@example.com / changeme
 
-# Service-specific configuration
 nginx_db_sqlite_file: '/data/database.sqlite'
 nginx_disable_ipv6: true
 
-# Advanced/Optional configuration
 # Additional stream ports (TCP/UDP forwarding)
 # Format: 'host:container' or 'host:container/protocol'
 # nginx_stream_ports:

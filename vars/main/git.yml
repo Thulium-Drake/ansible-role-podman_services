@@ -1,14 +1,10 @@
 ---
-# Git service container definitions - Forgejo with Gitea Act Runners
-
-# Volume configuration
 podman_volumes_git:
   git:
     - 'git-data'
     - 'git-runner1-config'
     - 'git-runner2-config'
 
-# Network configuration
 podman_networks_git:
   git: []
 

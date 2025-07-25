@@ -1,12 +1,8 @@
 ---
-# n8n service container definitions
-
-# Volume configuration
 podman_volumes_n8n:
   n8n:
     - 'n8n-data'
 
-# Network configuration
 podman_networks_n8n:
   n8n: []
 
