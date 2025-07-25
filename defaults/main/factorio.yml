@@ -15,13 +15,3 @@ factorio_rcon_password: 'changeme-rcon'  # Override in group_vars
 # Service-specific configuration
 factorio_save_name: 'default'
 factorio_update_mods: false
-
-# Volume configuration
-podman_volumes_factorio:
-  factorio:
-    - name: factorio-data
-      driver: "{{ podman_volume_driver }}"
-
-# Network configuration
-podman_networks_factorio:
-  factorio: []

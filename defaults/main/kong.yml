@@ -25,14 +25,3 @@ kong_postgres_db: 'kong'
 kong_postgres_user: 'kong'
 kong_prefix: '/var/run/kong'
 kong_declarative_config: '/opt/kong/kong.yaml'
-
-# Volume configuration
-podman_volumes_kong:
-  kong:
-    - 'kong-data'
-    - 'kong-postgresql-data'
-
-# Network configuration
-podman_networks_kong:
-  kong:
-    - 'kong-backend'

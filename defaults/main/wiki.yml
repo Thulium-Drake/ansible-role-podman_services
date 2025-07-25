@@ -14,12 +14,3 @@ wiki_port: '3000'
 # Service-specific configuration
 wiki_db_type: 'sqlite'
 wiki_db_filepath: '/wiki/database.sqlite'
-
-# Volume configuration
-podman_volumes_wiki:
-  wiki:
-    - 'wiki-data'
-
-# Network configuration
-podman_networks_wiki:
-  wiki: []

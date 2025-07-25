@@ -20,16 +20,3 @@ authentik_ldaps_port: '636'
 authentik_postgres_user: 'authentik'
 authentik_postgres_db: 'authentik'
 
-# Volume configuration
-podman_volumes_authentik:
-  authentik:
-    - 'authentik-postgresql_data'
-    - 'authentik-redis_data'
-    - 'authentik-media'
-    - 'authentik-templates'
-    - 'authentik-certs'
-
-# Network configuration
-podman_networks_authentik:
-  authentik:
-    - 'authentik-backend'

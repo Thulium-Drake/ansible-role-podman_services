@@ -7,8 +7,8 @@ tooling_vscode_version: 'latest'
 tooling_firefox_version: 'latest'
 
 # Port configuration
-tooling_vscode_port: 3000
-tooling_firefox_port: 3001
+tooling_vscode_port: '3000'
+tooling_firefox_port: '3001'
 
 # Authentication/Security configuration
 tooling_vscode_password: 'changeme-vscode'      # Override with vault
@@ -28,15 +28,3 @@ tooling_firefox_shm_size: '1gb'
 #   - '/home/user/projects:/workspace/projects:ro'
 # tooling_firefox_extra_volumes:
 #   - '/home/user/downloads:/config/downloads:rw'
-
-# Volume configuration
-podman_volumes_tooling:
-  tooling:
-    - 'tooling-vscode_config'
-    - 'tooling-vscode_workspace'
-    - 'tooling-firefox_config'
-
-# Network configuration
-podman_networks_tooling:
-  tooling:
-    - 'tooling-tooling'

@@ -1,11 +1,21 @@
 ---
 # Vaultwarden service container definitions
+
+# Volume configuration
+podman_volumes_vaultwarden:
+  vaultwarden:
+    - 'vaultwarden'
+
+# Network configuration
+podman_networks_vaultwarden:
+  vaultwarden: []
+
 podman_service_containers_vaultwarden:
   vaultwarden:
     vaultwarden:
       image: "docker.io/vaultwarden/server:{{ vaultwarden_version }}"
       env:
-        ROCKET_PORT: 3000
+        ROCKET_PORT: '3000'
         DOMAIN: "https://{{ vaultwarden_domain }}"
         SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
         SIGNUPS_VERIFY: "{{ vaultwarden_signups_verify }}"

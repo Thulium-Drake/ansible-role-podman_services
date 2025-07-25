@@ -24,12 +24,3 @@ ethereum_genesis_beacon_api_url: 'https://beaconstate-mainnet.chainsafe.io'
 ethereum_geth_cache: '4096'
 ethereum_geth_syncmode: 'snap'
 ethereum_geth_gcmode: 'full'
-
-# Volume configuration
-podman_volumes_ethereum:
-  ethereum: []
-
-# Network configuration
-podman_networks_ethereum:
-  ethereum:
-    - 'ethereum-backend'

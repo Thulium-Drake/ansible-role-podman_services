@@ -1,5 +1,15 @@
 ---
 # Home Assistant service container definitions
+
+# Volume configuration
+podman_volumes_homeassistant:
+  homeassistant:
+    - 'homeassistant'
+
+# Network configuration
+podman_networks_homeassistant:
+  homeassistant: []
+
 podman_service_containers_homeassistant:
   homeassistant:
     homeassistant:

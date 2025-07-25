@@ -43,21 +43,3 @@ jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
 # GPU Support (options: 'none', 'nvidia')
 arr_gpu: 'none'
-
-# Volume configuration
-podman_volumes_arr:
-  arr:
-    - 'arr-bazarr_config'
-    - 'arr-prowlarr_config'
-    - 'arr-radarr_config'
-    - 'arr-readarr_config'
-    - 'arr-sonarr_config'
-    - 'arr-transmission_config'
-    - 'arr-jellyseerr_config'
-    - 'arr-jellyfin_config'
-    - 'arr-data'
-
-# Network configuration
-podman_networks_arr:
-  arr:
-    - 'arr-backend'

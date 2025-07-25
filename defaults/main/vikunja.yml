@@ -15,13 +15,3 @@ vikunja_jwt_secret: 'change-me-to-a-super-secure-random-secret'  # IMPORTANT: Ov
 # Service-specific configuration
 vikunja_public_url: 'http://localhost:3456/'
 vikunja_database_path: '/db/vikunja.db'
-
-# Volume configuration
-podman_volumes_vikunja:
-  vikunja:
-    - vikunja-files
-    - vikunja-db
-
-# Network configuration
-podman_networks_vikunja:
-  vikunja: []

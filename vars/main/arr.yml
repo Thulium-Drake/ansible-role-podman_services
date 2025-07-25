@@ -1,5 +1,24 @@
 ---
 # ARR service container definitions
+
+# Volume configuration
+podman_volumes_arr:
+  arr:
+    - 'arr-bazarr_config'
+    - 'arr-prowlarr_config'
+    - 'arr-radarr_config'
+    - 'arr-readarr_config'
+    - 'arr-sonarr_config'
+    - 'arr-transmission_config'
+    - 'arr-jellyseerr_config'
+    - 'arr-jellyfin_config'
+    - 'arr-data'
+
+# Network configuration
+podman_networks_arr:
+  arr:
+    - 'arr-backend'
+
 podman_service_containers_arr:
   arr:
     bazarr:

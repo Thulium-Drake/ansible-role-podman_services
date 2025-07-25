@@ -2,7 +2,7 @@
 - name: 'Gather current effective user for systemd service restarts'
   ansible.builtin.command: whoami
   register: 'podman_effective_user'
-  changed_when: false  # gathers information only
+  changed_when: false
 
 - name: 'Set fact for useraccount'
   ansible.builtin.set_fact:
@@ -14,9 +14,6 @@
   loop: "{{ podman_services }}"
   loop_control:
     loop_var: 'service'
-
-- name: 'Load main vars file'
-  ansible.builtin.include_vars: 'main/main.yml'
 
 - name: 'Run without become if not needed'
   become: "{{ (podman_user_account != 'root') | ternary(omit, true) }}"

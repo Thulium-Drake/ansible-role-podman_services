@@ -15,7 +15,7 @@ pihole_web_password: 'changeme'  # IMPORTANT: Override this in group_vars!
 
 # Service-specific configuration
 pihole_timezone: 'UTC'
-pihole_webinterface: 'true'
+pihole_webinterface: true
 
 # DNS configuration
 pihole_dns_listening_mode: 'all'
@@ -24,13 +24,3 @@ pihole_dnsmasq_listening: 'all'
 pihole_dns_upstreams:
   - '9.9.9.9'          # Quad9
   - '149.112.112.112'  # Quad9 secondary
-
-# Volume configuration
-podman_volumes_pihole:
-  pihole:
-    - 'pihole-etc'
-    - 'pihole-dnsmasq'
-
-# Network configuration
-podman_networks_pihole:
-  pihole: []

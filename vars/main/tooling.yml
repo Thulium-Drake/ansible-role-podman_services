@@ -1,5 +1,18 @@
 ---
 # Tooling service container definitions - Development tools and utilities
+
+# Volume configuration
+podman_volumes_tooling:
+  tooling:
+    - 'tooling-vscode_config'
+    - 'tooling-vscode_workspace'
+    - 'tooling-firefox_config'
+
+# Network configuration
+podman_networks_tooling:
+  tooling:
+    - 'tooling-tooling'
+
 podman_service_containers_tooling:
   tooling:
     vscode:

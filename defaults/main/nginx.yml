@@ -25,13 +25,3 @@ nginx_disable_ipv6: true
 #   - '1194:1194/udp'   # OpenVPN UDP
 #   - '8080:8080/tcp'   # HTTP alternative
 nginx_stream_ports: []
-
-# Volume configuration
-podman_volumes_nginx:
-  nginx:
-    - 'nginx'
-    - 'letsencrypt'
-
-# Network configuration
-podman_networks_nginx:
-  nginx: []

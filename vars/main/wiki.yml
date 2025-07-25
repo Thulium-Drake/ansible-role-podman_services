@@ -1,5 +1,15 @@
 ---
 # Wiki.js service container definitions
+
+# Volume configuration
+podman_volumes_wiki:
+  wiki:
+    - 'wiki-data'
+
+# Network configuration
+podman_networks_wiki:
+  wiki: []
+
 podman_service_containers_wiki:
   wiki:
     wiki:

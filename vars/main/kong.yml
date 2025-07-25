@@ -1,5 +1,16 @@
 ---
 # Kong API Gateway container definitions
+
+# Volume configuration
+podman_volumes_kong:
+  kong:
+    - 'kong-data'
+    - 'kong-postgresql-data'
+
+# Network configuration
+podman_networks_kong:
+  kong: []
+
 podman_service_containers_kong:
   kong:
     postgresql:

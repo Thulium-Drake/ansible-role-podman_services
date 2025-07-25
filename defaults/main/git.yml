@@ -20,16 +20,4 @@ git_runner_count: 2
 git_runner_url: 'http://git-server:3000'  # Default internal URL
 
 # Advanced/Optional configuration
-# git_runner_dns: ['192.168.20.254']  # DNS servers for runners
-
-# Volume configuration
-podman_volumes_git:
-  git:
-    - 'git-data'
-    - 'git-runner1-config'
-    - 'git-runner2-config'
-
-# Network configuration
-podman_networks_git:
-  git:
-    - 'git-backend'
+# git_runner_dns: ["{{ podman_dns }}"]  # DNS servers for runners

@@ -15,13 +15,3 @@ homeassistant_additional_ports: []
 # homeassistant_additional_ports:
 #   - '1883:1883'  # MQTT
 #   - '5353:5353/udp'  # mDNS
-
-# Volume configuration
-podman_volumes_homeassistant:
-  homeassistant:
-    - 'homeassistant'
-
-# Network configuration
-podman_networks_homeassistant:
-  homeassistant: []
-

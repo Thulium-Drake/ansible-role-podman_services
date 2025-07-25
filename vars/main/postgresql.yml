@@ -1,5 +1,15 @@
 ---
 # PostgreSQL service container definitions
+
+# Volume configuration
+podman_volumes_postgresql:
+  postgresql:
+    - 'postgresql-data'
+
+# Network configuration
+podman_networks_postgresql:
+  postgresql: []
+
 podman_service_containers_postgresql:
   postgresql:
     postgresql:

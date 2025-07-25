@@ -1,5 +1,20 @@
 ---
 # Authentik service container definitions
+
+# Volume configuration
+podman_volumes_authentik:
+  authentik:
+    - 'authentik-postgresql_data'
+    - 'authentik-redis_data'
+    - 'authentik-media'
+    - 'authentik-templates'
+    - 'authentik-certs'
+
+# Network configuration
+podman_networks_authentik:
+  authentik:
+    - 'authentik-backend'
+
 podman_service_containers_authentik:
   authentik:
     postgresql:

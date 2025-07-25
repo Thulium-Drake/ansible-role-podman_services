@@ -1,5 +1,16 @@
 ---
 # Pi-hole service container definitions
+
+# Volume configuration
+podman_volumes_pihole:
+  pihole:
+    - 'pihole-etc'
+    - 'pihole-dnsmasq'
+
+# Network configuration
+podman_networks_pihole:
+  pihole: []
+
 podman_service_containers_pihole:
   pihole:
     pihole:
@@ -19,5 +30,5 @@ podman_service_containers_pihole:
         FTLCONF_webserver_interface: "{{ pihole_webinterface }}"
         FTLCONF_dnsmasq_listening: "{{ pihole_dnsmasq_listening }}"
       cap_add:
-        - NET_ADMIN
+        - 'NET_ADMIN'
       healthcheck: 'dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1'

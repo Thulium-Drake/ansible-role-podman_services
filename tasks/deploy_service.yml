@@ -25,20 +25,20 @@
           service['name'] + '-' + item.key
         )
       }}
-    image: "{{ item.value.image }}"
+    image: "{{ item['value']['image'] }}"
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
-    privileged: "{{ item.value.privileged | default(false) }}"
-    env: "{{ item.value.env | default({}) }}"
-    network: "{{ item.value.network | default([]) }}"
-    ports: "{{ item.value.ports | default([]) }}"
-    volume: "{{ item.value.volumes | default([]) }}"
-    device: "{{ item.value.device | default(omit) }}"
-    dns: "{{ item.value.dns | default(omit) }}"
-    command: "{{ item.value.command | default(omit) }}"
-    user: "{{ item.value.user | default(omit) }}"
-    healthcheck: "{{ item.value.healthcheck | default(omit) }}"
-    healthcheck_interval: "{{ item.value.healthcheck_interval | default('60s') }}"
+    privileged: "{{ item['value']['privileged'] | default(false) }}"
+    env: "{{ item['value']['env'] | default({}) }}"
+    network: "{{ item['value']['network'] | default([]) }}"
+    ports: "{{ item['value']['ports'] | default([]) }}"
+    volume: "{{ item['value']['volumes'] | default([]) }}"
+    device: "{{ item['value']['device'] | default(omit) }}"
+    dns: "{{ item['value']['dns'] | default(omit) }}"
+    command: "{{ item['value']['command'] | default(omit) }}"
+    user: "{{ item['value']['user'] | default(omit) }}"
+    healthcheck: "{{ item['value']['healthcheck'] | default(omit) }}"
+    healthcheck_interval: "{{ item['value']['healthcheck_interval'] | default('60s') }}"
     pull: 'newer'
     quadlet_options: "{{ podman_quadlet_options }}"
   loop: "{{ merged_service_containers[service['name']] | dict2items }}"

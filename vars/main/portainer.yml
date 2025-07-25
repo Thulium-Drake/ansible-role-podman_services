@@ -1,5 +1,16 @@
 ---
 # Portainer service container definitions - Container management UI
+
+# Volume configuration
+podman_volumes_portainer:
+  portainer:
+    - name: portainer-data
+      driver: "{{ podman_volume_driver }}"
+
+# Network configuration
+podman_networks_portainer:
+  portainer: []
+
 podman_service_containers_portainer:
   portainer:
     portainer:

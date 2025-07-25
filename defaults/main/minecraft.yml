@@ -20,13 +20,3 @@ minecraft_difficulty: 'easy'
 minecraft_max_players: '20'
 minecraft_motd: 'A Minecraft Server'
 minecraft_spawn_protection: '16'
-
-# Volume configuration
-podman_volumes_minecraft:
-  minecraft:
-    - name: minecraft-data
-      driver: "{{ podman_volume_driver }}"
-
-# Network configuration
-podman_networks_minecraft:
-  minecraft: []
