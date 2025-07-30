@@ -10,7 +10,7 @@ podman_networks_kong:
 podman_service_containers_kong:
   kong:
     postgresql:
-      image: "docker.io/library/postgres:16-alpine"
+      image: 'docker.io/library/postgres:16-alpine'
       network:
         - 'kong-backend.network'
       healthcheck: "pg_isready -d {{ kong_postgres_db }} -U {{ kong_postgres_user }}"

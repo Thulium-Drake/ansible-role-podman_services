@@ -99,7 +99,7 @@ podman_service_containers_arr:
       ports:
         - "{{ transmission_port }}:9091/tcp"
       privileged: true
-      healthcheck: "[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 '[0-9]')\" ] && exit 1 || exit 0"
+      healthcheck: '[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 ''[0-9]'')\" ] && exit 1 || exit 0'
       volumes:
         - "{{ service['name'] }}-transmission_config:/config:Z"
         - "{{ arr_data_folder }}:/data"

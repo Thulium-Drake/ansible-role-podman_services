@@ -1,7 +1,7 @@
 ---
 podman_volumes_portainer:
   portainer:
-    - name: portainer-data
+    - name: 'portainer-data'
       driver: "{{ podman_volume_driver }}"
 
 podman_networks_portainer:

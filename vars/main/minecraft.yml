@@ -1,7 +1,7 @@
 ---
 podman_volumes_minecraft:
   minecraft:
-    - name: minecraft-data
+    - name: 'minecraft-data'
       driver: "{{ podman_volume_driver }}"
 
 podman_networks_minecraft:

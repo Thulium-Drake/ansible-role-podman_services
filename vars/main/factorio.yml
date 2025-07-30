@@ -1,7 +1,7 @@
 ---
 podman_volumes_factorio:
   factorio:
-    - name: factorio-data
+    - name: 'factorio-data'
       driver: "{{ podman_volume_driver }}"
 
 podman_networks_factorio:

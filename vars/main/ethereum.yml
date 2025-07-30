@@ -38,13 +38,13 @@ podman_service_containers_ethereum:
         - '8545:8545/tcp'
         - '8546:8546/tcp'
         - '8547:8547/tcp'
-      pull: newer
+      pull: 'newer'
       quadlet_options: "{{ podman_quadlet_options }}"
       volumes:
         - "/ethereum:/ethereum"
-      healthcheck: wget --no-verbose --tries=1 --spider http://localhost:8545 || exit 1
-      healthcheck_interval: 60s
-      healthcheck_start_period: 5m
+      healthcheck: 'wget --no-verbose --tries=1 --spider http://localhost:8545 || exit 1'
+      healthcheck_interval: '60s'
+      healthcheck_start_period: '5m'
 
     beacon:
       name: "{{ service['name'] }}-beacon"
@@ -71,7 +71,7 @@ podman_service_containers_ethereum:
         - '8080:8080/tcp'
         - '13000:13000/tcp'
         - '12000:12000/udp'
-      pull: newer
+      pull: 'newer'
       quadlet_options: "{{ podman_quadlet_options }}"
       cap_add:
         - NET_ADMIN
@@ -99,7 +99,7 @@ podman_service_containers_ethereum:
       ports:
         - '7500:7500/tcp'
         - '8081:8081/tcp'
-      pull: newer
+      pull: 'newer'
       quadlet_options: "{{ podman_quadlet_options }}"
       volumes:
         - "/ethereum:/ethereum"
