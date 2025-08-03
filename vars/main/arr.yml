@@ -93,7 +93,7 @@ podman_service_containers_arr:
         TZ: "{{ arr_timezone }}"
 
     transmission:
-      image: 'docker.io/haugene/transmission-openvpn'
+      image: "{{ transmission_image_uri }}"
       network:
         - 'arr-backend.network'
       ports:
@@ -107,14 +107,14 @@ podman_service_containers_arr:
         PUID: "{{ arr_data_container_uid }}"
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
-        OPENVPN_PROVIDER: "{{ transmission_vpn_provider }}"
-        OPENVPN_CONFIG: "{{ transmission_vpn_config }}"
-        OPENVPN_USERNAME: "{{ transmission_vpn_username }}"
-        OPENVPN_PASSWORD: "{{ transmission_vpn_password }}"
-        LOCAL_NETWORK: "{{ transmission_local_network }}"
+        OPENVPN_PROVIDER: "{{ transmission_vpn_provider | default(omit, true) }}"
+        OPENVPN_CONFIG: "{{ transmission_vpn_config | default(omit, true) }}"
+        OPENVPN_USERNAME: "{{ transmission_vpn_username | default(omit, true) }}"
+        OPENVPN_PASSWORD: "{{ transmission_vpn_password | default(omit, true) }}"
+        LOCAL_NETWORK: "{{ transmission_local_network | default(omit, true) }}"
         TRANSMISSION_PORT_FORWARDING_ENABLED: true
-        TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address | default(omit) }}"
-        TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit) }}"
+        TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address | default(omit, true) }}"
+        TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit, true) }}"
 
     jellyseerr:
       image: 'docker.io/fallenbagel/jellyseerr:latest'

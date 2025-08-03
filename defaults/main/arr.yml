@@ -15,16 +15,17 @@ arr_data_container_gid: '0'
 arr_timezone: 'Europe/Amsterdam'
 
 # Set in group_vars for transmission VPN
-transmission_vpn_provider: 'VPN Provider'
-transmission_vpn_config: 'VPN Config'
-transmission_vpn_username: 'vpn_username'
-transmission_vpn_password: 'vpn_password'
-transmission_local_network: '192.168.0.0/16'
-# transmission_bind_address: '1.2.3.4' # Optional, set to your public IP if needed
-
+transmission_image_uri: 'docker.io/haugene/transmission-openvpn'
+# These settings apply to the default image above
+transmission_vpn_provider: ''   # VPN Provider
+transmission_vpn_config: ''  # VPN Config
+transmission_vpn_username: ''  # vpn_username
+transmission_vpn_password: ''  # vpn_password
+transmission_local_network: ''  # 192.168.0.0/16
+transmission_bind_address: ''  # 1.2.3.4 - Optional, set to your public IP if needed
 # Transmission Web UI options: combustion, kettu, transmission-web-control,
 # flood-for-transmission, shift, transmissionic
-# transmission_web_ui: 'flood-for-transmission' # Optional, set to your preferred UI
+transmission_web_ui: ''
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 

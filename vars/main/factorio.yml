@@ -1,7 +1,7 @@
 ---
 podman_volumes_factorio:
   factorio:
-    - name: 'factorio-data'
+    - name: 'factorio'
       driver: "{{ podman_volume_driver }}"
 
 podman_networks_factorio:
@@ -10,13 +10,13 @@ podman_networks_factorio:
 podman_service_containers_factorio:
   factorio:
     factorio:
-      image: "docker.io/factoriotools/factorio:{{ factorio_version }}"
+      image: "{{ factorio_image_uri }}"
       ports:
         - "{{ factorio_port }}:34197/udp"
         - "{{ factorio_rcon_port }}:27015/tcp"
       volumes:
-        - "{{ service['name'] }}-data:/factorio:Z"
+        - "{{ service['name'] }}:/factorio:Z"
       env:
-        SAVE_NAME: "{{ factorio_save_name }}"
-        UPDATE_MODS_ON_START: "{{ factorio_update_mods }}"
-        RCON_PASSWORD: "{{ factorio_rcon_password }}"
+        SAVE_NAME: "{{ factorio_save_name | default(omit) }}"
+        UPDATE_MODS_ON_START: "{{ factorio_update_mods | default(omit) }}"
+        RCON_PASSWORD: "{{ factorio_rcon_password | default(omit) }}"

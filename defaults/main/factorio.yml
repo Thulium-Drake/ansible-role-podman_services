@@ -1,5 +1,5 @@
 ---
-factorio_version: 'latest'
+factorio_image_uri: 'docker.io/factoriotools/factorio:latest'
 
 factorio_port: '34197'    # Game port (UDP)
 factorio_rcon_port: '27015' # RCON port
