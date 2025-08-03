@@ -9,6 +9,15 @@
     podman_user_account: "{{ podman_effective_user['stdout'] }}"
   when: podman_user_account is not defined
 
+- name: 'Gather podman_user effective uid'
+  ansible.builtin.command: id -u {{ podman_user_account }}
+  register: 'podman_effective_user_uid'
+  changed_when: false
+
+- name: 'Set fact for useraccount'
+  ansible.builtin.set_fact:
+    podman_user_uid: "{{ podman_effective_user_uid['stdout'] }}"
+
 - name: 'Load service container definitions'
   ansible.builtin.include_vars: "main/{{ service['name'] }}.yml"
   loop: "{{ podman_services }}"

@@ -15,5 +15,5 @@ podman_service_containers_portainer:
         - "{{ portainer_port }}:9443"
       volume:
         - "{{ service['name'] }}-data:/data:Z"
-        - "/run/user/{{ ansible_user_uid }}/podman/podman.sock:/var/run/docker.sock:Z"
+        - "/run/user/{{ podman_user_uid }}/podman/podman.sock:/var/run/docker.sock:Z"
       healthcheck: 'curl -f https://localhost:9443/ || exit 1'
