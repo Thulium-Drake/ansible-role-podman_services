@@ -1,0 +1,18 @@
+podman_volumes_grafana:
+  grafana:
+    - 'grafana'
+
+podman_networks_grafana:
+  grafana:
+    - 'grafana-backend'
+
+podman_service_containers_grafana:
+  grafana:
+    grafana:
+    image: 'docker.io/grafana/grafana:latest'
+    ports:
+      - "{{ grafana_listen_uri }}:3000"
+    volume:
+      - "{{ service['name'] }}:/var/lib/grafana:Z"
+    network:
+      - 'grafana-backend.network'
