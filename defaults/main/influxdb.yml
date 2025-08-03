@@ -1,0 +1,6 @@
+---
+influxdb_listen_uri: 8086
+influxdb_username: 'admin'
+influxdb_password: 'GimmeData'
+influxdb_organization: 'MyOrg'
+influxdb_bucket: 'MyFirstDB'
