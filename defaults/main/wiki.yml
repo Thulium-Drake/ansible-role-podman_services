@@ -1,9 +1,8 @@
 ---
+# Traefik settings
+wiki_app_name: 'wiki'
+
+# Wiki settings
 wiki_version: '2'
-
-wiki_port: '3000'
-
-# Admin account setup on first login
-
 wiki_db_type: 'sqlite'
 wiki_db_filepath: '/wiki/database.sqlite'
