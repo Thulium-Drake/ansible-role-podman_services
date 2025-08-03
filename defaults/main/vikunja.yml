@@ -3,7 +3,7 @@
 
 vikunja_version: 'latest'
 
-vikunja_port: '3456'
+vikunja_app_name: 'vikunja'
 
 vikunja_jwt_secret: 'change-me-to-a-super-secure-random-secret'  # IMPORTANT: Override!
 
