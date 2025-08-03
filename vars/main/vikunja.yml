@@ -20,6 +20,8 @@ podman_service_containers_vikunja:
         VIKUNJA_SERVICE_JWTSECRET: "{{ vikunja_jwt_secret }}"
         VIKUNJA_SERVICE_PUBLICURL: "{{ vikunja_public_url }}"
         VIKUNJA_DATABASE_PATH: "{{ vikunja_database_path }}"
+      network:
+        - 'traefik-backend.network'
       volume:
         - '{{ service["name"] }}-files:/app/vikunja/files:Z'
         - '{{ service["name"] }}-db:/db:Z'
