@@ -14,11 +14,17 @@ podman_service_containers_homeassistant:
   homeassistant:
     homeassistant:
       image: "ghcr.io/home-assistant/home-assistant:{{ homeassistant_version }}"
-      ports: "{{ [homeassistant_port + ':8123'] + (homeassistant_additional_ports | default([])) }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.homeassistant.rule: "Host(`{{ homeassistant_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.homeassistant.tls: "true"
+        traefik.http.services.homeassistant.loadbalancer.server.port: '6767'
+      ports: "{{ homeassistant_additional_ports | default([]) }}"
       volume:
         - "{{ service['name'] }}:/config:Z"
       network:
         - 'homeassistant-backend.network'
+        - 'traefik-backend.network'
     mqtt:
       image: 'docker.io/library/eclipse-mosquitto:latest'
       ports: "{{ homeassistant_mqtt_port }}:1883"
