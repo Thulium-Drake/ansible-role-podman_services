@@ -1,0 +1,27 @@
+---
+podman_volumes_openbao:
+  openbao:
+    - 'openbao_config'
+    - 'openbao_data'
+
+podman_volume_files_openbao:
+  openbao_config:
+    - 'config.hcl'
+
+podman_networks_openbao:
+  openbao: []
+
+podman_service_containers_openbao:
+  openbao:
+    openbao:
+      image: 'quay.io/openbao/openbao'
+      command:
+        - 'server'
+        - '-config=/openbao/config/config.hcl'
+      cap_add:
+        - 'IPC_LOCK'
+      ports:
+        - "{{ openbao_listen_uri }}:8200"
+      volumes:
+        - "{{ service['name'] }}_config:/openbao/config:Z"
+        - "{{ service['name'] }}_data:/openbao/file:Z"

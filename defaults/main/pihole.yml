@@ -13,4 +13,4 @@ pihole_webinterface: true
 
 pihole_dns_listening_mode: 'all'
 pihole_dnsmasq_listening: 'all'
-pihole_dns_upstreams: "{{ podman_dns: }}"
+pihole_dns_upstreams: "{{ podman_dns }}"

@@ -1,0 +1,66 @@
+---
+podman_volumes_invoiceninja:
+  invoiceninja:
+    - 'invoiceninja'
+    - 'invoiceninja_db'
+    - 'invoiceninja_web_config'
+
+podman_volume_files_invoice_ninja:
+  invoiceninja_web_config:
+    - 'nginx.conf'
+
+podman_networks_invoiceninja:
+  invoiceninja:
+    - 'invoiceninja-backend'
+
+podman_service_containers_invoiceninja:
+  invoiceninja:
+    db:
+      image: 'docker.io/library/mariadb:latest'
+      env:
+        MYSQL_ROOT_PASSWORD: "{{ invoiceninja_db_password }}"
+        MYSQL_DATABASE: 'invoiceninja'
+        MYSQL_USER: 'invoiceninja'
+        MYSQL_PASSWORD: "{{ invoiceninja_db_password }}"
+      volumes:
+        - "{{ service['name'] }}_db:/var/lib/mysql:Z"
+      network:
+        - 'invoiceninja-backend.network'
+      healthcheck: 'mariadb-admin ping -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD}'
+      healthcheck_interval: '5s'
+      healthcheck_retries: 10
+      healthcheck_timeout: '3s'
+    invoiceninja:
+      image: "docker.io/invoiceninja/invoiceninja:{{ invoiceninja_version }}"
+      env:
+        APP_DEBUG: true
+        APP_URL: "{{ invoiceninja_url }}"
+        APP_KEY: "base64:{{ invoiceninja_appkey }}"
+        REQUIRE_HTTPS: false
+        PHANTOMJS_PDF_GENERATION: false
+        PDF_GENERATOR: 'snappdf'
+        TRUSTED_PROXIES: '*'
+        IN_USER_EMAIL: "{{ invoiceninja_admin_email }}"
+        IN_PASSWORD: "{{ invoiceninja_admin_password }}"
+        DB_HOST: "{{ service['name'] }}-db"
+        DB_PORT: 3306
+        DB_DATABASE: 'invoiceninja'
+        DB_USERNAME: 'invoiceninja'
+        DB_PASSWORD: "{{ invoiceninja_db_password }}"
+      volumes:
+        - "{{ service['name'] }}_public:/var/www/app/public:z"
+        - "{{ service['name'] }}_storage:/var/www/app/storage:z"
+      network:
+        - 'invoiceninja-backend.network'
+      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
+    web:
+      image: 'docker.io/library/nginx:latest'
+      volumes:
+        - "{{ service['name'] }}_web_config:/etc/nginx/conf.d:Z"
+        - "{{ service['name'] }}_public:/var/www/app/public:z,ro"
+      network:
+        - 'invoiceninja-backend.network'
+      pull: 'newer'
+      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja.service'] + ['After=invoiceninja.service'] }}"
+      ports:
+        - '9000:80'
