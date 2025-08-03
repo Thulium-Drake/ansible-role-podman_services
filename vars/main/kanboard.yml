@@ -6,7 +6,8 @@ podman_volumes_kanboard:
     - 'kanboard_plugins'
 
 podman_networks_kanboard:
-  kanboard: []
+  kanboard:
+    - 'traefik-backend'
 
 podman_service_containers_kanboard:
   kanboard:
@@ -38,11 +39,15 @@ podman_service_containers_kanboard:
         MAIL_SMTP_ENCRYPTION: "{{ kanboard_smtp_encryption | default(omit, true) }}"
         MAIL_SMTP_USERNAME: "{{ kanboard_smtp_username | default(omit, true) }}"
         MAIL_SMTP_PASSWORD: "{{ kanboard_smtp_password | default(omit, true) }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.kanboard.rule: "Host(`{{ kanboard_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.kanboard.tls: "true"
+        traefik.http.services.kanboard.loadbalancer.server.port: '80'
       volume:
         - "{{ service['name'] }}_data:/var/www/app/data:z"
         - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
-      ports:
-        - "{{ kanboard_listen_uri }}:80"
       network:
         - 'kanboard-backend.network'
+        - 'traefik-backend.network'
       quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=kanboard-db.service'] + ['After=kanboard-db.service'] }}"
