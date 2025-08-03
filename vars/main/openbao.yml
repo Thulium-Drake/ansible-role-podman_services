@@ -20,8 +20,11 @@ podman_service_containers_openbao:
         - '-config=/openbao/config/config.hcl'
       cap_add:
         - 'IPC_LOCK'
-      ports:
-        - "{{ openbao_listen_uri }}:8200"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.openbao.rule: "Host(`{{ openbao_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.openbao.tls: "true"
+        traefik.http.services.openbao.loadbalancer.server.port: '8200'
       volume:
         - "{{ service['name'] }}_config:/openbao/config:Z"
         - "{{ service['name'] }}_data:/openbao/file:Z"
