@@ -22,7 +22,7 @@ podman_service_containers_invoiceninja:
         MYSQL_DATABASE: 'invoiceninja'
         MYSQL_USER: 'invoiceninja'
         MYSQL_PASSWORD: "{{ invoiceninja_db_password }}"
-      volumes:
+      volume:
         - "{{ service['name'] }}_db:/var/lib/mysql:Z"
       network:
         - 'invoiceninja-backend.network'
@@ -47,7 +47,7 @@ podman_service_containers_invoiceninja:
         DB_DATABASE: 'invoiceninja'
         DB_USERNAME: 'invoiceninja'
         DB_PASSWORD: "{{ invoiceninja_db_password }}"
-      volumes:
+      volume:
         - "{{ service['name'] }}_public:/var/www/app/public:z"
         - "{{ service['name'] }}_storage:/var/www/app/storage:z"
       network:
@@ -55,7 +55,7 @@ podman_service_containers_invoiceninja:
       quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
     web:
       image: 'docker.io/library/nginx:latest'
-      volumes:
+      volume:
         - "{{ service['name'] }}_web_config:/etc/nginx/conf.d:Z"
         - "{{ service['name'] }}_public:/var/www/app/public:z,ro"
       network:

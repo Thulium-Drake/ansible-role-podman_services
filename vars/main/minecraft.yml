@@ -14,7 +14,7 @@ podman_service_containers_minecraft:
       ports:
         - "{{ minecraft_port }}:25565/tcp"
         - "{{ minecraft_port }}:25565/udp"
-      volumes:
+      volume:
         - "{{ service['name'] }}-data:/data:Z"
       env:
         EULA: "{{ minecraft_eula }}"

@@ -18,7 +18,7 @@ podman_service_containers_authentik:
       network:
         - 'authentik-backend.network'
       healthcheck: "pg_isready -d {{ authentik_postgres_db }} -U {{ authentik_postgres_user }}"
-      volumes:
+      volume:
         - "{{ service['name'] }}-postgresql_data:/var/lib/postgresql/data:Z"
       env:
         POSTGRES_PASSWORD: "{{ authentik_postgres_password }}"
@@ -30,7 +30,7 @@ podman_service_containers_authentik:
       network:
         - 'authentik-backend.network'
       healthcheck: 'redis-cli ping | grep PONG'
-      volumes:
+      volume:
         - "{{ service['name'] }}-redis_data:/data:Z"
       command: '--save 60 1 --loglevel warning'
 
@@ -43,7 +43,7 @@ podman_service_containers_authentik:
         - "{{ authentik_https_port }}:9443/tcp"
       command: 'server'
       privileged: true
-      volumes:
+      volume:
         - "{{ service['name'] }}-media:/media:Z"
         - "{{ service['name'] }}-templates:/templates:Z"
       env:
@@ -60,7 +60,7 @@ podman_service_containers_authentik:
         - 'authentik-backend.network'
       command: 'worker'
       privileged: true
-      volumes:
+      volume:
         - "{{ service['name'] }}-media:/media:Z"
         - "{{ service['name'] }}-templates:/templates:Z"
         - '/run/podman/podman.sock:/var/run/docker.sock:Z'

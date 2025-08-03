@@ -29,6 +29,6 @@ podman_service_containers_n8n:
         DB_POSTGRESDB_DATABASE: "{{ n8n_database_name | default(omit) }}"
         DB_POSTGRESDB_USER: "{{ n8n_database_user | default(omit) }}"
         DB_POSTGRESDB_PASSWORD: "{{ n8n_database_password | default(omit) }}"
-      volumes:
+      volume:
         - '/run/podman/podman.sock:/run/podman/podman.sock:Z'
         - "{{ service['name'] }}-data:/home/node/.n8n:Z"

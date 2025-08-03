@@ -26,5 +26,5 @@ podman_service_containers_vaultwarden:
         SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
       ports:
         - "{{ vaultwarden_listen_uri }}:3000"
-      volumes:
+      volume:
         - "{{ service['name'] }}:/data:Z"

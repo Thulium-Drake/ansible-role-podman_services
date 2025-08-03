@@ -15,7 +15,7 @@ podman_service_containers_pihole:
         - "{{ pihole_dns_port }}:53/tcp"
         - "{{ pihole_dns_port }}:53/udp"
         - "{{ pihole_web_port }}:80/tcp"
-      volumes:
+      volume:
         - "{{ service['name'] }}-etc:/etc/pihole:Z"
         - "{{ service['name'] }}-dnsmasq:/etc/dnsmasq.d:Z"
       env:

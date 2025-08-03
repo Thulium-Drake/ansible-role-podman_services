@@ -24,7 +24,7 @@ podman_service_containers_arr:
       ports:
         - "{{ bazarr_port }}:6767/tcp"
       healthcheck: 'curl -f http://localhost:6767/api/system/ping || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-bazarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -39,7 +39,7 @@ podman_service_containers_arr:
       ports:
         - "{{ prowlarr_port }}:9696/tcp"
       healthcheck: 'nc -z localhost 9696 || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-prowlarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -54,7 +54,7 @@ podman_service_containers_arr:
       ports:
         - "{{ radarr_port }}:7878/tcp"
       healthcheck: 'nc -z localhost 7878 || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-radarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -69,7 +69,7 @@ podman_service_containers_arr:
       ports:
         - "{{ readarr_port }}:8787/tcp"
       healthcheck: 'nc -z localhost 8787 || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-readarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -84,7 +84,7 @@ podman_service_containers_arr:
       ports:
         - "{{ sonarr_port }}:8989/tcp"
       healthcheck: 'nc -z localhost 8989 || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-sonarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -100,7 +100,7 @@ podman_service_containers_arr:
         - "{{ transmission_port }}:9091/tcp"
       privileged: true
       healthcheck: '[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 ''[0-9]'')\" ] && exit 1 || exit 0'
-      volumes:
+      volume:
         - "{{ service['name'] }}-transmission_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:
@@ -123,7 +123,7 @@ podman_service_containers_arr:
       ports:
         - "{{ jellyseerr_port }}:5055/tcp"
       healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
 
     jellyfin:
@@ -132,7 +132,7 @@ podman_service_containers_arr:
         - 'arr-backend.network'
       privileged: "{{ (arr_gpu == 'nvidia') | ternary(true, false) }}"
       healthcheck: 'curl -f http://localhost:8096/health || exit 1'
-      volumes:
+      volume:
         - "{{ service['name'] }}-jellyfin_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
       env:

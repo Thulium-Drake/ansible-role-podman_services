@@ -16,6 +16,6 @@ podman_service_containers_postgresql:
         POSTGRES_USER: "{{ postgresql_user }}"
         POSTGRES_PASSWORD: "{{ postgresql_password }}"
         POSTGRES_DB: "{{ postgresql_database }}"
-      volumes:
+      volume:
         - "{{ service['name'] }}-data:/var/lib/postgresql/data:Z"
       healthcheck: 'pg_isready || exit 1'

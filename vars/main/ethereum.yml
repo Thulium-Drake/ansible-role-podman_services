@@ -40,7 +40,7 @@ podman_service_containers_ethereum:
         - '8547:8547/tcp'
       pull: 'newer'
       quadlet_options: "{{ podman_quadlet_options }}"
-      volumes:
+      volume:
         - "/ethereum:/ethereum"
       healthcheck: 'wget --no-verbose --tries=1 --spider http://localhost:8545 || exit 1'
       healthcheck_interval: '60s'
@@ -75,7 +75,7 @@ podman_service_containers_ethereum:
       quadlet_options: "{{ podman_quadlet_options }}"
       cap_add:
         - NET_ADMIN
-      volumes:
+      volume:
         - "/ethereum:/ethereum"
 
     validator:
@@ -101,5 +101,5 @@ podman_service_containers_ethereum:
         - '8081:8081/tcp'
       pull: 'newer'
       quadlet_options: "{{ podman_quadlet_options }}"
-      volumes:
+      volume:
         - "/ethereum:/ethereum"

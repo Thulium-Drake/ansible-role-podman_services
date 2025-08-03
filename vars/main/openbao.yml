@@ -22,6 +22,6 @@ podman_service_containers_openbao:
         - 'IPC_LOCK'
       ports:
         - "{{ openbao_listen_uri }}:8200"
-      volumes:
+      volume:
         - "{{ service['name'] }}_config:/openbao/config:Z"
         - "{{ service['name'] }}_data:/openbao/file:Z"

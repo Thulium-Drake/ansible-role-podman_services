@@ -29,7 +29,7 @@
     env: "{{ item['value']['env'] | default(omit) }}"
     network: "{{ item['value']['network'] | default(omit) }}"
     ports: "{{ item['value']['ports'] | default(omit) }}"
-    volume: "{{ item['value']['volumes'] | default(omit) }}"
+    volume: "{{ item['value']['volume'] | default(omit) }}"
     cap_add: "{{ item['value']['cap_add'] | default(omit) }}"
     device: "{{ item['value']['device'] | default(omit) }}"
     dns: "{{ item['value']['dns'] | default(omit) }}"

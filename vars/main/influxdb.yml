@@ -19,9 +19,9 @@ podman_service_containers_influxdb:
       DOCKER_INFLUXDB_INIT_ORG: "{{ influxdb_organization }}"
       DOCKER_INFLUXDB_INIT_BUCKET: "{{ influxdb_bucket }}"
     quadlet_options: "{{ podman_quadlet_options }}"
-    networks:
+    network:
       - 'influxdb-backend.network'
       - 'grafana-backend.network'
-    volumes:
+    volume:
       - "{{ service['name'] }}_config:/etc/influxdb2:Z"
       - "{{ service['name'] }}_data:/var/lib/influxdb2:Z"

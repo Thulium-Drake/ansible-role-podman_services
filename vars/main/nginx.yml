@@ -12,7 +12,7 @@ podman_service_containers_nginx:
     proxy:
       image: "docker.io/jc21/nginx-proxy-manager:{{ nginx_version }}"
       ports: "{{ [nginx_http_port + ':80', nginx_https_port + ':443', nginx_admin_port + ':81'] + nginx_stream_ports | default([]) }}"
-      volumes:
+      volume:
         - "nginx:/data:Z"
         - "letsencrypt:/etc/letsencrypt:Z"
       env:

@@ -12,7 +12,7 @@ podman_service_containers_wiki:
       image: "ghcr.io/requarks/wiki:{{ wiki_version }}"
       ports:
         - "{{ wiki_port }}:3000"
-      volumes:
+      volume:
         - "{{ service['name'] }}-data:/wiki:Z"
       env:
         DB_TYPE: "{{ wiki_db_type }}"

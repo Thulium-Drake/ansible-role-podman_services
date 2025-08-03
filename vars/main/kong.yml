@@ -14,7 +14,7 @@ podman_service_containers_kong:
       network:
         - 'kong-backend.network'
       healthcheck: "pg_isready -d {{ kong_postgres_db }} -U {{ kong_postgres_user }}"
-      volumes:
+      volume:
         - "{{ service['name'] }}-postgresql-data:/var/lib/postgresql/data:Z"
       env:
         POSTGRES_PASSWORD: "{{ kong_postgres_password }}"
@@ -62,7 +62,7 @@ podman_service_containers_kong:
         - "{{ kong_admin_port }}:8001/tcp"
         - "{{ kong_admin_ssl_port }}:8444/tcp"
         - "{{ kong_admin_gui_port }}:8002/tcp"
-      volumes:
+      volume:
         - "{{ service['name'] }}-data:/var/run/kong:Z"
       env:
         KONG_DATABASE: "{{ kong_database }}"
