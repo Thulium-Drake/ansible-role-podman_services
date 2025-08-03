@@ -3,15 +3,29 @@ This role contains a collection of services that run on a Podman node. All persi
 
 The catalogus currently contains:
 
-* arr: A full arr stack with transmission
+* arr: A full arr stack with jellyfin, jellyseer, transmission and sabnzbd
 * authentik: Open-source Identity Provider focused on flexibility and versatility
-* git: Forgejo (Gitea fork) with Act Runners for CI/CD
-* hello_world: a simple container that will return 'hello world' via a REST API
-* homeassistant: Open source home automation that puts local control and privacy first
-* vaultwarden: A free alternative server for the Bitwarden Password Manager
 * factorio: The Factorio server
+* ethereum: Ethereum validator and beacon
+* git: Forgejo (Gitea fork) with Act Runners for CI/CD
+* grafana: data visualization tool
+* hello_world: a simple container that will return 'hello world' via a REST API
+* homeassistant: Open source home automation that puts local control and privacy first, comes with eclipse-mosquitto
+* influxdb: A time-series database
+* invoiceninja: Invoicing software
+* kanboard: A kanban-style todo tracker
+* kong: API gateway
 * minecraft: The Minecraft Server
+* n8n: Workflow automation with native AI capabilities
+* nginx: NginX proxy Manager
+* openbao: A secret storage platform
+* pihole: The Privacy and Tracking DNS filter
+* portainer: A management solution for container platforms
+* postgresql: A robust database server
+* tooling: A developer toolchain with VScode server and Firefox
+* vaultwarden: A free alternative server for the Bitwarden Password Manager
 * vikunja: Task management and todo application
+* wiki: Node.JS based Wiki app
 
 # Deployment
 In order to use the services from this catalogue, do the following:
