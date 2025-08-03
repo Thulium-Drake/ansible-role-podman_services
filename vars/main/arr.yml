@@ -14,6 +14,7 @@ podman_volumes_arr:
 podman_networks_arr:
   arr:
     - 'arr-backend'
+    - 'traefik-backend'
 
 podman_service_containers_arr:
   arr:
@@ -21,9 +22,13 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/bazarr:latest'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ bazarr_port }}:6767/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'curl -f http://localhost:6767/api/system/ping || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.bazarr.rule: "Host(`bazarr.{{ traefik_domain }}`)"
+        traefik.http.routers.bazarr.tls: "true"
+        traefik.http.services.bazarr.loadbalancer.server.port: '6767'
       volume:
         - "{{ service['name'] }}-bazarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -36,9 +41,13 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/prowlarr:latest'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ prowlarr_port }}:9696/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'nc -z localhost 9696 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.prowlarr.rule: "Host(`prowlarr.{{ traefik_domain }}`)"
+        traefik.http.routers.prowlarr.tls: "true"
+        traefik.http.services.prowlarr.loadbalancer.server.port: '9696'
       volume:
         - "{{ service['name'] }}-prowlarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -51,9 +60,13 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/radarr:latest'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ radarr_port }}:7878/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'nc -z localhost 7878 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.radarr.rule: "Host(`radarr.{{ traefik_domain }}`)"
+        traefik.http.routers.radarr.tls: "true"
+        traefik.http.services.radarr.loadbalancer.server.port: '7878'
       volume:
         - "{{ service['name'] }}-radarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -66,9 +79,13 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/readarr:develop'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ readarr_port }}:8787/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'nc -z localhost 8787 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.readarr.rule: "Host(`readarr.{{ traefik_domain }}`)"
+        traefik.http.routers.readarr.tls: "true"
+        traefik.http.services.readarr.loadbalancer.server.port: '8787'
       volume:
         - "{{ service['name'] }}-readarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -81,9 +98,13 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/sonarr:latest'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ sonarr_port }}:8989/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'nc -z localhost 8989 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.sonarr.rule: "Host(`sonarr.{{ traefik_domain }}`)"
+        traefik.http.routers.sonarr.tls: "true"
+        traefik.http.services.sonarr.loadbalancer.server.port: '8989'
       volume:
         - "{{ service['name'] }}-sonarr_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -92,14 +113,36 @@ podman_service_containers_arr:
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
 
+    sabnzbd:
+      image: 'lscr.io/linuxserver/sabnzbd:latest'
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.sabnzbd.rule: "Host(`sabnzbd.{{ traefik_domain }}`)"
+        traefik.http.routers.sabnzbd.tls: "true"
+        traefik.http.services.sabnzbd.loadbalancer.server.port: '8080'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      volume:
+        - "{{ service['name'] }}-sabnzbd_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+
     transmission:
       image: "{{ transmission_image_uri }}"
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ transmission_port }}:9091/tcp"
+        - 'traefik-backend.network'
       privileged: true
       healthcheck: '[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 ''[0-9]'')\" ] && exit 1 || exit 0'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.transmission.rule: "Host(`transmission.{{ traefik_domain }}`)"
+        traefik.http.routers.transmission.tls: "true"
+        traefik.http.services.transmission.loadbalancer.server.port: '9091'
       volume:
         - "{{ service['name'] }}-transmission_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -120,9 +163,13 @@ podman_service_containers_arr:
       image: 'docker.io/fallenbagel/jellyseerr:latest'
       network:
         - 'arr-backend.network'
-      ports:
-        - "{{ jellyseerr_port }}:5055/tcp"
+        - 'traefik-backend.network'
       healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.jellyseer.rule: "Host(`jellyseer.{{ traefik_domain }}`)"
+        traefik.http.routers.jellyseer.tls: "true"
+        traefik.http.services.jellyseer.loadbalancer.server.port: '5055'
       volume:
         - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
 
@@ -130,8 +177,14 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/jellyfin:latest'
       network:
         - 'arr-backend.network'
+        - 'traefik-backend.network'
       privileged: "{{ (arr_gpu == 'nvidia') | ternary(true, false) }}"
       healthcheck: 'curl -f http://localhost:8096/health || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.jellyfin.rule: "Host(`jellyfin.{{ traefik_domain }}`)"
+        traefik.http.routers.jellyfin.tls: "true"
+        traefik.http.services.jellyfin.loadbalancer.server.port: '8096'
       volume:
         - "{{ service['name'] }}-jellyfin_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -143,7 +196,6 @@ podman_service_containers_arr:
         NVIDIA_VISIBLE_DEVICES: "{{ (arr_gpu == 'nvidia') | ternary('all', omit) }}"
         NVIDIA_DRIVER_CAPABILITIES: "{{ (arr_gpu == 'nvidia') | ternary('compute,video,utility', omit) }}"
       ports:
-        - "{{ jellyfin_webui_port }}:8096/tcp"
         - '1900:1900/udp'
         - '7359:7359/udp'
       device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'], omit) }}"

@@ -1,14 +1,4 @@
 ---
-bazarr_port: '6767'
-jellyfin_webui_port: '8096'
-prowlarr_port: '9696'
-radarr_port: '7878'
-readarr_port: '8787'
-sabnzbd_port: '8080'
-sonarr_port: '8989'
-jellyseerr_port: '5055'
-transmission_port: '9091'
-
 arr_data_folder: 'arr-data'  # Folder that contains downloads/movies/tv etc.
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'

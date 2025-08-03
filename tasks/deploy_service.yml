@@ -22,25 +22,27 @@
           service['name'] + '-' + item['key']
         )
       }}
-    image: "{{ item['value']['image'] }}"
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
     auto_remove: true
-    privileged: "{{ item['value']['privileged'] | default(omit) }}"
-    env: "{{ item['value']['env'] | default(omit) }}"
-    network: "{{ item['value']['network'] | default(omit) }}"
-    ports: "{{ item['value']['ports'] | default(omit) }}"
-    volume: "{{ item['value']['volume'] | default(omit) }}"
     cap_add: "{{ item['value']['cap_add'] | default(omit) }}"
+    command: "{{ item['value']['command'] | default(omit) }}"
     device: "{{ item['value']['device'] | default(omit) }}"
     dns: "{{ item['value']['dns'] | default(omit) }}"
-    command: "{{ item['value']['command'] | default(omit) }}"
-    user: "{{ item['value']['user'] | default(omit) }}"
+    env: "{{ item['value']['env'] | default(omit) }}"
     healthcheck: "{{ item['value']['healthcheck'] | default(omit) }}"
     healthcheck_interval: "{{ item['value']['healthcheck_interval'] | default(omit) }}"
     healthcheck_retries: "{{ item['value']['healthcheck_retries'] | default(omit) }}"
     healthcheck_timeout: "{{ item['value']['healthcheck_timeout'] | default(omit) }}"
+    image: "{{ item['value']['image'] }}"
+    labels: "{{ item['value']['labels'] | default(omit) }}"
+    network: "{{ item['value']['network'] | default(omit) }}"
+    ports: "{{ item['value']['ports'] | default(omit) }}"
+    privileged: "{{ item['value']['privileged'] | default(omit) }}"
     pull: 'newer'
     quadlet_options: "{{ item['value']['quadlet_options'] | default(podman_quadlet_options) }}"
+    user: "{{ item['value']['user'] | default(omit) }}"
+    security_opt: "{{ item['value']['security_opt'] | default(omit) }}"
+    volume: "{{ item['value']['volume'] | default(omit) }}"
   loop: "{{ merged_service_containers[service['name']] | dict2items }}"
   register: 'service_config'
   notify: 'Restart changed services'

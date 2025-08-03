@@ -13,16 +13,21 @@ podman_service_containers_traefik:
       image: 'docker.io/library/traefik:latest'
       ports:
         - '7000:8080'
-        - '7080:80'
         - '7443:443'
       command:
         - 'traefik'
         - '--api.insecure=true'
-      labels:
-        - "traefik.http.routers.dashboard.rule=Host({{ traefik_hostname | default(ansible_facts['fqdn'], true) }}) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-        - "traefik.http.routers.dashboard.service=api@internal"
+        - '--entrypoints.websecure.address=:443'
+        - '--providers.docker'
+        - '--providers.docker.watch'
+        - '--providers.docker.network=traefik-backend'
+        - '--providers.docker.exposedByDefault=false'
+      network:
+        - 'traefik-backend.network'
       volume:
         - "/run/user/{{ podman_user_uid }}/podman/podman.sock:/var/run/docker.sock:Z"
         - 'traefik_config:/etc/traefik:Z'
       cap_add:
         - 'NET_ADMIN'
+      security_opt:
+        - 'label=disable'
