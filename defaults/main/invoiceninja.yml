@@ -1,6 +1,7 @@
 ---
 invoiceninja_version: 'latest'
-invoiceninja_url: "http://{{ ansible_facts['fqdn'] }}:9000"
+invoiceninja_app_name: 'invoiceninja'
+invoiceninja_url: "https://{{ invoiceninja_app_name }}.{{ traefik_domain }}"
 
 # Generate one with the following command
 # openssl rand -base64 32
