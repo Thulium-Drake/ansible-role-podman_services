@@ -2,9 +2,13 @@
 podman_volumes_homeassistant:
   homeassistant:
     - 'homeassistant'
+    - 'homeassistant-mqtt_config'
+    - 'homeassistant-mqtt_data'
+    - 'homeassistant-mqtt_log'
 
 podman_networks_homeassistant:
-  homeassistant: []
+  homeassistant:
+    - 'homeassistant-backend'
 
 podman_service_containers_homeassistant:
   homeassistant:
@@ -13,3 +17,14 @@ podman_service_containers_homeassistant:
       ports: "{{ [homeassistant_port + ':8123'] + (homeassistant_additional_ports | default([])) }}"
       volume:
         - "{{ service['name'] }}:/config:Z"
+      network:
+        - 'homeassistant-backend.network'
+    mqtt:
+      image: 'docker.io/library/eclipse-mosquitto:latest'
+      ports: "{{ homeassistant_mqtt_port }}:1883"
+      volume:
+        - 'homeassistant-mqtt_config:/mosquitto/config:Z'
+        - 'homeassistant-mqtt_data:/mosquitto/data:Z'
+        - 'homeassistant-mqtt_log:/mosquitto/log:Z'
+      network:
+        - 'homeassistant-backend.network'

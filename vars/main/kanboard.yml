@@ -1,6 +1,9 @@
 ---
 podman_volumes_kanboard:
-  kanboard: []
+  kanboard:
+    - 'kanboard_db'
+    - 'kanboard_data'
+    - 'kanboard_plugins'
 
 podman_networks_kanboard:
   kanboard: []

@@ -2,6 +2,7 @@
 homeassistant_version: 'stable'
 
 homeassistant_port: '8123'
+homeassistant_mqtt_port: '1883'
 
 # If you run plugins that need additional ports, add them here
 homeassistant_additional_ports: []
