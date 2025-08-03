@@ -4,7 +4,8 @@ podman_volumes_vaultwarden:
     - 'vaultwarden'
 
 podman_networks_vaultwarden:
-  vaultwarden: []
+  vaultwarden:
+    - 'traefik-backend'
 
 podman_service_containers_vaultwarden:
   vaultwarden:
@@ -24,7 +25,12 @@ podman_service_containers_vaultwarden:
         SMTP_SECURITY: "{{ vaultwarden_smtp_ssl | ternary('tls', 'off') }}"
         SMTP_USERNAME: "{{ vaultwarden_smtp_user | default(omit, true) }}"
         SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
-      ports:
-        - "{{ vaultwarden_listen_uri }}:3000"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.vaultwarden.rule: "Host(`{{ vaultwarden_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.vaultwarden.tls: "true"
+        traefik.http.services.vaultwarden.loadbalancer.server.port: '3000'
+      network:
+        - 'traefik-backend.network'
       volume:
         - "{{ service['name'] }}:/data:Z"

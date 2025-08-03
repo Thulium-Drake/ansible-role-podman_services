@@ -1,10 +1,9 @@
 ---
-# NOTE: Vaultwarden is not encrypted by default!
+# Traefik settings
+vaultwarden_app_name: 'vaultwarden'
 
+# Vaultwarden settings
 vaultwarden_version: 'alpine'
-
-vaultwarden_listen_uri: '3000'  # Either specify IP:port (e.g. 127.0.0.1:3000) or just port
-
 vaultwarden_admin_token: ''  # Set this to enable the admin portal
 vaultwarden_domain: 'vault.example.nl'
 
