@@ -10,9 +10,7 @@ podman_service_containers_n8n:
   n8n:
     n8n:
       # N8N + Heavy Python dependencies
-      image: "git.overwrite.io/kevin/container-n8n:{{ n8n_version }}"
-      # Original image:
-      # image: "docker.n8n.io/n8nio/n8n:{{ n8n_version }}"
+      image: "{{ n8n_image_uri }}"
       privileged: true
       dns: "{{ podman_dns }}"
       ports:

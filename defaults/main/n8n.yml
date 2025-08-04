@@ -1,5 +1,5 @@
 ---
-n8n_version: 'latest'
+n8n_image_uri: 'docker.n8n.io/n8nio/n8n:latest'
 
 n8n_port: '5678'
 
