@@ -4,6 +4,8 @@ arr_data_container_uid: '0'
 arr_data_container_gid: '0'
 arr_timezone: 'Europe/Amsterdam'
 
+jellyfin_app_name: 'jellyfin'
+
 # Set in group_vars for transmission VPN
 transmission_image_uri: 'docker.io/haugene/transmission-openvpn'
 # These settings apply to the default image above
