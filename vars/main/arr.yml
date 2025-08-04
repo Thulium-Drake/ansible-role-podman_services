@@ -167,7 +167,7 @@ podman_service_containers_arr:
       healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
       labels:
         traefik.enable: true
-        traefik.http.routers.jellyseer.rule: "Host(`jellyseer.{{ traefik_domain }}`)"
+        traefik.http.routers.jellyseer.rule: "Host(`jellyseerr.{{ traefik_domain }}`)"
         traefik.http.routers.jellyseer.tls: "true"
         traefik.http.services.jellyseer.loadbalancer.server.port: '5055'
       volume:
