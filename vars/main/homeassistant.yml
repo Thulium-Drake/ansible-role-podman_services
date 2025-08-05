@@ -18,7 +18,7 @@ podman_service_containers_homeassistant:
         traefik.enable: true
         traefik.http.routers.homeassistant.rule: "Host(`{{ homeassistant_app_name }}.{{ traefik_domain }}`)"
         traefik.http.routers.homeassistant.tls: "true"
-        traefik.http.services.homeassistant.loadbalancer.server.port: '6767'
+        traefik.http.services.homeassistant.loadbalancer.server.port: '8123'
       ports: "{{ homeassistant_additional_ports | default([]) }}"
       volume:
         - "{{ service['name'] }}:/config:Z"
