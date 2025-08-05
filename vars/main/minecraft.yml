@@ -10,19 +10,11 @@ podman_networks_minecraft:
 podman_service_containers_minecraft:
   minecraft:
     minecraft:
-      image: "docker.io/itzg/minecraft-server:{{ minecraft_container_version }}"
+      image: "{{ minecraft_image_uri }}"
       ports:
         - "{{ minecraft_port }}:25565/tcp"
         - "{{ minecraft_port }}:25565/udp"
       volume:
         - "{{ service['name'] }}-data:/data:Z"
-      env:
-        EULA: "{{ minecraft_eula }}"
-        VERSION: "{{ minecraft_version }}"
-        TYPE: "{{ minecraft_type }}"
-        MEMORY: "{{ minecraft_memory }}"
-        DIFFICULTY: "{{ minecraft_difficulty }}"
-        MAX_PLAYERS: "{{ minecraft_max_players }}"
-        MOTD: "{{ minecraft_motd }}"
-        SPAWN_PROTECTION: "{{ minecraft_spawn_protection }}"
+      env: "{{ minecraft_envvars }}"
       healthcheck: 'mc-monitor status --host localhost --port 25565'

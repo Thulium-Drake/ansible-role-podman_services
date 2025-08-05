@@ -1,7 +1,17 @@
 ---
-minecraft_container_version: 'latest'
+minecraft_image_uri: 'docker.io/itzg/minecraft-server'
 
+# Minecraft server settings
 minecraft_port: '25565'
+minecraft_envvars:
+  EULA: "TRUE"
+  VERSION: 'LATEST'
+  TYPE: 'AUTO_CURSEFORGE'
+  CF_API_KEY: "{{ minecraft_curseforge_api_key | quote }}"
+  CF_SLUG: 'better-mc-forge-bmc4'
+  CF_EXCLUDE_MODS: 'yungs-menu-tweaks,xaeroplus'
+  INIT_MEMORY: '1G'
+  MAX_MEMORY: '1G'
 
 minecraft_eula: true  # Server requires EULA acceptance
 

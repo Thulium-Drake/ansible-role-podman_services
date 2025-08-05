@@ -119,6 +119,7 @@ podman_service_containers_arr:
         PUID: "{{ arr_data_container_uid }}"
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
+      healthcheck: 'nc -z localhost 8080 || exit 1'
       labels:
         traefik.enable: true
         traefik.http.routers.sabnzbd.rule: "Host(`sabnzbd.{{ traefik_domain }}`)"
@@ -137,7 +138,7 @@ podman_service_containers_arr:
         - 'arr-backend.network'
         - 'traefik-backend.network'
       privileged: true
-      healthcheck: '[ \"$$(curl -s --max-time 5 api.ipify.org)\" = \"$$(dig +short +time=5 overwrite.io | grep -m 1 ''[0-9]'')\" ] && exit 1 || exit 0'
+      healthcheck: "{{ transmission_healtcheck_command }}"
       labels:
         traefik.enable: true
         traefik.http.routers.transmission.rule: "Host(`transmission.{{ traefik_domain }}`)"

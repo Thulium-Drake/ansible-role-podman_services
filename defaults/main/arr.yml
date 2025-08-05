@@ -1,5 +1,5 @@
 ---
-arr_data_folder: 'arr-data'  # Folder that contains downloads/movies/tv etc.
+arr_data_folder: '/media'  # Folder that contains downloads/movies/tv etc.
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'
 arr_timezone: 'Europe/Amsterdam'
@@ -8,6 +8,9 @@ jellyfin_app_name: 'jellyfin'
 
 # Set in group_vars for transmission VPN
 transmission_image_uri: 'docker.io/haugene/transmission-openvpn'
+
+# The healthcheck command can be changed to accomodate verifying connectivity with VPNs if applicable
+transmission_healthcheck_command: 'nc -z localhost 9091 || exit 1'
 # These settings apply to the default image above
 transmission_vpn_provider: ''   # VPN Provider
 transmission_vpn_config: ''  # VPN Config

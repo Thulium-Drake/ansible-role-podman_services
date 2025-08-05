@@ -2,12 +2,6 @@
 - name: 'Update package sources'
   hosts: 'all'
   tasks:
-    - name: 'Update APT cache'
-      ansible.builtin.apt:
+    - name: 'Update package cache'
+      ansible.builtin.package:
         update_cache: true
-      when: ansible_facts['os_family'] == 'Debian'
-
-    - name: 'Update YUM cache'
-      ansible.builtin.yum:
-        update_cache: true
-      when: ansible_facts['os_family'] == 'RedHat'
