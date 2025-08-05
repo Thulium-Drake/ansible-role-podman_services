@@ -11,10 +11,10 @@ podman_service_containers_grafana:
     grafana:
     image: 'docker.io/grafana/grafana:latest'
     labels:
-        traefik.enable: true
-        traefik.http.routers.grafana.rule: "Host(`grafana.{{ traefik_domain }}`)"
-        traefik.http.routers.grafana.tls: "true"
-        traefik.http.services.grafana.loadbalancer.server.port: '3000'
+      traefik.enable: true
+      traefik.http.routers.grafana.rule: "Host(`grafana.{{ traefik_domain }}`)"
+      traefik.http.routers.grafana.tls: "true"
+      traefik.http.services.grafana.loadbalancer.server.port: '3000'
     volume:
       - "{{ service['name'] }}:/var/lib/grafana:Z"
     network:
