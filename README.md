@@ -23,6 +23,7 @@ The catalogus currently contains:
 * portainer: A management solution for container platforms
 * postgresql: A robust database server
 * tooling: A developer toolchain with VScode server and Firefox
+* traefik: auto-configurating reverse proxy
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
 * vikunja: Task management and todo application
 * wiki: Node.JS based Wiki app

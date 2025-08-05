@@ -138,7 +138,7 @@ podman_service_containers_arr:
         - 'arr-backend.network'
         - 'traefik-backend.network'
       privileged: true
-      healthcheck: "{{ transmission_healtcheck_command }}"
+      healthcheck: "{{ transmission_healthcheck_command }}"
       labels:
         traefik.enable: true
         traefik.http.routers.transmission.rule: "Host(`transmission.{{ traefik_domain }}`)"

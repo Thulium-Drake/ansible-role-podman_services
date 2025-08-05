@@ -1,3 +1,17 @@
 ---
 # Domain to route all applications under'
 traefik_domain: 'apps.example.com'
+
+# Certificate path to mount inside traefik container, must be readable by the user that runs the containers
+# Add the following config to the traefik_config volume in dynamic.yml:
+#
+# tls:
+#  stores:
+#    default:
+#      defaultCertificate:
+#        certFile: /etc/traefik/certs/my_cert_fullchain.crt
+#        keyFile: /etc/traefik/certs/my_cert.key
+#  certificates:
+#    - certFile: /etc/traefik/certs/my_cert_fullchain.crt
+#      keyFile: /etc/traefik/certs/my_cert.key
+traefik_cert_path: ''

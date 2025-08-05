@@ -22,11 +22,15 @@ podman_service_containers_traefik:
         - '--providers.docker.watch'
         - '--providers.docker.network=traefik-backend'
         - '--providers.docker.exposedByDefault=false'
+        - '--providers.file'
+        - '--providers.file.filename=/etc/traefik/dynamic.yml'
+        - '--providers.file.watch'
       network:
         - 'traefik-backend.network'
       volume:
         - "/run/user/{{ podman_user_uid }}/podman/podman.sock:/var/run/docker.sock:Z"
         - 'traefik_config:/etc/traefik:Z'
+        - "{{ traefik_cert_path | default('traefik_empty_volume', true) }}:/etc/traefik/certs"
       cap_add:
         - 'NET_ADMIN'
       security_opt:
