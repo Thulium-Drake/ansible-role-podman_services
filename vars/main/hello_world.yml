@@ -1,0 +1,13 @@
+---
+podman_volumes_hello_world:
+  hello_world: []
+
+podman_networks_hello_world:
+  hello_world: []
+
+podman_service_containers_hello_world:
+  hello_world:
+    hello_world:
+      image: "docker.io/thomaspoignant/hello-world-rest-json:{{ hello_world_version }}"
+      ports:
+        - "{{ hello_world_port }}:8080"

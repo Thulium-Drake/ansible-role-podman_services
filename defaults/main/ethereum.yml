@@ -1,0 +1,18 @@
+---
+ethereum_geth_version: 'stable'
+ethereum_beacon_version: 'stable'
+ethereum_validator_version: 'stable'
+
+# Ports defined in vars/main/ethereum.yml
+
+ethereum_fee_recipient: 'dev-null.eth'  # Set to your ETH address
+
+ethereum_timezone: 'Europe/Amsterdam'
+ethereum_user_id: '1001:1002'
+ethereum_checkpoint_sync_url: 'https://beaconstate-mainnet.chainsafe.io'
+ethereum_genesis_beacon_api_url: 'https://beaconstate-mainnet.chainsafe.io'
+
+# Geth settings
+ethereum_geth_cache: '4096'
+ethereum_geth_syncmode: 'snap'
+ethereum_geth_gcmode: 'full'

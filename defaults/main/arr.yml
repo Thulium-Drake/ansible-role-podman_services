@@ -1,21 +1,27 @@
 ---
-# Set this to the folder that _contains_ your downloads/movies/tv etc.
-# This can also be a podman nfs volume created with:
-#  podman volume create --opt type=nfs --opt o=async --opt device=nfs.example.nl:/exports/media media
-arr_data_folder: '/media'
-
+arr_data_folder: '/media'  # Folder that contains downloads/movies/tv etc.
 arr_data_container_uid: '0'
 arr_data_container_gid: '0'
+arr_timezone: 'Europe/Amsterdam'
 
-bazarr_port: 6767
-jellyfin_webui_port: 8096
-prowlarr_port: 9696
-radarr_port: 7878
-readarr_port: 8787
-sabnzbd_port: 8080
-sonarr_port: 8989
-transmission_port: 9091
+jellyfin_app_name: 'jellyfin'
+
+# Set in group_vars for transmission VPN
+transmission_image_uri: 'docker.io/haugene/transmission-openvpn'
+
+# The healthcheck command can be changed to accomodate verifying connectivity with VPNs if applicable
+transmission_healthcheck_command: 'nc -z localhost 9091 || exit 1'
+# These settings apply to the default image above
+transmission_vpn_provider: ''   # VPN Provider
+transmission_vpn_config: ''  # VPN Config
+transmission_vpn_username: ''  # vpn_username
+transmission_vpn_password: ''  # vpn_password
+transmission_local_network: ''  # 192.168.0.0/16
+transmission_bind_address: ''  # 1.2.3.4 - Optional, set to your public IP if needed
+# Transmission Web UI options: combustion, kettu, transmission-web-control,
+# flood-for-transmission, shift, transmissionic
+transmission_web_ui: ''
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
-arr_timezone: 'Etc/UTC'
+arr_gpu: 'none'  # Options: none, nvidia

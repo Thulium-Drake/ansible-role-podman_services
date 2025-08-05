@@ -1,0 +1,3 @@
+---
+# Domain to route all applications under'
+traefik_domain: 'apps.example.com'

@@ -1,0 +1,20 @@
+---
+podman_volumes_minecraft:
+  minecraft:
+    - name: 'minecraft-data'
+      driver: "{{ podman_volume_driver }}"
+
+podman_networks_minecraft:
+  minecraft: []
+
+podman_service_containers_minecraft:
+  minecraft:
+    minecraft:
+      image: "{{ minecraft_image_uri }}"
+      ports:
+        - "{{ minecraft_port }}:25565/tcp"
+        - "{{ minecraft_port }}:25565/udp"
+      volume:
+        - "{{ service['name'] }}-data:/data:Z"
+      env: "{{ minecraft_envvars }}"
+      healthcheck: 'mc-monitor status --host localhost --port 25565'

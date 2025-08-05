@@ -1,0 +1,19 @@
+---
+nginx_version: 'latest'
+
+nginx_http_port: '80'
+nginx_https_port: '443'
+nginx_admin_port: '81'
+
+# Default admin: admin@example.com / changeme
+
+nginx_db_sqlite_file: '/data/database.sqlite'
+nginx_disable_ipv6: true
+
+# Additional stream ports (TCP/UDP forwarding)
+# Format: 'host:container' or 'host:container/protocol'
+# nginx_stream_ports:
+#   - '3389:3389'       # RDP (defaults to tcp)
+#   - '1194:1194/udp'   # OpenVPN UDP
+#   - '8080:8080/tcp'   # HTTP alternative
+nginx_stream_ports: []

@@ -1,0 +1,27 @@
+---
+podman_volumes_influxdb:
+  influxdb: []
+
+podman_networks_influxdb:
+  influxdb: []
+
+podman_service_containers_influxdb:
+  influxdb:
+    image: 'docker.io/library/influxdb:2-alpine'
+    auto_remove: true
+    ports:
+      - "{{ influxdb_listen_uri }}:8086"
+    pull: 'newer'
+    env:
+      DOCKER_INFLUXDB_INIT_MODE: 'setup'
+      DOCKER_INFLUXDB_INIT_USERNAME: "{{ influxdb_username }}"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "{{ influxdb_password }}"
+      DOCKER_INFLUXDB_INIT_ORG: "{{ influxdb_organization }}"
+      DOCKER_INFLUXDB_INIT_BUCKET: "{{ influxdb_bucket }}"
+    quadlet_options: "{{ podman_quadlet_options }}"
+    network:
+      - 'influxdb-backend.network'
+      - 'grafana-backend.network'
+    volume:
+      - "{{ service['name'] }}_config:/etc/influxdb2:Z"
+      - "{{ service['name'] }}_data:/var/lib/influxdb2:Z"

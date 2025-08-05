@@ -4,11 +4,3 @@ influxdb_username: 'admin'
 influxdb_password: 'GimmeData'
 influxdb_organization: 'MyOrg'
 influxdb_bucket: 'MyFirstDB'
-
-influxdb_telegraf_instances:
-  - name: 'power_meter'
-    config_token: 'sDF5IPM6mpYfIi2mdMdR9yHC9gYgWZ_YPIMgKzskYLFiYvGhixzgTBwkfXS_wxHDNrOY9f1FJZ8noqd2Q_7Q3A=='
-    config_url: 'http://influxdb:8086/api/v2/telegrafs/0ec8b241bba9f000'
-  - name: 'power_pricing'
-    config_token: 'pQWAPqZxgacoK3X7UAG52DvEhVbtrussVwgEnlrMTdBTokTceg57fERrEHx0HV8J_khCYqmfvox1ib-4-cRTaw=='
-    config_url: 'http://influxdb:8086/api/v2/telegrafs/0eca3426350f6000'

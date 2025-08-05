@@ -1,0 +1,11 @@
+---
+# IMPORTANT: Override vikunja_jwt_secret in group_vars!
+
+vikunja_version: 'latest'
+
+vikunja_app_name: 'vikunja'
+
+vikunja_jwt_secret: 'change-me-to-a-super-secure-random-secret'  # IMPORTANT: Override!
+
+vikunja_public_url: 'http://localhost:3456/'
+vikunja_database_path: '/db/vikunja.db'

@@ -1,0 +1,202 @@
+---
+podman_volumes_arr:
+  arr:
+    - 'arr-bazarr_config'
+    - 'arr-prowlarr_config'
+    - 'arr-radarr_config'
+    - 'arr-readarr_config'
+    - 'arr-sonarr_config'
+    - 'arr-transmission_config'
+    - 'arr-jellyseerr_config'
+    - 'arr-jellyfin_config'
+    - 'arr-data'
+
+podman_networks_arr:
+  arr:
+    - 'arr-backend'
+    - 'traefik-backend'
+
+podman_service_containers_arr:
+  arr:
+    bazarr:
+      image: 'lscr.io/linuxserver/bazarr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'curl -f http://localhost:6767/api/system/ping || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.bazarr.rule: "Host(`bazarr.{{ traefik_domain }}`)"
+        traefik.http.routers.bazarr.tls: "true"
+        traefik.http.services.bazarr.loadbalancer.server.port: '6767'
+      volume:
+        - "{{ service['name'] }}-bazarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    prowlarr:
+      image: 'lscr.io/linuxserver/prowlarr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'nc -z localhost 9696 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.prowlarr.rule: "Host(`prowlarr.{{ traefik_domain }}`)"
+        traefik.http.routers.prowlarr.tls: "true"
+        traefik.http.services.prowlarr.loadbalancer.server.port: '9696'
+      volume:
+        - "{{ service['name'] }}-prowlarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    radarr:
+      image: 'lscr.io/linuxserver/radarr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'nc -z localhost 7878 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.radarr.rule: "Host(`radarr.{{ traefik_domain }}`)"
+        traefik.http.routers.radarr.tls: "true"
+        traefik.http.services.radarr.loadbalancer.server.port: '7878'
+      volume:
+        - "{{ service['name'] }}-radarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    readarr:
+      image: 'lscr.io/linuxserver/readarr:develop'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'nc -z localhost 8787 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.readarr.rule: "Host(`readarr.{{ traefik_domain }}`)"
+        traefik.http.routers.readarr.tls: "true"
+        traefik.http.services.readarr.loadbalancer.server.port: '8787'
+      volume:
+        - "{{ service['name'] }}-readarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    sonarr:
+      image: 'lscr.io/linuxserver/sonarr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'nc -z localhost 8989 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.sonarr.rule: "Host(`sonarr.{{ traefik_domain }}`)"
+        traefik.http.routers.sonarr.tls: "true"
+        traefik.http.services.sonarr.loadbalancer.server.port: '8989'
+      volume:
+        - "{{ service['name'] }}-sonarr_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+
+    sabnzbd:
+      image: 'lscr.io/linuxserver/sabnzbd:latest'
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+      healthcheck: 'nc -z localhost 8080 || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.sabnzbd.rule: "Host(`sabnzbd.{{ traefik_domain }}`)"
+        traefik.http.routers.sabnzbd.tls: "true"
+        traefik.http.services.sabnzbd.loadbalancer.server.port: '8080'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      volume:
+        - "{{ service['name'] }}-sabnzbd_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+
+    transmission:
+      image: "{{ transmission_image_uri }}"
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      privileged: true
+      healthcheck: "{{ transmission_healtcheck_command }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.transmission.rule: "Host(`transmission.{{ traefik_domain }}`)"
+        traefik.http.routers.transmission.tls: "true"
+        traefik.http.services.transmission.loadbalancer.server.port: '9091'
+      volume:
+        - "{{ service['name'] }}-transmission_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+        OPENVPN_PROVIDER: "{{ transmission_vpn_provider | default(omit, true) }}"
+        OPENVPN_CONFIG: "{{ transmission_vpn_config | default(omit, true) }}"
+        OPENVPN_USERNAME: "{{ transmission_vpn_username | default(omit, true) }}"
+        OPENVPN_PASSWORD: "{{ transmission_vpn_password | default(omit, true) }}"
+        LOCAL_NETWORK: "{{ transmission_local_network | default(omit, true) }}"
+        TRANSMISSION_PORT_FORWARDING_ENABLED: true
+        TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address | default(omit, true) }}"
+        TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit, true) }}"
+
+    jellyseerr:
+      image: 'docker.io/fallenbagel/jellyseerr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.jellyseer.rule: "Host(`jellyseerr.{{ traefik_domain }}`)"
+        traefik.http.routers.jellyseer.tls: "true"
+        traefik.http.services.jellyseer.loadbalancer.server.port: '5055'
+      volume:
+        - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
+
+    jellyfin:
+      image: 'lscr.io/linuxserver/jellyfin:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      privileged: "{{ (arr_gpu == 'nvidia') | ternary(true, false) }}"
+      healthcheck: 'curl -f http://localhost:8096/health || exit 1'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.jellyfin.rule: "Host(`{{ jellyfin_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.jellyfin.tls: "true"
+        traefik.http.services.jellyfin.loadbalancer.server.port: '8096'
+      volume:
+        - "{{ service['name'] }}-jellyfin_config:/config:Z"
+        - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
+        JELLYFIN_PublishedServerUrl: "{{ jellyfin_autodiscovery_url }}"
+        NVIDIA_VISIBLE_DEVICES: "{{ (arr_gpu == 'nvidia') | ternary('all', omit) }}"
+        NVIDIA_DRIVER_CAPABILITIES: "{{ (arr_gpu == 'nvidia') | ternary('compute,video,utility', omit) }}"
+      ports:
+        - '1900:1900/udp'
+        - '7359:7359/udp'
+      device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'], omit) }}"

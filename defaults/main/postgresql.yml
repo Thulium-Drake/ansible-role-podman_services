@@ -1,0 +1,8 @@
+---
+postgresql_version: '17'
+
+postgresql_port: '5432'
+
+postgresql_user: 'postgres'
+postgresql_password: !unsafe 'CHANGE_ME_DATABASE_PASSWORD'  # REQUIRED: Override in group_vars
+postgresql_database: 'postgres'  # Initial database to create

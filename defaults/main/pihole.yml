@@ -1,0 +1,16 @@
+---
+# IMPORTANT: Override pihole_web_password in group_vars!
+
+pihole_version: 'latest'
+
+pihole_dns_port: '53'
+pihole_web_port: '8080'
+
+pihole_web_password: 'changeme'  # IMPORTANT: Override this in group_vars!
+
+pihole_timezone: 'UTC'
+pihole_webinterface: true
+
+pihole_dns_listening_mode: 'all'
+pihole_dnsmasq_listening: 'all'
+pihole_dns_upstreams: "{{ podman_dns }}"

@@ -1,0 +1,21 @@
+---
+# REQUIRED: Override kong_pg_password in group_vars
+
+kong_version: 'latest'
+
+kong_proxy_port: '8000'    # HTTP proxy
+kong_proxy_ssl_port: '8443' # HTTPS proxy
+kong_admin_port: '8001'    # Admin API
+kong_admin_ssl_port: '8444' # Admin API SSL
+kong_admin_gui_port: '8002' # Admin GUI
+
+kong_pg_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'  # REQUIRED: Override!
+kong_postgres_password: !unsafe 'CHANGE_ME_POSTGRES_PASSWORD'
+
+kong_database: 'postgres'
+kong_pg_database: 'kong'
+kong_pg_user: 'kong'
+kong_postgres_db: 'kong'
+kong_postgres_user: 'kong'
+kong_prefix: '/var/run/kong'
+kong_declarative_config: '/opt/kong/kong.yaml'

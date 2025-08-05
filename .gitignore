@@ -2,3 +2,6 @@ molecule/default/tests/__pycache__/
 *.swp
 *.pyc
 .ansible
+.vscode
+CLAUDE.md
+.claude

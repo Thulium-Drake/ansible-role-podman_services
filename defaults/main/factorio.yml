@@ -1,6 +1,12 @@
+---
 # Which image you wish to use, I build my own, see
 # https://github.com/Thulium-Drake/container-factorio/ for my version
 factorio_image_uri: 'repo.example.com/games/factorio'
-factorio_version: 'latest'
 
-factorio_listen_port: 34197
+factorio_port: '34197'    # Game port (UDP)
+factorio_rcon_port: '27015' # RCON port
+
+factorio_rcon_password: 'changeme-rcon'  # Override in group_vars
+
+factorio_save_name: 'default'
+factorio_update_mods: false

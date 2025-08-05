@@ -12,7 +12,5 @@ kanboard_smtp_encryption: ''  # ssl, tls or leave empty
 kanboard_smtp_username: 'mailer'
 kanboard_smtp_password: 'AllTheTasks!'
 
-# The listening URI for Kanboard
-# Either specify an IP address:port (e.g. 127.0.0.1:3000) or a port for listening on all in    terfaces
-# NOTE: Kanboard is not encrypted by default!
-kanboard_listen_uri: '3023'
+# Traefik settings
+kanboard_app_name: 'kanboard'

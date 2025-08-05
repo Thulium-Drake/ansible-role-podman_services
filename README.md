@@ -3,12 +3,29 @@ This role contains a collection of services that run on a Podman node. All persi
 
 The catalogus currently contains:
 
-* arr: A full arr stack with transmission
-* hello_world: a simple container that will return 'hello world' via a REST API
-* homeassistant: Open source home automation that puts local control and privacy first
-* vaultwarden: A free alternative server for the Bitwarden Password Manager
+* arr: A full arr stack with jellyfin, jellyseer, transmission and sabnzbd
+* authentik: Open-source Identity Provider focused on flexibility and versatility
 * factorio: The Factorio server
+* ethereum: Ethereum validator and beacon
+* git: Forgejo (Gitea fork) with Act Runners for CI/CD
+* grafana: data visualization tool
+* hello_world: a simple container that will return 'hello world' via a REST API
+* homeassistant: Open source home automation that puts local control and privacy first, comes with eclipse-mosquitto
+* influxdb: A time-series database
+* invoiceninja: Invoicing software
+* kanboard: A kanban-style todo tracker
+* kong: API gateway
 * minecraft: The Minecraft Server
+* n8n: Workflow automation with native AI capabilities
+* nginx: NginX proxy Manager
+* openbao: A secret storage platform
+* pihole: The Privacy and Tracking DNS filter
+* portainer: A management solution for container platforms
+* postgresql: A robust database server
+* tooling: A developer toolchain with VScode server and Firefox
+* vaultwarden: A free alternative server for the Bitwarden Password Manager
+* vikunja: Task management and todo application
+* wiki: Node.JS based Wiki app
 
 # Deployment
 In order to use the services from this catalogue, do the following:
@@ -73,20 +90,94 @@ This application requires additional setup after deployment:
   - Generate the unseal keys and the root token
   - Save these somewhere safe
 
-Also, the default setup of OpenBao is _without_ SSL, this should also be remediated with a reverse proxy!
+## Authentik notes
+Authentik is an open-source Identity Provider that provides authentication and authorization services. The service consists of multiple containers:
 
-## InfluxDB
-Setting up InfluxDB itself is rather straightforward, however when adding telegraf instances, it gets a bit tricky. Here's what you need to do:
+* **PostgreSQL**: Database backend for authentik
+* **Redis**: Cache and message broker
+* **Server**: Main authentik web interface and API
+* **Worker**: Background task processor
 
-  * Define a new Telegraf config in the InfluxDB WebUI
-    * Ensure that the URL for the output is 'http://influxdb:8086'
-    * Copy the URL and the Token
-  * Define a new instance (see defaults for an example)
-  * Run Ansible to start your new instance
+### Important configuration
+Before deploying authentik, you **must** change the following default values:
 
-The telegraf containers will download their config on each start and will complain in journalctl when something's not right. If you're debugging/changing them, the steps to change the config are:
+1. **authentik_secret_key**: Generate a secure random key (at least 50 characters)
+2. **authentik_postgres_password**: Set a strong database password
 
-  * Update the config in the InfluxDB WebUI
-  * Restart the service for that instance
-  * Wait for it to start, check journald for any logging
-  * Repeat
+### Initial setup
+1. After deployment, access authentik at `http://your-host:9000` (or your configured port)
+2. The initial setup wizard will guide you through creating an admin account
+3. Configure your authentication flows and providers as needed
+
+### Docker socket access
+The worker container can optionally access the Docker socket for container management features. This is controlled by:
+* `authentik_worker_docker_socket: true/false`
+* `authentik_worker_user_root: true/false` (required for socket access)
+
+If you don't need container management features, set both to `false` for better security.
+
+### Containers and networking
+The authentik service consists of multiple containers that communicate via a dedicated network:
+* `authentik-postgresql`: Database backend
+* `authentik-redis`: Cache and message broker
+* `authentik-server`: Main web interface and API (exposed on configured ports)
+* `authentik-worker`: Background task processor
+
+All containers communicate via the `authentik-backend` network.
+
+### Volumes
+The service creates the following Podman volumes for persistent data:
+* `authentik-postgresql_data`: PostgreSQL database data
+* `authentik-redis_data`: Redis cache data
+* `authentik-media`: Media files and uploads
+* `authentik-templates`: Custom templates
+* `authentik-certs`: SSL certificates
+
+All volumes use the configured `podman_volume_driver` (default: 'local').
+
+## Git notes
+The git service provides a complete Git hosting solution with CI/CD capabilities using Forgejo (a Gitea fork) and Act Runners.
+
+### Service Components
+The git service consists of multiple containers:
+* **git-server**: Main Forgejo instance providing Git hosting, web interface, and API
+* **git-runner1**: First Act Runner instance for CI/CD workflows
+* **git-runner2**: Second Act Runner instance for load distribution and redundancy
+
+### Important configuration
+Before deploying the git service, you **must** configure:
+
+1. **git_runner_token**: Generate a runner token from the Forgejo admin panel
+2. **git_runner_url**: Set the external URL for runner registration (e.g., 'https://git.overwrite.io')
+
+### DNS Resolution for Job Containers
+The git service includes special DNS configuration for Act Runner job containers to resolve external dependencies:
+
+```yaml
+git_runner_job_container_options: '--dns=8.8.8.8'  # External DNS for job containers
+```
+
+This configuration ensures that CI/CD workflows can download dependencies from external sources like GitHub, npm, etc.
+
+### Initial setup
+1. After deployment, access Forgejo at the configured port (default: 3000)
+2. Complete the initial setup wizard to create an admin account
+3. Navigate to Site Administration → Actions → Runners to register the runners
+4. Use the generated token to update the `git_runner_token` configuration
+
+### Networking
+The git service uses a dedicated network (`git-backend`) for internal communication between the server and runners. Job containers are created with external DNS servers to ensure proper dependency resolution.
+
+### Volumes
+The service creates the following Podman volumes for persistent data:
+* `git-data`: Main Forgejo data including repositories, database, and configuration
+* `git-runner1-config`: Configuration and state for the first runner
+* `git-runner2-config`: Configuration and state for the second runner
+
+### Troubleshooting
+If CI/CD workflows fail with DNS resolution errors, verify:
+1. The `git_runner_job_container_options` includes external DNS servers
+2. Runners have been restarted after configuration changes
+3. Job containers show correct DNS configuration in `/etc/resolv.conf`
+
+For detailed troubleshooting, see `TROUBLESHOOTING-GIT-RUNNERS.md` in the ansible-overwrite project.

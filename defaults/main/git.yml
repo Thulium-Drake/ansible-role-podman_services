@@ -1,0 +1,14 @@
+---
+git_version: '11-rootless'
+git_runner_version: 'nightly'
+
+git_http_port: '3000'
+git_ssh_port: '2222'
+
+git_runner_token: ''  # REQUIRED: Override with token from Forgejo admin panel
+
+git_timezone: 'Europe/Amsterdam'
+git_runner_count: 2
+git_runner_url: 'http://git-server:3000'  # Default internal URL
+
+# git_runner_dns: ["{{ podman_dns }}"]  # DNS servers for runners

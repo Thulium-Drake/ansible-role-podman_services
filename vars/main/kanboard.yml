@@ -1,0 +1,53 @@
+---
+podman_volumes_kanboard:
+  kanboard:
+    - 'kanboard_db'
+    - 'kanboard_data'
+    - 'kanboard_plugins'
+
+podman_networks_kanboard:
+  kanboard:
+    - 'traefik-backend'
+
+podman_service_containers_kanboard:
+  kanboard:
+    db:
+      image: 'docker.io/library/postgres:latest'
+      env:
+        POSTGRES_USER: 'kanboard'
+        POSTGRES_PASSWORD: "{{ kanboard_db_password }}"
+        POSTGRES_DB: 'kanboard'
+      volume:
+        - "{{ service['name'] }}_db:/var/lib/postgresql/data:Z"
+      network:
+        - 'kanboard-backend.network'
+      healthcheck: 'pg_isready -U${POSTGRES_USER}'
+      healthcheck_interval: '5s'
+      healthcheck_retries: 10
+      healthcheck_timeout: '3s'
+    kanboard:
+      image: 'docker.io/kanboard/kanboard:latest'
+      env:
+        DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@kanboard-db/kanboard"
+        REVERSE_PROXY_AUTH: "{{ kanboard_reverse_proxy_auth }}"
+        REVERSE_PROXY_USER_HEADER: "{{ kanboard_reverse_proxy_header }}"
+        HIDE_LOGIN_FORM: "{{ not kanboard_reverse_proxy_auth }}"
+        DISABLE_LOGOUT: "{{ not kanboard_reverse_proxy_auth }}"
+        MAIL_TRANSPORT: 'smtp'
+        MAIL_SMTP_HOSTNAME: "{{ kanboard_smtp_hostname }}"
+        MAIL_SMTP_PORT: "{{ kanboard_smtp_port }}"
+        MAIL_SMTP_ENCRYPTION: "{{ kanboard_smtp_encryption | default(omit, true) }}"
+        MAIL_SMTP_USERNAME: "{{ kanboard_smtp_username | default(omit, true) }}"
+        MAIL_SMTP_PASSWORD: "{{ kanboard_smtp_password | default(omit, true) }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.kanboard.rule: "Host(`{{ kanboard_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.kanboard.tls: "true"
+        traefik.http.services.kanboard.loadbalancer.server.port: '80'
+      volume:
+        - "{{ service['name'] }}_data:/var/www/app/data:z"
+        - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
+      network:
+        - 'kanboard-backend.network'
+        - 'traefik-backend.network'
+      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=kanboard-db.service'] + ['After=kanboard-db.service'] }}"

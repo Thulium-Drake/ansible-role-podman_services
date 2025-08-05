@@ -1,0 +1,27 @@
+---
+podman_volumes_vikunja:
+  vikunja:
+    - 'vikunja-files'
+    - 'vikunja-db'
+
+podman_networks_vikunja:
+  vikunja: []
+
+podman_service_containers_vikunja:
+  vikunja:
+    vikunja:
+      image: "docker.io/vikunja/vikunja:{{ vikunja_version }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.vikunja.rule: "Host(`{{ vikunja_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.vikunja.tls: "true"
+        traefik.http.services.vikunja.loadbalancer.server.port: '3456'
+      env:
+        VIKUNJA_SERVICE_JWTSECRET: "{{ vikunja_jwt_secret }}"
+        VIKUNJA_SERVICE_PUBLICURL: "{{ vikunja_public_url }}"
+        VIKUNJA_DATABASE_PATH: "{{ vikunja_database_path }}"
+      network:
+        - 'traefik-backend.network'
+      volume:
+        - '{{ service["name"] }}-files:/app/vikunja/files:Z'
+        - '{{ service["name"] }}-db:/db:Z'

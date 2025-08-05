@@ -15,18 +15,6 @@
   loop_control:
     loop_var: 'volume'
 
-- name: 'Workaround - Stop services for removed networks'
-  ansible.builtin.systemd:
-    name: "{{ network }}-network.service"
-    state: 'stopped'
-    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system') }}"
-  become: "{{ (podman_user_account != 'root') | ternary(true, omit) }}"
-  become_user: "{{ podman_user_account }}"
-  loop: "{{ podman_networks[service['name']] }}"
-  loop_control:
-    loop_var: 'network'
-  failed_when: false  # Don't care if the network isn't there, we're removing it anyway
-
 - name: 'Workaround - Remove quadlets for removed networks'
   ansible.builtin.file:
     path: "{{ (podman_user_account != 'root') | ternary('~/.config', '/etc') }}/containers/systemd/{{ network }}.network"
@@ -39,4 +27,4 @@
   ansible.builtin.systemd:
     daemon_reload: true
     daemon_reexec: true
-    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system', 'system') }}"
+    scope: "{{ (podman_user_account != 'root') | ternary('user', 'system') }}"

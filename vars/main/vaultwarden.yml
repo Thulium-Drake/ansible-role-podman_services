@@ -1,0 +1,36 @@
+---
+podman_volumes_vaultwarden:
+  vaultwarden:
+    - 'vaultwarden'
+
+podman_networks_vaultwarden:
+  vaultwarden:
+    - 'traefik-backend'
+
+podman_service_containers_vaultwarden:
+  vaultwarden:
+    vaultwarden:
+      image: "docker.io/vaultwarden/server:{{ vaultwarden_version }}"
+      env:
+        ROCKET_PORT: '3000'
+        DOMAIN: "https://{{ vaultwarden_domain }}"
+        SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
+        SIGNUPS_VERIFY: "{{ vaultwarden_signups_verify }}"
+        SIGNUPS_DOMAINS_WHITELIST: "{{ vaultwarden_signup_whitelist | join(',') | default(omit, true) }}"
+        INVITATIONS_ALLOWED: "{{ vaultwarden_invitations_allowed }}"
+        ADMIN_TOKEN: "{{ vaultwarden_admin_token | default(omit, true) }}"
+        SMTP_HOST: "{{ vaultwarden_smtp_server }}"
+        SMTP_PORT: "{{ vaultwarden_smtp_port }}"
+        SMTP_FROM: "{{ vaultwarden_smtp_from }}"
+        SMTP_SECURITY: "{{ vaultwarden_smtp_ssl | ternary('tls', 'off') }}"
+        SMTP_USERNAME: "{{ vaultwarden_smtp_user | default(omit, true) }}"
+        SMTP_PASSWORD: "{{ vaultwarden_smtp_password | default(omit, true) }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.vaultwarden.rule: "Host(`{{ vaultwarden_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.vaultwarden.tls: "true"
+        traefik.http.services.vaultwarden.loadbalancer.server.port: '3000'
+      network:
+        - 'traefik-backend.network'
+      volume:
+        - "{{ service['name'] }}:/data:Z"

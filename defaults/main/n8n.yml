@@ -1,0 +1,14 @@
+---
+n8n_image_uri: 'docker.n8n.io/n8nio/n8n:latest'
+
+n8n_port: '5678'
+
+n8n_webhook_url: "http://{{ inventory_hostname }}:{{ n8n_port }}"
+n8n_timezone: 'Europe/Amsterdam'
+
+n8n_database_type: 'sqlite'  # or 'postgresdb' for PostgreSQL
+# n8n_database_host: 'localhost'  # PostgreSQL only
+# n8n_database_port: '5432'       # PostgreSQL only
+# n8n_database_name: 'n8n'        # PostgreSQL only
+# n8n_database_user: 'n8n'        # PostgreSQL only
+# n8n_database_password: !unsafe 'CHANGE_ME_DB_PASSWORD'  # PostgreSQL only - REQUIRED: Override in group_vars

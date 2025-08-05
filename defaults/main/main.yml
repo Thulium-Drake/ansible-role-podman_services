@@ -1,6 +1,7 @@
 ---
 # Services to deploy contained in this role, for service configuration, please see the appropriate file
 # in the defaults
+
 # NOTE: When disabling services, DATA VOLUMES WILL BE REMOVED!
 podman_services: []
 # - name: 'hello_world'
@@ -9,6 +10,11 @@ podman_services: []
 # Which driver to use for volume storage, this role does not set up the driver!
 podman_volume_driver: 'local'
 
+# Which DNS server to use for containers, this role does not set up the DNS server!
+podman_dns:
+  - '9.9.9.9'          # Quad9
+  - '149.112.112.112'  # Quad9 secondary
+
 # Default options for all generated container quadlets
 # Enable automatic updates and ensure that it is started by default
 podman_quadlet_options:
@@ -16,3 +22,6 @@ podman_quadlet_options:
   - |
     [Install]
     WantedBy=default.target
+  - |
+    [Service]
+    Restart=always

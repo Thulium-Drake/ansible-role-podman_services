@@ -1,12 +1,8 @@
 ---
-# Images etc.
 minecraft_image_uri: 'docker.io/itzg/minecraft-server'
-minecraft_image_version: 'latest'
-
-minecraft_curseforge_api_key: 'my_awesome_api_key'
 
 # Minecraft server settings
-minecraft_listen_port: 25565
+minecraft_port: '25565'
 minecraft_envvars:
   EULA: "TRUE"
   VERSION: 'LATEST'
@@ -16,3 +12,13 @@ minecraft_envvars:
   CF_EXCLUDE_MODS: 'yungs-menu-tweaks,xaeroplus'
   INIT_MEMORY: '1G'
   MAX_MEMORY: '1G'
+
+minecraft_eula: true  # Server requires EULA acceptance
+
+minecraft_version: 'LATEST'
+minecraft_type: 'VANILLA'
+minecraft_memory: '1G'
+minecraft_difficulty: 'easy'
+minecraft_max_players: '20'
+minecraft_motd: 'A Minecraft Server'
+minecraft_spawn_protection: '16'

@@ -1,0 +1,22 @@
+podman_volumes_grafana:
+  grafana:
+    - 'grafana'
+
+podman_networks_grafana:
+  grafana:
+    - 'grafana-backend'
+
+podman_service_containers_grafana:
+  grafana:
+    grafana:
+    image: 'docker.io/grafana/grafana:latest'
+    labels:
+        traefik.enable: true
+        traefik.http.routers.grafana.rule: "Host(`grafana.{{ traefik_domain }}`)"
+        traefik.http.routers.grafana.tls: "true"
+        traefik.http.services.grafana.loadbalancer.server.port: '3000'
+    volume:
+      - "{{ service['name'] }}:/var/lib/grafana:Z"
+    network:
+      - 'grafana-backend.network'
+      - 'traefik-backend.network'

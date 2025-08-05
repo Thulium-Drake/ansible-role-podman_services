@@ -1,0 +1,32 @@
+---
+podman_volumes_openbao:
+  openbao:
+    - 'openbao_config'
+    - 'openbao_data'
+
+podman_volume_files_openbao:
+  openbao_config:
+    - 'config.hcl'
+
+podman_networks_openbao:
+  openbao: []
+
+podman_service_containers_openbao:
+  openbao:
+    openbao:
+      image: 'quay.io/openbao/openbao'
+      command:
+        - 'server'
+        - '-config=/openbao/config/config.hcl'
+      cap_add:
+        - 'IPC_LOCK'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.openbao.rule: "Host(`{{ openbao_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.openbao.tls: "true"
+        traefik.http.services.openbao.loadbalancer.server.port: '8200'
+      network:
+        - 'traefik-backend.network'
+      volume:
+        - "{{ service['name'] }}_config:/openbao/config:Z"
+        - "{{ service['name'] }}_data:/openbao/file:Z"

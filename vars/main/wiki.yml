@@ -1,0 +1,25 @@
+---
+podman_volumes_wiki:
+  wiki:
+    - 'wiki-data'
+
+podman_networks_wiki:
+  wiki: []
+
+podman_service_containers_wiki:
+  wiki:
+    wiki:
+      image: "ghcr.io/requarks/wiki:{{ wiki_version }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.wiki.rule: "Host(`{{ wiki_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.wiki.tls: "true"
+        traefik.http.services.wiki.loadbalancer.server.port: '3000'
+      volume:
+        - "{{ service['name'] }}-data:/wiki:Z"
+      network:
+        - 'traefik-backend.network'
+      env:
+        DB_TYPE: "{{ wiki_db_type }}"
+        DB_FILEPATH: "{{ wiki_db_filepath }}"
+      healthcheck: 'curl -f http://localhost:3000/healthz || exit 1'

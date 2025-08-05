@@ -1,0 +1,41 @@
+---
+podman_volumes_tooling:
+  tooling:
+    - 'tooling-vscode_config'
+    - 'tooling-vscode_workspace'
+    - 'tooling-firefox_config'
+
+podman_networks_tooling:
+  tooling:
+    - 'tooling-tooling'
+
+podman_service_containers_tooling:
+  tooling:
+    vscode:
+      image: "docker.io/linuxserver/code-server:{{ tooling_vscode_version }}"
+      ports:
+        - "{{ tooling_vscode_port }}:8443"
+      volume: "{{ ['tooling-vscode_config:/config:Z', 'tooling-vscode_workspace:/workspace:Z'] + (tooling_vscode_extra_volumes | default([])) }}"
+      env:
+        PUID: "{{ tooling_user_id }}"
+        PGID: "{{ tooling_group_id }}"
+        TZ: "{{ tooling_timezone }}"
+        PASSWORD: "{{ tooling_vscode_password }}"
+        SUDO_PASSWORD: "{{ tooling_vscode_sudo_password }}"
+      network:
+        - 'tooling-tooling.network'
+      healthcheck: 'curl -f http://localhost:8443/ || exit 1'
+
+    firefox:
+      image: "docker.io/linuxserver/firefox:{{ tooling_firefox_version }}"
+      ports:
+        - "{{ tooling_firefox_port }}:3000"
+      volume: "{{ ['tooling-firefox_config:/config:Z'] + (tooling_firefox_extra_volumes | default([])) }}"
+      env:
+        PUID: "{{ tooling_user_id }}"
+        PGID: "{{ tooling_group_id }}"
+        TZ: "{{ tooling_timezone }}"
+      network:
+        - 'tooling-tooling.network'
+      shm_size: "{{ tooling_firefox_shm_size }}"
+      healthcheck: 'curl -f http://localhost:3000/ || exit 1'

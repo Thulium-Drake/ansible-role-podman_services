@@ -1,0 +1,22 @@
+---
+podman_volumes_factorio:
+  factorio:
+    - name: 'factorio'
+      driver: "{{ podman_volume_driver }}"
+
+podman_networks_factorio:
+  factorio: []
+
+podman_service_containers_factorio:
+  factorio:
+    factorio:
+      image: "{{ factorio_image_uri }}"
+      ports:
+        - "{{ factorio_port }}:34197/udp"
+        - "{{ factorio_rcon_port }}:27015/tcp"
+      volume:
+        - "{{ service['name'] }}:/factorio:Z"
+      env:
+        SAVE_NAME: "{{ factorio_save_name | default(omit) }}"
+        UPDATE_MODS_ON_START: "{{ factorio_update_mods | default(omit) }}"
+        RCON_PASSWORD: "{{ factorio_rcon_password | default(omit) }}"

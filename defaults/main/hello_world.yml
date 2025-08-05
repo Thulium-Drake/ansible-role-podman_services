@@ -1,0 +1,7 @@
+---
+hello_world_version: 'latest'
+
+hello_world_port: '8080'
+
+# No authentication required
+# Simple one-time run container
