@@ -12,7 +12,6 @@ podman_service_containers_vaultwarden:
     vaultwarden:
       image: "docker.io/vaultwarden/server:{{ vaultwarden_version }}"
       env:
-        ROCKET_PORT: '3000'
         DOMAIN: "https://{{ vaultwarden_domain }}"
         SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
         SIGNUPS_VERIFY: "{{ vaultwarden_signups_verify }}"
@@ -29,7 +28,7 @@ podman_service_containers_vaultwarden:
         traefik.enable: true
         traefik.http.routers.vaultwarden.rule: "Host(`{{ vaultwarden_app_name }}.{{ traefik_domain }}`)"
         traefik.http.routers.vaultwarden.tls: "true"
-        traefik.http.services.vaultwarden.loadbalancer.server.port: '3000'
+        traefik.http.services.vaultwarden.loadbalancer.server.port: '80'
       network:
         - 'traefik-backend.network'
       volume:
