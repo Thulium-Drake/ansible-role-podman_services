@@ -83,6 +83,13 @@ http:
 
 3. Restart the service
 
+## OpenBao
+This application requires additional setup after deployment:
+
+  - Go to the URL of your OpenBao instance (https://<server>)
+  - Generate the unseal keys and the root token
+  - Save these somewhere safe
+
 ## Authentik notes
 Authentik is an open-source Identity Provider that provides authentication and authorization services. The service consists of multiple containers:
 
