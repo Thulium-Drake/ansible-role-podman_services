@@ -23,7 +23,7 @@ podman_service_containers_traefik:
         - '--providers.docker.network=traefik-backend'
         - '--providers.docker.exposedByDefault=false'
         - '--providers.file'
-        - '--providers.file.filename=/etc/traefik/dynamic.yml'
+        - '--providers.file.directory=/etc/traefik'
         - '--providers.file.watch'
       network:
         - 'traefik-backend.network'
