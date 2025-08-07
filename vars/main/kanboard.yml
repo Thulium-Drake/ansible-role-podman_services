@@ -47,6 +47,7 @@ podman_service_containers_kanboard:
       volume:
         - "{{ service['name'] }}_data:/var/www/app/data:z"
         - "{{ service['name'] }}_plugins:/var/www/app/plugins:z"
+      ports: "{{ (kanboard_listen_uri != '') | ternary(kanboard_listen_uri + ':80', omit) }}"
       network:
         - 'kanboard-backend.network'
         - 'traefik-backend.network'

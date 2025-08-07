@@ -14,3 +14,6 @@ kanboard_smtp_password: 'AllTheTasks!'
 
 # Traefik settings
 kanboard_app_name: 'kanboard'
+# In case you need a different reverse proxy to process this application
+# kanboard_listen_uri: '127.0.0.1:3023'
+kanboard_listen_uri: ''
