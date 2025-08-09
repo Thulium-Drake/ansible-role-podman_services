@@ -1,0 +1,32 @@
+---
+- name: "Ensure tmp folder on target host - {{ service['name'] }}"
+  ansible.builtin.file:
+    path: "/tmp/{{ service['name'] }}"
+    state: 'directory'
+    mode: '0750'
+  changed_when: false  # not important for idempotency
+
+- name: "Copy files to target host - {{ service['name'] }}"
+  ansible.builtin.copy:
+    src: "{{ service['name'] }}/{{ container_file['src'] }}"
+    dest: "/tmp/{{ service['name'] }}/{{ container_file['src'] }}"
+    mode: "{{ container_file['mode'] | default('0644') }}"
+  loop: "{{ podman_container_files[service['name']] | default([]) }}"
+  loop_control:
+    loop_var: 'container_file'
+  changed_when: false  # not important for idempotency
+
+- name: "Copy files to container - {{ service['name'] }}"
+  containers.podman.podman_container_copy:
+    container: "{{ container_file['container'] }}"
+    dest: "{{ container_file['dest'] }}"
+    src: "/tmp/{{ service['name'] }}/{{ container_file['src'] }}"
+  loop: "{{ podman_container_files[service['name']] | default([]) }}"
+  loop_control:
+    loop_var: 'container_file'
+
+- name: "Cleanup tmp folder on target host - {{ service['name'] }}"
+  ansible.builtin.file:
+    path: "/tmp/{{ service['name'] }}"
+    state: 'absent'
+  changed_when: false  # not important for idempotency
