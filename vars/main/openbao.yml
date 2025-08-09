@@ -4,12 +4,11 @@ podman_volumes_openbao:
     - 'openbao_config'
     - 'openbao_data'
 
-podman_volume_files_openbao:
-  openbao_config:
-    - 'config.hcl'
-
-podman_networks_openbao:
-  openbao: []
+podman_container_files_openbao:
+  openbao:
+    - container: 'openbao'
+      src: 'config.hcl'
+      dest: '/openbao/config/config.hcl'
 
 podman_service_containers_openbao:
   openbao:

@@ -6,6 +6,6 @@
     driver: "{{ (volume is string) | ternary(podman_volume_driver, volume['driver'] | default(podman_volume_driver)) }}"
     options: "{{ (volume is string) | ternary(omit, volume['options'] | default(omit)) }}"
   notify: 'Restart changed services'
-  loop: "{{ podman_volumes[service['name']] }}"
+  loop: "{{ podman_volumes[service['name']] | default([]) }}"
   loop_control:
     loop_var: 'volume'

@@ -5,10 +5,6 @@ podman_volumes_kanboard:
     - 'kanboard_data'
     - 'kanboard_plugins'
 
-podman_networks_kanboard:
-  kanboard:
-    - 'traefik-backend'
-
 podman_service_containers_kanboard:
   kanboard:
     db:

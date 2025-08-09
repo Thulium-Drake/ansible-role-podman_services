@@ -4,6 +4,6 @@
     name: "{{ network }}"
     state: "{{ (service['state'] | default('present') == 'present') | ternary('quadlet', 'absent') }}"
   notify: 'Restart changed services'
-  loop: "{{ podman_networks[service['name']] }}"
+  loop: "{{ podman_networks[service['name']] | default([]) }}"
   loop_control:
     loop_var: 'network'

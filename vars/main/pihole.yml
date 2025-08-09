@@ -4,9 +4,6 @@ podman_volumes_pihole:
     - 'pihole-etc'
     - 'pihole-dnsmasq'
 
-podman_networks_pihole:
-  pihole: []
-
 podman_service_containers_pihole:
   pihole:
     pihole:

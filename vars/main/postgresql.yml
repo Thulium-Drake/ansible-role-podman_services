@@ -3,9 +3,6 @@ podman_volumes_postgresql:
   postgresql:
     - 'postgresql-data'
 
-podman_networks_postgresql:
-  postgresql: []
-
 podman_service_containers_postgresql:
   postgresql:
     postgresql:

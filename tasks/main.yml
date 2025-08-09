@@ -40,3 +40,12 @@
       loop: "{{ podman_services }}"
       loop_control:
         loop_var: 'service'
+
+    - name: 'Flush handlers'
+      ansible.builtin.meta: 'flush_handlers'
+
+    - name: 'Ensure container files'
+      ansible.builtin.include_tasks: 'ensure_container_files.yml'
+      loop: "{{ podman_services }}"
+      loop_control:
+        loop_var: 'service'

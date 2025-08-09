@@ -1,9 +1,8 @@
 ---
 podman_volumes_influxdb:
-  influxdb: []
-
-podman_networks_influxdb:
-  influxdb: []
+  influxdb:
+    - 'influxdb_config'
+    - 'influxdb_data'
 
 podman_service_containers_influxdb:
   influxdb:

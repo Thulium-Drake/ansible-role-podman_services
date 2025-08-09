@@ -3,10 +3,6 @@ podman_volumes_vaultwarden:
   vaultwarden:
     - 'vaultwarden'
 
-podman_networks_vaultwarden:
-  vaultwarden:
-    - 'traefik-backend'
-
 podman_service_containers_vaultwarden:
   vaultwarden:
     vaultwarden:

@@ -43,6 +43,8 @@ In order to use the services from this catalogue, do the following:
     - 'podman_services'
 ```
 
+Please note that files copied to containers by this role are not user-manageable!
+
 ## Deployment scenarios
 This role can support running rootless, but it requires one of the following:
 

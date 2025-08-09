@@ -4,9 +4,6 @@ podman_volumes_factorio:
     - name: 'factorio'
       driver: "{{ podman_volume_driver }}"
 
-podman_networks_factorio:
-  factorio: []
-
 podman_service_containers_factorio:
   factorio:
     factorio:

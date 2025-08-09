@@ -7,3 +7,6 @@ podman_networks: "{{ lookup('community.general.merge_variables', 'podman_network
 
 # Service container definitions - dynamically merged from individual service files
 podman_service_containers: "{{ lookup('community.general.merge_variables', 'podman_service_containers_', pattern_type='prefix') }}"
+
+# Container files - dynamically merged from individual service files
+podman_container_files: "{{ lookup('community.general.merge_variables', 'podman_container_files_', pattern_type='prefix') }}"

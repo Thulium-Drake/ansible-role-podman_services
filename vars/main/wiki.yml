@@ -3,9 +3,6 @@ podman_volumes_wiki:
   wiki:
     - 'wiki-data'
 
-podman_networks_wiki:
-  wiki: []
-
 podman_service_containers_wiki:
   wiki:
     wiki:

@@ -14,7 +14,6 @@ podman_volumes_arr:
 podman_networks_arr:
   arr:
     - 'arr-backend'
-    - 'traefik-backend'
 
 podman_service_containers_arr:
   arr:

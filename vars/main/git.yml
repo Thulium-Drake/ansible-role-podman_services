@@ -5,9 +5,6 @@ podman_volumes_git:
     - 'git-runner1-config'
     - 'git-runner2-config'
 
-podman_networks_git:
-  git: []
-
 podman_service_containers_git:
   git:
     server:

@@ -3,9 +3,6 @@ podman_volumes_n8n:
   n8n:
     - 'n8n-data'
 
-podman_networks_n8n:
-  n8n: []
-
 podman_service_containers_n8n:
   n8n:
     n8n:

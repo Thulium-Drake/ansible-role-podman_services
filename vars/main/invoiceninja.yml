@@ -5,9 +5,11 @@ podman_volumes_invoiceninja:
     - 'invoiceninja_db'
     - 'invoiceninja_web_config'
 
-podman_volume_files_invoice_ninja:
-  invoiceninja_web_config:
-    - 'nginx.conf'
+podman_container_files_invoice_ninja:
+  invoiceninja:
+    - container: 'invoiceninja-web'
+      src: 'nginx.conf'
+      dest: '/etc/nginx/conf.d/invoiceninja.conf'
 
 podman_networks_invoiceninja:
   invoiceninja:

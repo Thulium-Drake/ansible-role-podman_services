@@ -1,7 +1,4 @@
 ---
-podman_volumes_ethereum:
-  ethereum: []
-
 podman_networks_ethereum:
   ethereum:
     - 'ethereum-backend'

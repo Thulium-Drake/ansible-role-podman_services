@@ -1,10 +1,4 @@
 ---
-podman_volumes_hello_world:
-  hello_world: []
-
-podman_networks_hello_world:
-  hello_world: []
-
 podman_service_containers_hello_world:
   hello_world:
     hello_world:

@@ -1,3 +1,5 @@
+# This file is managed by Ansible
+# YOUR CHANGES WILL BE LOST!
 storage "file" {
   path    = "/openbao/file"
 }

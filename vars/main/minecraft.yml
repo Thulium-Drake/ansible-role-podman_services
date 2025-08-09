@@ -4,9 +4,6 @@ podman_volumes_minecraft:
     - name: 'minecraft-data'
       driver: "{{ podman_volume_driver }}"
 
-podman_networks_minecraft:
-  minecraft: []
-
 podman_service_containers_minecraft:
   minecraft:
     minecraft:

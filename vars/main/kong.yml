@@ -4,9 +4,6 @@ podman_volumes_kong:
     - 'kong-data'
     - 'kong-postgresql-data'
 
-podman_networks_kong:
-  kong: []
-
 podman_service_containers_kong:
   kong:
     postgresql:
