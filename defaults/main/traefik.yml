@@ -2,7 +2,8 @@
 # Domain to route all applications under'
 traefik_domain: 'apps.example.com'
 
-# Certificate path to mount inside traefik container, must be readable by the user that runs the containers
+# Certificate path from which to copy certs inside traefik container,
+# must be readable by the user that runs the playbook (e.g. podman in the default non-root setup)
 # Add the following config to the traefik_config volume in dynamic.yml:
 #
 # tls:
