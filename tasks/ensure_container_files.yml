@@ -8,20 +8,32 @@
 
 - name: "Copy files to target host - {{ service['name'] }}"
   ansible.builtin.copy:
-    src: "{{ service['name'] }}/{{ container_file['src'] }}"
+    src: "{{ container_file['src'] }}"
     dest: "/tmp/{{ service['name'] }}/{{ container_file['src'] }}"
     mode: "{{ container_file['mode'] | default('0644') }}"
   loop: "{{ podman_container_files[service['name']] | default([]) }}"
   loop_control:
     loop_var: 'container_file'
+  when: not container_file['remote_src'] | default(false)
   changed_when: false  # not important for idempotency
 
-- name: "Copy files to container - {{ service['name'] }}"
+- name: "Copy temp files to container - {{ service['name'] }}"
   containers.podman.podman_container_copy:
     container: "{{ container_file['container'] }}"
     dest: "{{ container_file['dest'] }}"
     src: "/tmp/{{ service['name'] }}/{{ container_file['src'] }}"
   loop: "{{ podman_container_files[service['name']] | default([]) }}"
+  when: not container_file['remote_src'] | default(false)
+  loop_control:
+    loop_var: 'container_file'
+
+- name: "Copy remote files to container - {{ service['name'] }}"
+  containers.podman.podman_container_copy:
+    container: "{{ container_file['container'] }}"
+    dest: "{{ container_file['dest'] }}"
+    src: "{{ container_file['src'] }}"
+  loop: "{{ podman_container_files[service['name']] | default([]) }}"
+  when: container_file['remote_src'] | default(false)
   loop_control:
     loop_var: 'container_file'
 
