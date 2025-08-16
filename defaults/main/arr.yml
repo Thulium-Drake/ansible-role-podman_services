@@ -24,4 +24,4 @@ transmission_web_ui: ''
 
 jellyfin_autodiscovery_url: "http://{{ ansible_facts['fqdn'] }}:8096"
 
-arr_gpu: 'none'  # Options: none, nvidia
+arr_gpu: 'none'  # Options: none, intel, nvidia

@@ -198,4 +198,5 @@ podman_service_containers_arr:
       ports:
         - '1900:1900/udp'
         - '7359:7359/udp'
-      device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'], omit) }}"
+      device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'],
+                  (arr_gpu == 'intel') | ternary(['/dev/dri/renderD128'], omit)) }}"
