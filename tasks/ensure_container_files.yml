@@ -8,7 +8,7 @@
 
 - name: "Copy files to target host - {{ service['name'] }}"
   ansible.builtin.copy:
-    src: "{{ container_file['src'] }}"
+    src: "{{ service['name'] }}/{{ container_file['src'] }}"
     dest: "/tmp/{{ service['name'] }}/{{ container_file['src'] }}"
     mode: "{{ container_file['mode'] | default('0644') }}"
   loop: "{{ podman_container_files[service['name']] | default([]) }}"
