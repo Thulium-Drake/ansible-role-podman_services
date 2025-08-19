@@ -1,0 +1,14 @@
+---
+trinitycore_image_uri: 'registry.example.com/trinitycore/server:latest'
+
+# Server connection settings
+trinitycore_auth_port: '3724'
+trinitycore_world_port: '8085'
+trinitycore_racon_port: '3443'
+
+# DB settings
+trinitycore_db_password: 'IMMA_CHARGING_MA_FIREBALL!'
+
+# Initial admin account settings
+trinitycore_admin_user: 'khadgar'
+trinitycore_admin_password: 'KirinTor'

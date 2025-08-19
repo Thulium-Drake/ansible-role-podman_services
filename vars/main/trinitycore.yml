@@ -1,0 +1,68 @@
+---
+podman_networks_trinitycore:
+  trinitycore:
+    - 'trinitycore-backend'
+
+podman_volumes_trinitycore:
+  trinitycore:
+    - 'trinitycore_config'
+    - 'trinitycore_data'
+    - 'trinitycore_db'
+
+podman_service_containers_trinitycore:
+  trinitycore:
+    db:
+      image: 'docker.io/library/mariadb:11'
+      env:
+        MARIADB_USER: 'trinitycore'
+        MARIADB_PASSWORD: "{{ trinitycore_db_password }}"
+        MARIADB_ROOT_PASSWORD: "{{ trinitycore_db_password }}"
+      volume:
+        - "{{ service['name'] }}_db:/var/lib/mysql:Z"
+      network:
+        - 'trinitycore-backend.network'
+    dbadmin:
+      image: 'docker.io/library/phpmyadmin:latest'
+      env:
+        MYSQL_ROOT_PASSWORD: "{{ trinitycore_db_password }}"
+        PMA_HOST: 'trinitycore-db'
+      network:
+        - 'trinitycore-backend.network'
+        - 'traefik-backend.network'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.invoiceninja.rule: "Host(`trinitycore-db.{{ traefik_domain }}`)"
+        traefik.http.routers.invoiceninja.tls: "true"
+        traefik.http.services.invoiceninja.loadbalancer.server.port: '80'
+    world:
+      image: "{{ trinitycore_image_uri }}"
+      env:
+        TRINITYDB_USER: 'root'
+        TRINITYDB_HOST: 'trinitycore-db'
+        TRINITYDB_PASSWORD: "{{ trinitycore_db_password }}"
+        TRINITY_SERVICE: 'worldserver'
+        TRINITY_USER: "{{ trinitycore_admin_user }}"
+        TRINITY_PASSWORD: "{{ trinitycore_admin_password }}"
+      volume:
+        - "{{ service['name'] }}_config:/app/etc:z"
+        - "{{ service['name'] }}_data:/app/data:Z"
+      ports:
+        - "{{ trinitycore_world_port }}:8085"
+        - "{{ trinitycore_racon_port }}:3443"
+      network:
+        - 'trinitycore-backend.network'
+      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=trinitycore-db.service'] + ['After=trinitycore-db.service'] }}"
+    auth:
+      image: "{{ trinitycore_image_uri }}"
+      env:
+        TRINITYDB_USER: 'root'
+        TRINITYDB_HOST: 'trinitycore-db'
+        TRINITYDB_PASSWORD: "{{ trinitycore_db_password }}"
+        TRINITY_SERVICE: 'authserver'
+      volume:
+        - "{{ service['name'] }}_config:/app/etc:z"
+      ports:
+        - "{{ trinitycore_auth_port }}:3724"
+      network:
+        - 'trinitycore-backend.network'
+      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=trinitycore-world.service'] + ['After=trinitycore-world.service'] }}"

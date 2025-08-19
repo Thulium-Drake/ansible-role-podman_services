@@ -24,6 +24,7 @@ The catalogus currently contains:
 * postgresql: A robust database server
 * tooling: A developer toolchain with VScode server and Firefox
 * traefik: auto-configurating reverse proxy
+* trinitycore: A MMO server emulator
 * vaultwarden: A free alternative server for the Bitwarden Password Manager
 * vikunja: Task management and todo application
 * wiki: Node.JS based Wiki app
