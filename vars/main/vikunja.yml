@@ -17,6 +17,14 @@ podman_service_containers_vikunja:
         VIKUNJA_SERVICE_JWTSECRET: "{{ vikunja_jwt_secret }}"
         VIKUNJA_SERVICE_PUBLICURL: "{{ vikunja_public_url }}"
         VIKUNJA_DATABASE_PATH: "{{ vikunja_database_path }}"
+        VIKUNJA_MAILER_ENABLED: "{{ vikunja_mailer_enabled }}"
+        VIKUNJA_MAILER_HOST: "{{ vikunja_mailer_host }}"
+        VIKUNJA_MAILER_PORT: "{{ vikunja_mailer_port }}"
+        VIKUNJA_MAILER_AUTHTYPE: "{{ vikunja_mailer_authtype }}"
+        VIKUNJA_MAILER_USERNAME: "{{ vikunja_mailer_username | default(omit, true) }}"
+        VIKUNJA_MAILER_PASSWORD: "{{ vikunja_mailer_password | default(omit, true) }}"
+        VIKUNJA_MAILER_SKIPTLSVERIFY: "{{ vikunja_mailer_insecure }}"
+        VIKUNJA_MAILER_FROMEMAIL: "{{ vikunja_mailer_from_address }}"
       network:
         - 'traefik-backend.network'
       volume:

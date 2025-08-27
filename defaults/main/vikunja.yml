@@ -9,3 +9,12 @@ vikunja_jwt_secret: 'change-me-to-a-super-secure-random-secret'  # IMPORTANT: Ov
 
 vikunja_public_url: 'http://localhost:3456/'
 vikunja_database_path: '/db/vikunja.db'
+
+vikunja_mailer_enabled: false
+vikunja_mailer_host: 'smtp.example.nl'
+vikunja_mailer_port: 25
+vikunja_mailer_authtype: 'plain'  # login or cram-md5
+vikunja_mailer_username: ''
+vikunja_mailer_password: ''
+vikunja_mailer_insecure: false
+vikunja_mailer_from_address: 'vikunja@example.nl'
