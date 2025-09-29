@@ -8,7 +8,7 @@ podman_volumes_kanboard:
 podman_service_containers_kanboard:
   kanboard:
     db:
-      image: 'docker.io/library/postgres:latest'
+      image: 'docker.io/library/postgres:17'
       env:
         POSTGRES_USER: 'kanboard'
         POSTGRES_PASSWORD: "{{ kanboard_db_password }}"
