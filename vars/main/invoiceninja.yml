@@ -33,7 +33,7 @@ podman_service_containers_invoiceninja:
       healthcheck_retries: 10
       healthcheck_timeout: '3s'
     invoiceninja:
-      image: "docker.io/invoiceninja/invoiceninja-debian:{{ invoiceninja_version }}"
+      image: "{{ invoiceninja_image }}:{{ invoiceninja_version }}"
       env:
         APP_DEBUG: true
         APP_ENV: 'production'

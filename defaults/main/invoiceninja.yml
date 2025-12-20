@@ -1,4 +1,5 @@
 ---
+invoiceninja_image: 'docker.io/invoiceninja/invoiceninja-debian'
 invoiceninja_version: 'latest'
 invoiceninja_app_name: 'invoiceninja'
 invoiceninja_url: "https://{{ invoiceninja_app_name }}.{{ traefik_domain }}"
