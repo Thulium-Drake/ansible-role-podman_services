@@ -36,6 +36,7 @@ podman_service_containers_invoiceninja:
       image: "docker.io/invoiceninja/invoiceninja-debian:{{ invoiceninja_version }}"
       env:
         APP_DEBUG: true
+        APP_ENV: 'production'
         APP_URL: "{{ invoiceninja_url }}"
         APP_KEY: "base64:{{ invoiceninja_appkey }}"
         REQUIRE_HTTPS: false
