@@ -65,7 +65,8 @@ podman_service_containers_invoiceninja:
         traefik.http.services.invoiceninja.loadbalancer.server.port: '80'
       volume:
         - "{{ service['name'] }}_web_config:/etc/nginx/conf.d:Z"
-        - "{{ service['name'] }}_public:/var/www/app/public:z,ro"
+        - "{{ service['name'] }}_public:/var/www/html/public:z,ro"
+        - "{{ service['name'] }}_public:/var/www/html/storage:z,ro"
       network:
         - 'invoiceninja-backend.network'
         - 'traefik-backend.network'
