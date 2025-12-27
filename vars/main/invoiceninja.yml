@@ -51,8 +51,8 @@ podman_service_containers_invoiceninja:
         DB_USERNAME: 'invoiceninja'
         DB_PASSWORD: "{{ invoiceninja_db_password }}"
       volume:
-        - "{{ service['name'] }}_public:/var/www/app/public:z"
-        - "{{ service['name'] }}_storage:/var/www/app/storage:z"
+        - "{{ service['name'] }}_public:/var/www/html/public:z"
+        - "{{ service['name'] }}_storage:/var/www/html/storage:z"
       network:
         - 'invoiceninja-backend.network'
       quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
@@ -66,7 +66,7 @@ podman_service_containers_invoiceninja:
       volume:
         - "{{ service['name'] }}_web_config:/etc/nginx/conf.d:Z"
         - "{{ service['name'] }}_public:/var/www/html/public:z,ro"
-        - "{{ service['name'] }}_public:/var/www/html/storage:z,ro"
+        - "{{ service['name'] }}_storage:/var/www/html/storage:z,ro"
       network:
         - 'invoiceninja-backend.network'
         - 'traefik-backend.network'
