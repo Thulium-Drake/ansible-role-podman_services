@@ -14,6 +14,8 @@ podman_service_containers_calibre_web_automated:
         traefik.http.routers.calibre_web_automated.rule: "Host(`{{ calibre_web_automated_app_name }}.{{ traefik_domain }}`)"
         traefik.http.routers.calibre_web_automated.tls: "true"
         traefik.http.services.calibre_web_automated.loadbalancer.server.port: '8083'
+        traefik.http.routers.calibre_web_automated.middlewares: 'customheader'
+        traefik.http.middlewares.customheader.headers.customrequestheaders.X-Scheme: 'https'
       env:
         PUID: "{{ calibre_web_automated_container_uid }}"
         PGID: "{{ calibre_web_automated_container_gid }}"
