@@ -5,6 +5,7 @@ The catalogus currently contains:
 
 * arr: A full arr stack with jellyfin, jellyseer, transmission and sabnzbd
 * authentik: Open-source Identity Provider focused on flexibility and versatility
+* booklore: A self-hosted digital library management system
 * factorio: The Factorio server
 * ethereum: Ethereum validator and beacon
 * git: Forgejo (Gitea fork) with Act Runners for CI/CD
@@ -66,6 +67,17 @@ Configuring the integrations between the different apps works as follows:
   * Go to the source app -> Settings -> General and retrieve the API key
   * Go to the target app and paste the API key
   * The server address inside the app will be http://arr-$APP:$PORT (e.g. http://arr-prowlarr:9696 and http://arr-radarr:7878)
+
+## Booklore notes
+If you're running Booklore with a _different_ UID then 0, you need to do the following step manually:
+
+  * Change the ownership of the ```booklore-data/_data``` folder to the one you've chosen. In my setup (uid=49) this meant:
+```
+sudo chown -R 100048:100048 ~podman/.local/share/containers/storage/volumes/booklore-data/_data
+sudo chown -R 100048:100048 ~podman/.local/share/containers/storage/volumes/booklore-books/_data
+```
+
+After this, Booklore will start succesfully
 
 ### Sabnzbd specific notes
 The application uses a sort of hostname matching to prevent all kinds of nastiness. You'll need to follow the instructions on https://sabnzbd.org/wiki/extra/hostname-check.html to configure the app properly.

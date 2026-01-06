@@ -1,0 +1,11 @@
+---
+booklore_version: 'latest'
+booklore_app_name: 'booklore'
+booklore_timezone: 'Europe/Amsterdam'
+
+booklore_db_password: 'AWellReadMindIsAGreatMind!'
+
+# UserId to use outside the container for access to the import filesystem
+booklore_container_uid: '0'
+booklore_container_gid: '0'
+booklore_import_folder: '/media/books'  # Folder that you can place books in for automatic import
