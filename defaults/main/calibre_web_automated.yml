@@ -1,0 +1,10 @@
+---
+calibre_web_automated_version: 'latest'
+calibre_web_automated_app_name: 'calibre-web'
+calibre_web_automated_timezone: 'Europe/Amsterdam'
+
+calibre_web_automated_container_uid: 1000
+calibre_web_automated_container_gid: 1000
+calibre_web_automated_import_folder: '/media/books/import'
+
+calibre_web_automated_hardcover_token: 'your_hardcover_api_key_here'

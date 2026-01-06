@@ -1,0 +1,29 @@
+---
+podman_volumes_calibre_web_automated:
+  calibre_web_automated:
+    - 'calibre-web-automated-config'
+    - 'calibre-web-automated-library'
+    - 'calibre-web-automated-plugins'
+
+podman_service_containers_calibre_web_automated:
+  calibre_web_automated:
+    calibre_web_automated:
+      image: "docker.io/crocodilestick/calibre-web-automated:{{ calibre_web_automated_version }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.calibre_web_automated.rule: "Host(`{{ calibre_web_automated_app_name }}.{{ traefik_domain }}`)"
+        traefik.http.routers.calibre_web_automated.tls: "true"
+        traefik.http.services.calibre_web_automated.loadbalancer.server.port: '8083'
+      env:
+        PUID: "{{ calibre_web_automated_container_uid }}"
+        PGID: "{{ calibre_web_automated_container_gid }}"
+        TZ: "{{ calibre_web_automated_timezone }}"
+        HARDCOVER_TOKEN: "{{ calibre_web_automated_hardcover_token }}"
+        CWA_PORT_OVERRIDE: 8083
+      network:
+        - 'traefik-backend.network'
+      volume:
+        - '{{ service["name"] }}-config:/config:Z'
+        - '{{ service["name"] }}-library:/calibre-library:Z'
+        - '{{ service["name"] }}-plugins:/config/.config/calibre/plugins:Z'
+        - "{{ calibre_web_automated_import_folder }}:/cwa-book-ingest"
