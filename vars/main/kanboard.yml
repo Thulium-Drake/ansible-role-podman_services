@@ -27,6 +27,7 @@ podman_service_containers_kanboard:
         DATABASE_URL: "postgres://kanboard:{{ kanboard_db_password }}@kanboard-db/kanboard"
         REVERSE_PROXY_AUTH: "{{ kanboard_reverse_proxy_auth }}"
         REVERSE_PROXY_USER_HEADER: "{{ kanboard_reverse_proxy_header }}"
+        TRUSTED_PROXY_NETWORKS: '10.89.0.0/16'  # Should cover all Podman networks
         HIDE_LOGIN_FORM: "{{ not kanboard_reverse_proxy_auth }}"
         DISABLE_LOGOUT: "{{ not kanboard_reverse_proxy_auth }}"
         MAIL_TRANSPORT: 'smtp'
