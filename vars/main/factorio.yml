@@ -12,7 +12,7 @@ podman_service_containers_factorio:
         - "{{ factorio_port }}:34197/udp"
         - "{{ factorio_rcon_port }}:27015/tcp"
       volume:
-        - "{{ service['name'] }}:/factorio:Z"
+        - "{{ service['name'] }}:/data:Z"
       env:
         SAVE_NAME: "{{ factorio_save_name | default(omit) }}"
         UPDATE_MODS_ON_START: "{{ factorio_update_mods | default(omit) }}"
