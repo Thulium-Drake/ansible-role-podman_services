@@ -3,7 +3,7 @@ This role contains a collection of services that run on a Podman node. All persi
 
 The catalogus currently contains:
 
-* arr: A full arr stack with jellyfin, jellyseer, transmission and sabnzbd
+* arr: A full arr stack with jellyfin, seerr, transmission and sabnzbd
 * authentik: Open-source Identity Provider focused on flexibility and versatility
 * calibre_web_automated: A self-hosted digital library management system
 * factorio: The Factorio server
@@ -69,6 +69,8 @@ Configuring the integrations between the different apps works as follows:
   * The server address inside the app will be http://arr-$APP:$PORT (e.g. http://arr-prowlarr:9696 and http://arr-radarr:7878)
 
 When setting up recyclarr, keep in mind that it does not have a webinterface, you'll need to enter the container to edit the config and to run the commands needed. It will be spun up with a default configuration in place in `/config`
+
+NOTE: Seerr (still) uses jellyseerr for it's volume name, this is for backwards compatibility
 
 ### Sabnzbd specific notes
 The application uses a sort of hostname matching to prevent all kinds of nastiness. You'll need to follow the instructions on https://sabnzbd.org/wiki/extra/hostname-check.html to configure the app properly.

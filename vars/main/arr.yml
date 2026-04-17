@@ -172,17 +172,17 @@ podman_service_containers_arr:
         TRANSMISSION_BIND_ADDRESS: "{{ transmission_bind_address | default(omit, true) }}"
         TRANSMISSION_WEB_UI: "{{ transmission_web_ui | default(omit, true) }}"
 
-    jellyseerr:
-      image: 'docker.io/fallenbagel/jellyseerr:latest'
+    seerr:
+      image: 'ghcr.io/seerr-team/seerr:latest'
       network:
         - 'arr-backend.network'
         - 'traefik-backend.network'
       healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
       labels:
         traefik.enable: true
-        traefik.http.routers.jellyseer.rule: "Host(`jellyseerr.{{ traefik_domain }}`)"
-        traefik.http.routers.jellyseer.tls: "true"
-        traefik.http.services.jellyseer.loadbalancer.server.port: '5055'
+        traefik.http.routers.seerr.rule: "Host(`seerr.{{ traefik_domain }}`)"
+        traefik.http.routers.seerr.tls: "true"
+        traefik.http.services.seerr.loadbalancer.server.port: '5055'
       volume:
         - "{{ service['name'] }}-jellyseerr_config:/app/config:Z"
 
