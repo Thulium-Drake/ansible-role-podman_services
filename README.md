@@ -70,7 +70,7 @@ Configuring the integrations between the different apps works as follows:
 
 When setting up recyclarr, keep in mind that it does not have a webinterface, you'll need to enter the container to edit the config and to run the commands needed. It will be spun up with a default configuration in place in `/config`
 
-NOTE: Seerr (still) uses jellyseerr for it's volume name, this is for backwards compatibility
+NOTE: Seerr (still) uses jellyseerr for it's volume name, this is for backwards compatibility. In order to migrate your config, make sure the Podman volume is owned by UID 1000 _in_ the container (with an offset of 100000 that would be UID 100999).
 
 ### Sabnzbd specific notes
 The application uses a sort of hostname matching to prevent all kinds of nastiness. You'll need to follow the instructions on https://sabnzbd.org/wiki/extra/hostname-check.html to configure the app properly.
