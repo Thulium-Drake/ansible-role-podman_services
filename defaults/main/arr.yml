@@ -9,6 +9,9 @@ jellyfin_app_name: 'jellyfin'
 # Set in group_vars for transmission VPN
 transmission_image_uri: 'docker.io/haugene/transmission-openvpn'
 
+# Image tag of recyclarr to use
+arr_recyclar_image_tag: 8
+
 # The healthcheck command can be changed to accomodate verifying connectivity with VPNs if applicable
 transmission_healthcheck_command: 'nc -z localhost 9091 || exit 1'
 # These settings apply to the default image above

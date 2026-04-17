@@ -93,6 +93,19 @@ podman_service_containers_arr:
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
 
+    recyclarr:
+      image: "ghcr.io/recyclarr/recyclarr:{{ arr_recyclar_image_tag }}"
+      network:
+        - 'arr-backend.network'
+      volume:
+        - "{{ service['name'] }}-recyclarr_config:/config:Z"
+        - "{{ service['name'] }}-recyclarr_data:/data:Z"
+      env:
+        TZ: "{{ arr_timezone }}"
+        RECYCLARR_CREATE_CONFIG: true
+        RECYCLARR_CONFIG_DIR: '/config'
+        RECYCLARR_DATA_DIR: '/data'
+
     sonarr:
       image: 'lscr.io/linuxserver/sonarr:latest'
       network:
