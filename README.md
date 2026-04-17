@@ -68,7 +68,39 @@ Configuring the integrations between the different apps works as follows:
   * Go to the target app and paste the API key
   * The server address inside the app will be http://arr-$APP:$PORT (e.g. http://arr-prowlarr:9696 and http://arr-radarr:7878)
 
-When setting up recyclarr, keep in mind that it does not have a webinterface, you'll need to enter the container to edit the config and to run the commands needed. It will be spun up with a default configuration in place in `/config`
+When setting up recyclarr, keep in mind that it does not have a webinterface, you'll need to enter the container to edit the config and to run the commands needed. It will be spun up with a default configuration in place in `/config`. An example config that will only select HD stuff:
+
+```
+sonarr:
+  series:
+    base_url: http://arr-sonarr:8989
+    api_key: xxx
+    delete_old_custom_formats: true
+    quality_definition:
+      type: series
+
+    quality_profiles:
+      - trash_id: 9d142234e45d6143785ac55f5a9e8dc9
+        reset_unmatched_scores:
+          enabled: true
+
+radarr:
+  movies:
+    base_url: http://arr-radarr:7878
+    api_key: xxx
+
+    delete_old_custom_formats: true
+
+    quality_definition:
+      type: movie
+
+    quality_profiles:
+      - trash_id: d1d67249d3890e49bc12e275d989a7e9
+        reset_unmatched_scores:
+          enabled: true
+```
+
+For more details, check https://recyclarr.dev/guide/
 
 NOTE: Seerr (still) uses jellyseerr for it's volume name, this is for backwards compatibility. In order to migrate your config, make sure the Podman volume is owned by UID 1000 _in_ the container (with an offset of 100000 that would be UID 100999).
 
