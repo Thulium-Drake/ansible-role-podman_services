@@ -51,7 +51,16 @@ podman_service_containers_trinitycore:
         - "{{ trinitycore_racon_port }}:3443"
       network:
         - 'trinitycore-backend.network'
-      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=trinitycore-db.service'] + ['After=trinitycore-db.service'] }}"
+      quadlet_options:
+        - 'AutoUpdate=registry'
+        - |
+          [Install]
+          WantedBy=default.target
+          Requires=trinitycore-db.service
+          After=trinitycore-db.service'
+        - |
+          [Service]
+          Restart=always
     auth:
       image: "{{ trinitycore_image_uri }}"
       env:
@@ -65,4 +74,13 @@ podman_service_containers_trinitycore:
         - "{{ trinitycore_auth_port }}:3724"
       network:
         - 'trinitycore-backend.network'
-      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=trinitycore-world.service'] + ['After=trinitycore-world.service'] }}"
+      quadlet_options:
+        - 'AutoUpdate=registry'
+        - |
+          [Install]
+          WantedBy=default.target
+          Requires=trinitycore-world.service
+          After=trinitycore-world.service'
+        - |
+          [Service]
+          Restart=always
