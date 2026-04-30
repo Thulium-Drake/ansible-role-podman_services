@@ -48,4 +48,15 @@ podman_service_containers_kanboard:
       network:
         - 'kanboard-backend.network'
         - 'traefik-backend.network'
-      quadlet_options: "{{ podman_quadlet_options + ['[Install]'] + ['Requires=kanboard-db.service'] + ['After=kanboard-db.service'] }}"
+      quadlet_options:
+        - 'AutoUpdate=registry'
+        - |
+          [Install]
+          WantedBy=default.target
+        - |
+          [Unit]
+          Requires=kanboard-db.service
+          After=kanboard-db.service
+        - |
+          [Service]
+          Restart=always

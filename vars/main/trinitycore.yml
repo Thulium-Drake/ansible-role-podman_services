@@ -80,7 +80,7 @@ podman_service_containers_trinitycore:
           [Install]
           WantedBy=default.target
           Requires=trinitycore-world.service
-          After=trinitycore-world.service'
+          After=trinitycore-world.service
         - |
           [Service]
           Restart=always
