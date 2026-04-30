@@ -55,7 +55,7 @@ podman_service_containers_invoiceninja:
         - "{{ service['name'] }}_storage:/var/www/html/storage:z"
       network:
         - 'invoiceninja-backend.network'
-      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
+      quadlet_options: "{{ podman_quadlet_options + ['[Install]'] + ['Requires=invoiceninja-db.service'] + ['After=invoiceninja-db.service'] }}"
     web:
       image: 'docker.io/library/nginx:latest'
       labels:
@@ -71,4 +71,4 @@ podman_service_containers_invoiceninja:
         - 'invoiceninja-backend.network'
         - 'traefik-backend.network'
       pull: 'newer'
-      quadlet_options: "{{ podman_quadlet_options + ['[Unit]'] + ['Requires=invoiceninja.service'] + ['After=invoiceninja.service'] }}"
+      quadlet_options: "{{ podman_quadlet_options + ['[Install]'] + ['Requires=invoiceninja.service'] + ['After=invoiceninja.service'] }}"
