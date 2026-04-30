@@ -17,7 +17,7 @@ podman_service_containers_kanboard:
         - "{{ service['name'] }}_db:/var/lib/postgresql/data:Z"
       network:
         - 'kanboard-backend.network'
-      healthcheck: 'pg_isready -U${POSTGRES_USER}'
+      healthcheck: '/usr/bin/pg_isready -U kanboard'
       healthcheck_interval: '5s'
       healthcheck_retries: 10
       healthcheck_timeout: '3s'
