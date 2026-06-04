@@ -74,24 +74,20 @@ podman_service_containers_arr:
         PGID: "{{ arr_data_container_gid }}"
         TZ: "{{ arr_timezone }}"
 
-    readarr:
-      image: 'lscr.io/linuxserver/readarr:develop'
+    bookshelf:
+      image: 'ghcr.io/pennydreadful/bookshelf:hardcover'
       network:
         - 'arr-backend.network'
         - 'traefik-backend.network'
       healthcheck: 'nc -z localhost 8787 || exit 1'
       labels:
         traefik.enable: true
-        traefik.http.routers.readarr.rule: "Host(`readarr.{{ traefik_domain }}`)"
-        traefik.http.routers.readarr.tls: "true"
-        traefik.http.services.readarr.loadbalancer.server.port: '8787'
+        traefik.http.routers.bookshelf.rule: "Host(`bookshelf.{{ traefik_domain }}`)"
+        traefik.http.routers.bookshelf.tls: "true"
+        traefik.http.services.bookshelf.loadbalancer.server.port: '8787'
       volume:
-        - "{{ service['name'] }}-readarr_config:/config:Z"
+        - "{{ service['name'] }}-bookshelf_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
-      env:
-        PUID: "{{ arr_data_container_uid }}"
-        PGID: "{{ arr_data_container_gid }}"
-        TZ: "{{ arr_timezone }}"
 
     recyclarr:
       image: "ghcr.io/recyclarr/recyclarr:{{ arr_recyclar_image_tag }}"
