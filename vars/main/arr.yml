@@ -4,7 +4,7 @@ podman_volumes_arr:
     - 'arr-bazarr_config'
     - 'arr-prowlarr_config'
     - 'arr-radarr_config'
-    - 'arr-readarr_config'
+    - 'arr-bookshelf_config'
     - 'arr-sonarr_config'
     - 'arr-transmission_config'
     - 'arr-jellyseerr_config'
@@ -88,6 +88,10 @@ podman_service_containers_arr:
       volume:
         - "{{ service['name'] }}-bookshelf_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
+      env:
+        PUID: "{{ arr_data_container_uid }}"
+        PGID: "{{ arr_data_container_gid }}"
+        TZ: "{{ arr_timezone }}"
 
     recyclarr:
       image: "ghcr.io/recyclarr/recyclarr:{{ arr_recyclar_image_tag }}"
