@@ -213,3 +213,16 @@ podman_service_containers_arr:
         - '7359:7359/udp'
       device: "{{ (arr_gpu == 'nvidia') | ternary(['nvidia.com/gpu=all'],
                   (arr_gpu == 'intel') | ternary(['/dev/dri/renderD128'], omit)) }}"
+    maintainerr:
+      image: 'ghcr.io/maintainerr/maintainerr:latest'
+      network:
+        - 'arr-backend.network'
+        - 'traefik-backend.network'
+      healthcheck: '/opt/app/healthcheck.sh'
+      labels:
+        traefik.enable: true
+        traefik.http.routers.maintainerr.rule: "Host(`maintainerr.{{ traefik_domain }}`)"
+        traefik.http.routers.maintainerr.tls: "true"
+        traefik.http.services.maintainerr.loadbalancer.server.port: '6246'
+      volume:
+        - "{{ service['name'] }}-maintainerr_config:/opt/data:Z"
