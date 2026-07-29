@@ -10,6 +10,8 @@ podman_service_containers_grafana:
   grafana:
     grafana:
     image: 'docker.io/grafana/grafana:latest'
+    ports:
+      - "{{ grafana_listen_uri }}:3000"  # If not using traefik
     labels:
       traefik.enable: true
       traefik.http.routers.grafana.rule: "Host(`grafana.{{ traefik_domain }}`)"
