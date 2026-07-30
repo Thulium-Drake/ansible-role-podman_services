@@ -15,6 +15,4 @@ podman_service_containers_grafana:
         traefik.http.services.grafana.loadbalancer.server.port: '3000'
       volume:
         - "{{ service['name'] }}:/var/lib/grafana:Z"
-      network:
-        - 'influxdb-backend.network'
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+      network: "{{ ['influxdb-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"

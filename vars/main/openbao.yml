@@ -24,8 +24,7 @@ podman_service_containers_openbao:
         traefik.http.routers.openbao.rule: "Host(`{{ openbao_app_name }}.{{ traefik_domain }}`)"
         traefik.http.routers.openbao.tls: "true"
         traefik.http.services.openbao.loadbalancer.server.port: '8200'
-      network:
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+      network: "{{ [] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
       volume:
         - "{{ service['name'] }}_config:/openbao/config:Z"
         - "{{ service['name'] }}_data:/openbao/file:Z"

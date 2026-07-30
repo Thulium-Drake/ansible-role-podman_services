@@ -22,9 +22,7 @@ podman_service_containers_homeassistant:
       ports: "{{ homeassistant_additional_ports | default([]) }}"
       volume:
         - "{{ service['name'] }}:/config:Z"
-      network:
-        - 'homeassistant-backend.network'
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+      network: "{{ ['homeassistant-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
     mqtt:
       image: 'docker.io/library/eclipse-mosquitto:latest'
       ports: "{{ homeassistant_mqtt_port }}:1883"

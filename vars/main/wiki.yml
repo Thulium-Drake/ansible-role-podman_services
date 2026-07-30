@@ -14,8 +14,7 @@ podman_service_containers_wiki:
         traefik.http.services.wiki.loadbalancer.server.port: '3000'
       volume:
         - "{{ service['name'] }}-data:/wiki:Z"
-      network:
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+      network: "{{ [] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
       env:
         DB_TYPE: "{{ wiki_db_type }}"
         DB_FILEPATH: "{{ wiki_db_filepath }}"

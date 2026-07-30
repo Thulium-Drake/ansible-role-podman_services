@@ -26,9 +26,7 @@ podman_service_containers_trinitycore:
       env:
         MYSQL_ROOT_PASSWORD: "{{ trinitycore_db_password }}"
         PMA_HOST: 'trinitycore-db'
-      network:
-        - 'trinitycore-backend.network'
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+        network: "{{ ['trinitycore-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
       labels:
         traefik.enable: true
         traefik.http.routers.invoiceninja.rule: "Host(`trinitycore-db.{{ traefik_domain }}`)"

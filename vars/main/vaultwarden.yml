@@ -25,7 +25,6 @@ podman_service_containers_vaultwarden:
         traefik.http.routers.vaultwarden.rule: "Host(`{{ vaultwarden_app_name }}.{{ traefik_domain }}`)"
         traefik.http.routers.vaultwarden.tls: "true"
         traefik.http.services.vaultwarden.loadbalancer.server.port: '80'
-      network:
-        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
+      network: "{{ [] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
       volume:
         - "{{ service['name'] }}:/data:Z"
