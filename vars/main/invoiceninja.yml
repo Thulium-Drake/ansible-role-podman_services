@@ -80,7 +80,7 @@ podman_service_containers_invoiceninja:
         - "{{ service['name'] }}_storage:/var/www/html/storage:z,ro"
       network:
         - 'invoiceninja-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       pull: 'newer'
       quadlet_options:
         - 'AutoUpdate=registry'

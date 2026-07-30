@@ -4,6 +4,10 @@ podman_volumes_influxdb:
     - 'influxdb_config'
     - 'influxdb_data'
 
+podman_networks_influxdb:
+  influxdb:
+    - 'influxdb-backend'
+
 podman_service_containers_influxdb:
   influxdb:
     influxdb:
@@ -21,7 +25,7 @@ podman_service_containers_influxdb:
       quadlet_options: "{{ podman_quadlet_options }}"
       network:
         - 'influxdb-backend.network'
-        - 'grafana-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       volume:
         - "{{ service['name'] }}_config:/etc/influxdb2:Z"
         - "{{ service['name'] }}_data:/var/lib/influxdb2:Z"

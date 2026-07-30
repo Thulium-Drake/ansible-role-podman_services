@@ -23,7 +23,7 @@ podman_service_containers_calibre_web_automated:
         HARDCOVER_TOKEN: "{{ calibre_web_automated_hardcover_token }}"
         CWA_PORT_OVERRIDE: 8083
       network:
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       volume:
         - '{{ service["name"] }}-config:/config:Z'
         - '{{ service["name"] }}-library:/calibre-library:Z'

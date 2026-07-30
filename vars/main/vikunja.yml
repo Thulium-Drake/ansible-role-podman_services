@@ -26,7 +26,7 @@ podman_service_containers_vikunja:
         VIKUNJA_MAILER_SKIPTLSVERIFY: "{{ vikunja_mailer_insecure }}"
         VIKUNJA_MAILER_FROMEMAIL: "{{ vikunja_mailer_from_address }}"
       network:
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       volume:
         - '{{ service["name"] }}-files:/app/vikunja/files:Z'
         - '{{ service["name"] }}-db:/db:Z'

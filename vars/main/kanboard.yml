@@ -47,7 +47,7 @@ podman_service_containers_kanboard:
       ports: "{{ (kanboard_listen_uri != '') | ternary(kanboard_listen_uri + ':80', omit) }}"
       network:
         - 'kanboard-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       quadlet_options:
         - 'AutoUpdate=registry'
         - |

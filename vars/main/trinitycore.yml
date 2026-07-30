@@ -28,7 +28,7 @@ podman_service_containers_trinitycore:
         PMA_HOST: 'trinitycore-db'
       network:
         - 'trinitycore-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       labels:
         traefik.enable: true
         traefik.http.routers.invoiceninja.rule: "Host(`trinitycore-db.{{ traefik_domain }}`)"

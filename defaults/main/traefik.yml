@@ -1,4 +1,8 @@
 ---
+# If you don't need traefik on a system, set this to true
+# This will remove all traefik-backend network connections for services
+traefik_disabled: false
+
 # Domain to route all applications under'
 traefik_domain: 'apps.example.com'
 

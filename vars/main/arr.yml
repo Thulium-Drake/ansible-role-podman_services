@@ -21,7 +21,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/bazarr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'curl -f http://localhost:6767/api/system/ping || exit 1'
       labels:
         traefik.enable: true
@@ -40,7 +40,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/prowlarr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'nc -z localhost 9696 || exit 1'
       labels:
         traefik.enable: true
@@ -59,7 +59,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/radarr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'nc -z localhost 7878 || exit 1'
       labels:
         traefik.enable: true
@@ -78,7 +78,7 @@ podman_service_containers_arr:
       image: 'ghcr.io/pennydreadful/bookshelf:hardcover'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'nc -z localhost 8787 || exit 1'
       labels:
         traefik.enable: true
@@ -110,7 +110,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/sonarr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'nc -z localhost 8989 || exit 1'
       labels:
         traefik.enable: true
@@ -139,7 +139,7 @@ podman_service_containers_arr:
         traefik.http.services.sabnzbd.loadbalancer.server.port: '8080'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       volume:
         - "{{ service['name'] }}-sabnzbd_config:/config:Z"
         - "{{ arr_data_folder }}:/data"
@@ -148,7 +148,7 @@ podman_service_containers_arr:
       image: "{{ transmission_image_uri }}"
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       privileged: true
       healthcheck: "{{ transmission_healthcheck_command }}"
       labels:
@@ -176,7 +176,7 @@ podman_service_containers_arr:
       image: 'ghcr.io/seerr-team/seerr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: 'wget --quiet --tries=1 --timeout=10 --spider http://localhost:5055/api/v1/status || exit 1'
       labels:
         traefik.enable: true
@@ -190,7 +190,7 @@ podman_service_containers_arr:
       image: 'lscr.io/linuxserver/jellyfin:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       privileged: "{{ (arr_gpu == 'nvidia') | ternary(true, false) }}"
       healthcheck: 'curl -f http://localhost:8096/health || exit 1'
       labels:
@@ -217,7 +217,7 @@ podman_service_containers_arr:
       image: 'ghcr.io/maintainerr/maintainerr:latest'
       network:
         - 'arr-backend.network'
-        - 'traefik-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
       healthcheck: '/opt/app/healthcheck.sh'
       labels:
         traefik.enable: true

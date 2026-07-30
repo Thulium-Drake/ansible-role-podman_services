@@ -2,10 +2,6 @@ podman_volumes_grafana:
   grafana:
     - 'grafana'
 
-podman_networks_grafana:
-  grafana:
-    - 'grafana-backend'
-
 podman_service_containers_grafana:
   grafana:
     grafana:
@@ -20,5 +16,5 @@ podman_service_containers_grafana:
       volume:
         - "{{ service['name'] }}:/var/lib/grafana:Z"
       network:
-        - 'grafana-backend.network'
-        - 'traefik-backend.network'
+        - 'influxdb-backend.network'
+        - "{{ traefik_disabled | ternary('', 'traefik-backend') }}"
