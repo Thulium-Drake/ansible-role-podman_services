@@ -1,2 +1,7 @@
 ---
 grafana_listen_uri: 3000
+
+# Grafana container configuration
+# Set all Grafana envvars in here for the configuration of the container
+grafana_container_env:
+  GF_SERVER_ROOT_URL: "http://{{ ansible_facts['fqdn'] }}:3000"
