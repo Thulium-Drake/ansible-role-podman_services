@@ -30,6 +30,24 @@ The catalogus currently contains:
 * vikunja: Task management and todo application
 * wiki: Node.JS based Wiki app
 
+## Custom services
+If you want to deploy a custom service that is not part of this collection, configure it as follows in the inventory of the target host/group:
+
+```
+podman_services:
+  - name: 'my_custom_container'
+    custom: true
+
+# This is a manual extension to the podman_services role
+podman_service_containers_custom_service:
+  custom_service:
+    custom_service:
+      image: 'docker.io/busybox'
+      # etc..
+```
+
+Setting `custom` will skip certain tasks in the role that look up the variables in the role, as they will be defined in the inventory.
+
 # Deployment
 In order to use the services from this catalogue, do the following:
 

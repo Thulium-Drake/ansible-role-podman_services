@@ -23,6 +23,7 @@
   loop: "{{ podman_services }}"
   loop_control:
     loop_var: 'service'
+  when: not service['custom'] | default(false)
 
 - name: 'Run without become if not needed'
   become: "{{ (podman_user_account != 'root') | ternary(omit, true) }}"
