@@ -5,3 +5,8 @@ grafana_listen_uri: 3000
 # Set all Grafana envvars in here for the configuration of the container
 grafana_container_env:
   GF_SERVER_ROOT_URL: "http://{{ ansible_facts['fqdn'] }}:3000"
+
+# This will allow you to add additional mounts to the grafana container, such as a copy
+# of the host system's CA certs
+grafana_volumes: []
+#  - '/var/lib/podman/cert.pem:/etc/ssl/cert.pem:z,ro'

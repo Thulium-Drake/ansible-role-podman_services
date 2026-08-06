@@ -2,6 +2,9 @@ podman_volumes_grafana:
   grafana:
     - 'grafana'
 
+podman_service_container_grafana_volumes:
+  - "{{ service['name'] }}:/var/lib/grafana:Z"
+
 podman_service_containers_grafana:
   grafana:
     grafana:
@@ -14,6 +17,5 @@ podman_service_containers_grafana:
         traefik.http.routers.grafana.rule: "Host(`grafana.{{ traefik_domain }}`)"
         traefik.http.routers.grafana.tls: "true"
         traefik.http.services.grafana.loadbalancer.server.port: '3000'
-      volume:
-        - "{{ service['name'] }}:/var/lib/grafana:Z"
+      volume: "{{ grafana_volumes + podman_service_container_grafana_volumes }}"
       network: "{{ ['influxdb-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
