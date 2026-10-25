@@ -1,0 +1,14 @@
+---
+azerothcore_image_uri: 'registry.example.com/azerothcore/server:latest'
+
+# Server connection settings
+azerothcore_auth_port: '3724'
+azerothcore_world_port: '8085'
+azerothcore_racon_port: '3443'
+
+# DB settings
+azerothcore_db_password: 'IMMA_CHARGING_MA_FIREBALL!'
+
+# Initial admin account settings
+azerothcore_admin_user: 'khadgar'
+azerothcore_admin_password: 'KirinTor'

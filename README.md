@@ -5,6 +5,7 @@ The catalogus currently contains:
 
 * arr: A full arr stack with jellyfin, seerr, transmission and sabnzbd
 * authentik: Open-source Identity Provider focused on flexibility and versatility
+* azerothcore: A moddable MMO server emulator
 * calibre_web_automated: A self-hosted digital library management system
 * factorio: The Factorio server
 * ethereum: Ethereum validator and beacon

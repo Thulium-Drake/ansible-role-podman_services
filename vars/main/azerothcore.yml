@@ -1,0 +1,84 @@
+---
+podman_networks_azerothcore:
+  azerothcore:
+    - 'azerothcore-backend'
+
+podman_volumes_azerothcore:
+  azerothcore:
+    - 'azerothcore_config'
+    - 'azerothcore_data'
+    - 'azerothcore_db'
+
+podman_service_containers_azerothcore:
+  azerothcore:
+    db:
+      image: 'docker.io/library/mariadb:11'
+      env:
+        MARIADB_USER: 'azerothcore'
+        MARIADB_PASSWORD: "{{ azerothcore_db_password }}"
+        MARIADB_ROOT_PASSWORD: "{{ azerothcore_db_password }}"
+      volume:
+        - "{{ service['name'] }}_db:/var/lib/mysql:Z"
+      network:
+        - 'azerothcore-backend.network'
+    dbadmin:
+      image: 'docker.io/library/phpmyadmin:latest'
+      env:
+        MYSQL_ROOT_PASSWORD: "{{ azerothcore_db_password }}"
+        PMA_HOST: 'azerothcore-db'
+        network: "{{ ['azerothcore-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
+      labels:
+        traefik.enable: true
+        traefik.http.routers.invoiceninja.rule: "Host(`azerothcore-db.{{ traefik_domain }}`)"
+        traefik.http.routers.invoiceninja.tls: "true"
+        traefik.http.services.invoiceninja.loadbalancer.server.port: '80'
+    world:
+      image: "{{ azerothcore_image_uri }}"
+      env:
+        AZEROTHDB_USER: 'root'
+        AZEROTHDB_HOST: 'azerothcore-db'
+        AZEROTHDB_PASSWORD: "{{ azerothcore_db_password }}"
+        AZEROTH_SERVICE: 'worldserver'
+        AZEROTH_USER: "{{ azerothcore_admin_user }}"
+        AZEROTH_PASSWORD: "{{ azerothcore_admin_password }}"
+      volume:
+        - "{{ service['name'] }}_config:/app/etc:z"
+        - "{{ service['name'] }}_data:/app/data:Z"
+      ports:
+        - "{{ azerothcore_world_port }}:8085"
+        - "{{ azerothcore_racon_port }}:3443"
+      network:
+        - 'azerothcore-backend.network'
+      quadlet_options:
+        - 'AutoUpdate=registry'
+        - |
+          [Install]
+          WantedBy=default.target
+          Requires=azerothcore-db.service
+          After=azerothcore-db.service'
+        - |
+          [Service]
+          Restart=always
+    auth:
+      image: "{{ azerothcore_image_uri }}"
+      env:
+        AZEROTHDB_USER: 'root'
+        AZEROTHDB_HOST: 'azerothcore-db'
+        AZEROTHDB_PASSWORD: "{{ azerothcore_db_password }}"
+        AZEROTH_SERVICE: 'authserver'
+      volume:
+        - "{{ service['name'] }}_config:/app/etc:z"
+      ports:
+        - "{{ azerothcore_auth_port }}:3724"
+      network:
+        - 'azerothcore-backend.network'
+      quadlet_options:
+        - 'AutoUpdate=registry'
+        - |
+          [Install]
+          WantedBy=default.target
+          Requires=azerothcore-world.service
+          After=azerothcore-world.service
+        - |
+          [Service]
+          Restart=always
