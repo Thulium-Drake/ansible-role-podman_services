@@ -12,11 +12,11 @@ podman_volumes_azerothcore:
 podman_service_containers_azerothcore:
   azerothcore:
     db:
-      image: 'docker.io/library/mariadb:11'
+      image: 'docker.io/library/mysql:9'
       env:
-        MARIADB_USER: 'azerothcore'
-        MARIADB_PASSWORD: "{{ azerothcore_db_password }}"
-        MARIADB_ROOT_PASSWORD: "{{ azerothcore_db_password }}"
+        MYSQL_USER: 'azerothcore'
+        MYSQL_PASSWORD: "{{ azerothcore_db_password }}"
+        MYSQL_ROOT_PASSWORD: "{{ azerothcore_db_password }}"
       volume:
         - "{{ service['name'] }}_db:/var/lib/mysql:Z"
       network:
