@@ -26,12 +26,12 @@ podman_service_containers_azerothcore:
       env:
         MYSQL_ROOT_PASSWORD: "{{ azerothcore_db_password }}"
         PMA_HOST: 'azerothcore-db'
-        network: "{{ ['azerothcore-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
+      network: "{{ ['azerothcore-backend.network'] + (traefik_disabled | ternary([], ['traefik-backend'])) }}"
       labels:
         traefik.enable: true
-        traefik.http.routers.invoiceninja.rule: "Host(`azerothcore-db.{{ traefik_domain }}`)"
-        traefik.http.routers.invoiceninja.tls: "true"
-        traefik.http.services.invoiceninja.loadbalancer.server.port: '80'
+        traefik.http.routers.azerothcore_dbadmin.rule: "Host(`azerothcore-db.{{ traefik_domain }}`)"
+        traefik.http.routers.azerothcore_dbadmin.tls: "true"
+        traefik.http.services.azerothcore_dbadmin.loadbalancer.server.port: '80'
     world:
       image: "{{ azerothcore_image_uri }}"
       env:
